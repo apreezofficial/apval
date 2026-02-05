@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --background: #050505;
+  --foreground: #ffffff;
+  --accent-red: #fc4100;
+  --accent-glow: rgba(252, 65, 0, 0.2);
+  --grid-color: rgba(255, 255, 255, 0.03);
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent-red: var(--accent-red);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+* {
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  overflow-x: hidden;
+}
+
+* {
+  border-color: rgba(74, 55, 40, 0.1);
+}
+
+@layer utilities {
+  .my_fixed_width {
+    @apply w-full max-w-[1200px] mx-auto px-4;
+  }
+
+  .bg-lightOrange {
+    @apply bg-[#fdf5f2];
+  }
+
+  .text-myRed {
+    @apply text-[#fc4100];
+  }
+
+  .bg-myRed {
+    @apply bg-[#fc4100];
+  }
+
+  .decoration-myRed {
+    text-decoration-color: #fc4100;
+  }
+
+  .border-myRed {
+    @apply border-[#fc4100];
+  }
+
+  .bg-myBlack {
+    @apply bg-[#1a1a1a];
+  }
+
+  .border-myBlack {
+    @apply border-[#1a1a1a];
+  }
+
+  .bg-dark {
+    @apply bg-[#1a1a1a];
+  }
+
+  .border-dark {
+    @apply border-[#1a1a1a];
+  }
+
+  .font-grotesk {
+    font-family: 'Geist', sans-serif;
+  }
+
+  .font-geist {
+    font-family: 'Geist', sans-serif;
+  }
+}
