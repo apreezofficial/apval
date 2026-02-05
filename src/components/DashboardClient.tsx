@@ -1,0 +1,243 @@
+'use client';
+import { useEffect, useState } from 'react';
+import Navbar from '@/components/Navbar';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, Plus, ExternalLink, Trash2, Edit2 } from 'lucide-react';
+import Link from 'next/link';
+import MultiStepEditor from '@/components/MultiStepEditor';
+import Footer from '@/components/Footer';
+
+import { useToast } from '@/components/Toast';
+import { useModal } from '@/components/Modal';
+
+export default function DashboardClient() {
+    const { showToast } = useToast();
+    const { confirm } = useModal();
+    const [user, setUser] = useState<any>(null);
+    const [valentines, setValentines] = useState<any[]>([]);
+    const [filter, setFilter] = useState<'all' | 'card' | 'website'>('all');
+    const [isEditorOpen, setIsEditorOpen] = useState(false);
+    const [editingValentine, setEditingValentine] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 6;
+
+    const fetchValentines = (userId: string) => {
+        setIsLoading(true);
+        fetch(`/api/valentines/user/${userId}`)
+            .then(res => res.json())
+            .then(data => {
+                const sorted = Array.isArray(data) ? data.sort((a: any, b: any) =>
+                    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+                ) : [];
+                setValentines(sorted);
+                setIsLoading(false);
+            })
+            .catch(() => setIsLoading(false));
+    };
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('user');
+        if (storedUser) {
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+            fetchValentines(parsedUser.id);
+        } else {
+            window.location.href = '/login';
+        }
+    }, []);
+
+    const filteredValentines = valentines.filter(v =>
+        filter === 'all' || v.templateId === filter || (filter === 'card' && v.templateId !== 'amour')
+    );
+
+    const totalPages = Math.ceil(filteredValentines.length / itemsPerPage);
+    const paginatedValentines = filteredValentines.slice(
+        (currentPage - 1) * itemsPerPage,
+        currentPage * itemsPerPage
+    );
+
+    useEffect(() => {
+        setCurrentPage(1);
+    }, [filter]);
+
+    const handleEdit = (v: any) => {
+        setEditingValentine(v);
+        setIsEditorOpen(true);
+    };
+
+    const handleDelete = (id: string) => {
+        confirm({
+            title: 'Delete Asset?',
+            message: 'This operation is irreversible. Your cinematic creation will be permanently removed from our delivery network.',
+            confirmText: 'Delete Permanently',
+            cancelText: 'Keep Asset',
+            type: 'danger',
+            onConfirm: async () => {
+                try {
+                    const res = await fetch(`/api/valentines?id=${id}`, { method: 'DELETE' });
+                    const result = await res.json();
+                    if (result.success) {
+                        showToast('Asset successfully decommissioned', 'success');
+                        fetchValentines(user.id);
+                    } else {
+                        showToast(result.error || 'Failed to delete asset', 'error');
+                    }
+                } catch (err) {
+                    showToast('Network error during decommission', 'error');
+                }
+            }
+        });
+    };
+
+    return (
+        <main className="min-h-screen bg-[#050505] text-white">
+            <Navbar />
+            <div className="pt-32 px-6 md:px-20 max-w-7xl mx-auto min-h-[70vh]">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
+                    <div>
+                        <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-2 text-white">My Creations</h1>
+                        <p className="text-white/40">Keep track of your heart's work and share the vibes</p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-4">
+                        <div className="flex items-center gap-1 p-1 bg-white/5 rounded-2xl border border-white/5">
+                            {(['all', 'card', 'website'] as const).map((cat) => (
+                                <button
+                                    key={cat}
+                                    onClick={() => setFilter(cat)}
+                                    className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] transition-all ${filter === cat
+                                        ? 'bg-myRed text-white shadow-lg shadow-myRed/20'
+                                        : 'text-white/40 hover:text-white hover:bg-white/5'
+                                        }`}
+                                >
+                                    {cat}s
+                                </button>
+                            ))}
+                        </div>
+                        <Link
+                            href="/templates"
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-myRed text-white rounded-full font-medium hover:bg-myRed/90 transition-all shadow-lg shadow-myRed/20"
+                        >
+                            <Plus className="w-5 h-5" />
+                            <span>Create New</span>
+                        </Link>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
+                    {isLoading ? (
+                        Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
+                    ) : paginatedValentines.length > 0 ? paginatedValentines.map((v) => (
+                        <motion.div
+                            key={v.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-[#0A0A0A] border border-white/5 rounded-[32px] p-8 space-y-6 hover:border-myRed/20 transition-all group"
+                        >
+                            <div className="flex items-center justify-between">
+                                <div className="w-12 h-12 bg-myRed/10 rounded-2xl flex items-center justify-center">
+                                    <Heart className="text-myRed w-6 h-6 fill-current" />
+                                </div>
+                                <span className="text-[10px] font-bold uppercase tracking-widest text-white/20">
+                                    Asset
+                                </span>
+                            </div>
+
+                            <div>
+                                <h3 className="text-xl font-bold mb-1 text-white">{v.headline} {v.recipient}</h3>
+                                <p className="text-white/40 text-sm line-clamp-2 italic">{v.message}</p>
+                            </div>
+
+                            <div className="flex items-center gap-2 pt-4 border-t border-white/5">
+                                <Link
+                                    href={`/v/${v.id}`}
+                                    className="flex-[2] flex items-center justify-center gap-2 py-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all text-sm font-medium text-white"
+                                    target="_blank"
+                                >
+                                    <ExternalLink className="w-4 h-4" />
+                                    <span>View</span>
+                                </Link>
+                                <button
+                                    onClick={() => handleEdit(v)}
+                                    className="flex-1 p-3 bg-white/5 rounded-xl hover:bg-myRed/10 hover:text-myRed transition-all flex items-center justify-center text-white/40"
+                                >
+                                    <Edit2 className="w-4 h-4" />
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(v.id)}
+                                    className="p-3 bg-white/5 rounded-xl hover:bg-red-500/10 hover:text-red-500 transition-all text-white/40"
+                                >
+                                    <Trash2 className="w-4 h-4" />
+                                </button>
+                            </div>
+                        </motion.div>
+                    )) : (
+                        <div className="col-span-full py-20 text-center border-2 border-dashed border-white/5 rounded-[40px]">
+                            <p className="text-white/20">No creations yet. Start by choosing a template!</p>
+                        </div>
+                    )}
+                </div>
+
+                {!isLoading && totalPages > 1 && (
+                    <div className="mt-16 mb-20 flex items-center justify-center gap-4">
+                        <button
+                            onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                            disabled={currentPage === 1}
+                            className="px-6 py-2 border border-white/5 rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-20 hover:bg-white/5 transition-all text-white/40"
+                        >
+                            Previous
+                        </button>
+                        <span className="text-white/40 text-xs font-bold uppercase tracking-widest">
+                            Page {currentPage} of {totalPages}
+                        </span>
+                        <button
+                            onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                            disabled={currentPage === totalPages}
+                            className="px-6 py-2 border border-white/5 rounded-xl text-xs font-bold uppercase tracking-widest disabled:opacity-20 hover:bg-white/5 transition-all text-white/40"
+                        >
+                            Next
+                        </button>
+                    </div>
+                )}
+            </div>
+
+            <Footer />
+
+            <AnimatePresence>
+                {isEditorOpen && (
+                    <MultiStepEditor
+                        templateId={editingValentine?.templateId || 'premium'}
+                        editId={editingValentine?.id}
+                        onClose={() => {
+                            setIsEditorOpen(false);
+                            setEditingValentine(null);
+                            if (user) fetchValentines(user.id);
+                        }}
+                    />
+                )}
+            </AnimatePresence>
+        </main>
+    );
+}
+
+function SkeletonCard() {
+    return (
+        <div className="bg-[#0A0A0A] border border-white/5 rounded-[32px] p-8 space-y-6 animate-pulse">
+            <div className="flex items-center justify-between">
+                <div className="w-12 h-12 bg-white/5 rounded-2xl" />
+                <div className="w-20 h-3 bg-white/5 rounded-full" />
+            </div>
+            <div className="space-y-3">
+                <div className="w-3/4 h-6 bg-white/5 rounded-lg" />
+                <div className="w-full h-4 bg-white/5 rounded-lg" />
+                <div className="w-1/2 h-4 bg-white/5 rounded-lg" />
+            </div>
+            <div className="flex gap-2 pt-4">
+                <div className="flex-[2] h-12 bg-white/5 rounded-xl" />
+                <div className="flex-1 h-12 bg-white/5 rounded-xl" />
+                <div className="w-12 h-12 bg-white/5 rounded-xl" />
+            </div>
+        </div>
+    );
+}
