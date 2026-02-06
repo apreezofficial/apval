@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, ArrowRight, ArrowLeft, Send, User, MessageCircle, Sparkles, Phone } from 'lucide-react';
+import { X, Heart, ArrowRight, ArrowLeft, Send, User, MessageCircle, Sparkles, Phone, Music, Music2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -14,6 +14,7 @@ interface MultiStepEditorProps {
 import AmourView from './templates/AmourView';
 import MinimalEliteView from './templates/MinimalEliteView';
 import PremiumMotionView from './templates/PremiumMotionView';
+import QuestValentineView from './templates/QuestValentineView';
 import { useToast } from './Toast';
 
 export default function MultiStepEditor({ templateId: initialTemplateId, onClose, editId }: MultiStepEditorProps) {
@@ -28,6 +29,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         sender: '',
         imageUrl: '',
         whatsapp: '',
+        musicUrl: '',
         // Premium Motion Specific
         introQuote1Line1: '',
         introQuote1Line2: '',
@@ -58,6 +60,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                             sender: valData.sender || '',
                             imageUrl: valData.imageUrl || '',
                             whatsapp: valData.whatsapp || '',
+                            musicUrl: valData.musicUrl || '',
                             introQuote1Line1: valData.introQuote1Line1 || '',
                             introQuote1Line2: valData.introQuote1Line2 || '',
                             introQuote2Line1: valData.introQuote2Line1 || '',
@@ -205,6 +208,10 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                         onUpdateData={(newData) => setData(prev => ({ ...prev, ...newData }))}
                                     />
                                 </div>
+                            ) : templateId === 'quest-valentine' ? (
+                                <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
+                                    <QuestValentineView data={data} />
+                                </div>
                             ) : (
                                 <div className="flex-1 p-6 pt-12 flex flex-col items-center justify-between bg-[#FF99F1] text-black">
                                     <div className="w-full space-y-6">
@@ -265,7 +272,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                             <div className="w-8 h-8 bg-myRed rounded-lg flex items-center justify-center">
                                 <Heart className="text-white w-4 h-4 fill-current" />
                             </div>
-                            <span className="text-xs font-bold uppercase tracking-widest text-white/40">Step {step} of {templateId === 'valentine-motion-premium' ? 5 : 4}</span>
+                            <span className="text-xs font-bold uppercase tracking-widest text-white/40">Step {step} of {templateId === 'valentine-motion-premium' ? 6 : 5}</span>
                         </div>
                         <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
                             <X className="w-5 h-5 text-white/40" />
@@ -494,6 +501,64 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
 
                                     {step === (templateId === 'valentine-motion-premium' ? 5 : 4) && (
                                         <motion.div
+                                            key="step-music"
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -20 }}
+                                            className="space-y-8"
+                                        >
+                                            <div className="space-y-4">
+                                                <h2 className="text-3xl font-medium tracking-tight">Audio Vibe</h2>
+                                                <p className="text-white/40 font-medium">Select a soundtrack or paste a YouTube/Spotify link.</p>
+                                            </div>
+
+                                            <div className="grid grid-cols-2 gap-3">
+                                                {[
+                                                    { name: 'Romantic Piano', url: 'https://www.youtube.com/embed/WJ3-F02-F_Y' },
+                                                    { name: 'Lofi Love', url: 'https://www.youtube.com/embed/5yx6BWlEVcY' },
+                                                    { name: 'Cinematic Strings', url: 'https://www.youtube.com/embed/B_mS_j8J0K0' },
+                                                    { name: 'Acoustic Guitar', url: 'https://www.youtube.com/embed/2mzX_7YhJ2g' }
+                                                ].map((track) => (
+                                                    <button
+                                                        key={track.name}
+                                                        onClick={() => setData({ ...data, musicUrl: track.url })}
+                                                        className={`p-4 rounded-2xl border transition-all text-left group ${data.musicUrl === track.url
+                                                            ? 'bg-myRed/20 border-myRed text-white'
+                                                            : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'
+                                                            }`}
+                                                    >
+                                                        <Music2 className={`w-5 h-5 mb-2 ${data.musicUrl === track.url ? 'text-myRed' : 'text-white/20'}`} />
+                                                        <div className="text-xs font-bold leading-tight uppercase tracking-widest">{track.name}</div>
+                                                    </button>
+                                                ))}
+                                            </div>
+
+                                            <div className="relative">
+                                                <Music className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                                                <input
+                                                    type="text"
+                                                    value={data.musicUrl}
+                                                    onChange={(e) => setData({ ...data, musicUrl: e.target.value })}
+                                                    placeholder="Or paste Embed URL (YouTube/Spotify)"
+                                                    className="w-full pl-16 pr-6 py-5 bg-white/[0.03] rounded-2xl border border-white/5 focus:border-myRed/50 outline-none text-white font-medium"
+                                                />
+                                            </div>
+
+                                            <div className="flex gap-4">
+                                                <button onClick={handleBack} className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all">Back</button>
+                                                <button
+                                                    onClick={handleNext}
+                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3"
+                                                >
+                                                    <span>{data.musicUrl ? 'Track Set' : 'Skip Audio'}</span>
+                                                    <ArrowRight className="w-5 h-5" />
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+
+                                    {step === (templateId === 'valentine-motion-premium' ? 6 : 5) && (
+                                        <motion.div
                                             key="step4"
                                             initial={{ opacity: 0, x: 20 }}
                                             animate={{ opacity: 1, x: 0 }}
@@ -560,7 +625,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                         </motion.div>
                                     )}
 
-                                    {step === (templateId === 'valentine-motion-premium' ? 5 : 4) && (
+                                    {step === (templateId === 'valentine-motion-premium' ? 7 : 6) && (
                                         <motion.div
                                             key="success"
                                             initial={{ opacity: 0, scale: 0.9 }}

@@ -10,6 +10,8 @@ import Footer from '@/components/Footer';
 import { useToast } from '@/components/Toast';
 import { useModal } from '@/components/Modal';
 
+import { TypewriterText, TypewriterStepWrapper } from '@/components/TypewriterText';
+
 export default function DashboardClient() {
     const { showToast } = useToast();
     const { confirm } = useModal();
@@ -21,6 +23,12 @@ export default function DashboardClient() {
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
+
+    const cardVariants = [
+        { initial: { opacity: 0, scale: 0.8, rotate: -3 }, animate: { opacity: 1, scale: 1, rotate: 0 } },
+        { initial: { opacity: 0, x: -50, filter: 'blur(5px)' }, animate: { opacity: 1, x: 0, filter: 'blur(0px)' } },
+        { initial: { opacity: 0, y: 50, rotate: 3 }, animate: { opacity: 1, y: 0, rotate: 0 } },
+    ];
 
     const fetchValentines = (userId: string) => {
         setIsLoading(true);
@@ -96,8 +104,12 @@ export default function DashboardClient() {
             <div className="pt-32 px-6 md:px-20 max-w-7xl mx-auto min-h-[70vh]">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
                     <div>
-                        <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-2 text-white">My Creations</h1>
-                        <p className="text-white/40">Keep track of your heart's work and share the vibes</p>
+                                    <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-2 text-white">
+                                        My Creations
+                                    </h1>
+                                    <p className="text-white/40">
+                                        Keep track of your heart's work and share the vibes
+                                    </p>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-4">
@@ -128,11 +140,13 @@ export default function DashboardClient() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-20">
                     {isLoading ? (
                         Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={i} />)
-                    ) : paginatedValentines.length > 0 ? paginatedValentines.map((v) => (
+                    ) : paginatedValentines.length > 0 ? paginatedValentines.map((v, index) => (
                         <motion.div
                             key={v.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            initial={cardVariants[index % cardVariants.length].initial}
+                            whileInView={cardVariants[index % cardVariants.length].animate}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: (index % 6) * 0.1, ease: [0.16, 1, 0.3, 1] }}
                             className="bg-[#0A0A0A] border border-white/5 rounded-[32px] p-8 space-y-6 hover:border-myRed/20 transition-all group"
                         >
                             <div className="flex items-center justify-between">

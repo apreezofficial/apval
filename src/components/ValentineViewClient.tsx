@@ -6,6 +6,7 @@ import Link from 'next/link';
 import AmourView from '@/components/templates/AmourView';
 import MinimalEliteView from '@/components/templates/MinimalEliteView';
 import PremiumMotionView from '@/components/templates/PremiumMotionView';
+import QuestValentineView from '@/components/templates/QuestValentineView';
 import NotFoundUI from '@/components/NotFoundUI';
 
 interface ValentineViewClientProps {
@@ -70,6 +71,10 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
 
         if (data.templateId === 'valentine-motion-premium') {
             return <PremiumMotionView data={data} />;
+        }
+
+        if (data.templateId === 'quest-valentine') {
+            return <QuestValentineView data={data} />;
         }
 
         // Default Template (Premium Mockup)
@@ -219,6 +224,19 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
     return (
         <>
             {renderContent()}
+
+            {data.musicUrl && (
+                <div className="fixed top-10 right-10 z-[100] flex items-center gap-4">
+                    <iframe
+                        src={`${data.musicUrl}${data.musicUrl.includes('?') ? '&' : '?'}autoplay=1`}
+                        className="hidden"
+                        allow="autoplay"
+                    />
+                    <div className="w-12 h-12 bg-white/10 backdrop-blur-3xl border border-white/20 rounded-full flex items-center justify-center animate-pulse">
+                        <Heart size={20} className="text-red-500 fill-current" />
+                    </div>
+                </div>
+            )}
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

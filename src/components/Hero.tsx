@@ -1,9 +1,13 @@
 'use client';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Heart, ArrowUpRight, Cpu } from 'lucide-react';
 import HeroPreview from './HeroPreview';
+import { TypewriterText } from './TypewriterText';
 
 export default function Hero() {
+    const [step, setStep] = React.useState(0);
+
     return (
         <section className="relative min-h-screen flex items-center pt-20 px-6 md:px-24 overflow-hidden bg-[#050505]">
             {/* Background Grid */}
@@ -25,9 +29,21 @@ export default function Hero() {
                         <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-none">
                             Apval.
                         </h1>
-                        <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-2xl md:text-3xl font-medium tracking-tight text-white/40 uppercase">
-                            <span>Valentine Experiences</span>
-                            <span>Ready to Share in Seconds</span>
+                        <div className="flex flex-col gap-2 text-2xl md:text-3xl font-medium tracking-tight text-white/40 uppercase">
+                            <div>
+                                <TypewriterText
+                                    text="Valentine Experiences"
+                                    speed={0.04}
+                                    onComplete={() => setStep(2)}
+                                />
+                            </div>
+                            <div>
+                                <TypewriterText
+                                    text="Ready to Share in Seconds"
+                                    trigger={step >= 2}
+                                    speed={0.04}
+                                />
+                            </div>
                         </div>
                     </motion.div>
 

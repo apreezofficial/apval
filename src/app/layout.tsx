@@ -62,6 +62,8 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+import BackgroundEffects from "@/components/BackgroundEffects";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -72,6 +74,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#050505] text-white`}
       >
+        <BackgroundEffects />
         <ToastProvider>
           <ModalProvider>
             {children}

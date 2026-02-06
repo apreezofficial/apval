@@ -39,5 +39,13 @@ export const templates: Template[] = [
         theme: 'elegant',
         previewColor: '#A82424',
         category: 'card'
+    },
+    {
+        id: 'quest-valentine',
+        name: 'Quest Valentine',
+        description: 'A playful "Will you be my Valentine?" question with a interactive buttons.',
+        theme: 'playful',
+        previewColor: '#FF4D4D',
+        category: 'website'
     }
 ];

@@ -90,6 +90,22 @@ export default function TemplateCard({ template }: TemplateCardProps) {
                             <div className="absolute top-4 left-4 w-1.5 h-1.5 rounded-full bg-[#D4AF37] opacity-40 blur-[1px]" />
                             <div className="absolute bottom-8 right-6 w-1 h-1 rounded-full bg-red-500 opacity-60 blur-[1px]" />
                         </div>
+                    ) : template.id === 'quest-valentine' ? (
+                        /* Quest Valentine Preview (Interactive Prank Theme) */
+                        <div className="w-[120px] aspect-[9/16] bg-[#fff5f5] rounded-[24px] border-[4px] border-[#ff4b4b]/20 shadow-2xl p-4 flex flex-col items-center justify-center space-y-3 relative group-hover:scale-105 transition-transform overflow-hidden">
+                            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_#ff4b4b_0%,_transparent_70%)]" />
+                            <div className="w-16 h-16 bg-white rounded-xl shadow-lg border border-[#ff4b4b]/10 flex items-center justify-center overflow-hidden">
+                                <img src="https://media.tenor.com/IC92C6pE88AAAAAi/be-my-valentine.gif" className="w-full h-full object-contain" alt="Bear Preview" />
+                            </div>
+                            <div className="space-y-1.5 w-full flex flex-col items-center">
+                                <div className="h-1.5 w-3/4 bg-[#ff4b4b]/40 rounded-full" />
+                                <div className="h-1.5 w-1/2 bg-[#ff4b4b]/20 rounded-full" />
+                            </div>
+                            <div className="flex gap-2 mt-2">
+                                <div className="w-8 h-4 bg-[#32cd32]/30 rounded-full" />
+                                <div className="w-8 h-4 bg-[#ff4b4b]/30 rounded-full" />
+                            </div>
+                        </div>
                     ) : (
                         /* Card / Premium Preview (Phone Mock - Color Scheme from image) */
                         <div className="w-[120px] aspect-[9/16] bg-[#FFECF8] rounded-[24px] border-[4px] border-black shadow-2xl p-4 flex flex-col items-center justify-between relative group-hover:rotate-[-3deg] transition-transform overflow-hidden">

@@ -11,7 +11,7 @@ export default function HeroPreview() {
         headline: "To the best stack",
         message: "Dedicated to my babe, the best stack on earth, php to the world",
         sender: "ap",
-        imageUrl: "https://images.unsplash.com/photo-1594909122845-11baa439b7bf?q=80&w=2070&auto=format&fit=crop" // Placeholder for the actual image which is base64 and too large
+        imageUrl: "/php.gif" // Placeholder for the actual image which is base64 and too large
     };
 
     const steps = [
@@ -22,11 +22,12 @@ export default function HeroPreview() {
     ];
 
     useEffect(() => {
-        const timer = setInterval(() => {
+        const currentDuration = steps[viewStep].type === 'image' ? 6000 : 4000;
+        const timer = setTimeout(() => {
             setViewStep((prev) => (prev + 1) % steps.length);
-        }, 4000);
-        return () => clearInterval(timer);
-    }, [steps.length]);
+        }, currentDuration);
+        return () => clearTimeout(timer);
+    }, [viewStep, steps.length]);
 
     return (
         <div className="relative w-full h-full group">
@@ -83,7 +84,7 @@ export default function HeroPreview() {
                                     <motion.div
                                         initial={{ scale: 0.9, rotate: -2 }}
                                         animate={{ scale: 1, rotate: 2 }}
-                                        transition={{ duration: 0.8 }}
+                                        transition={{ duration: 1.5 }}
                                         className="w-full aspect-square rounded-[32px] overflow-hidden border-4 border-white/5 shadow-2xl"
                                     >
                                         <img src={data.imageUrl} className="w-full h-full object-cover" alt="Visual" />

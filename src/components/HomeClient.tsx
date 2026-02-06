@@ -12,11 +12,22 @@ import { AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
+import { TypewriterText, TypewriterStepWrapper } from "@/components/TypewriterText";
+import { motion } from 'framer-motion';
+
 export default function HomeClient() {
     const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
     const [filter, setFilter] = useState<'all' | 'card' | 'website'>('all');
 
     const filteredTemplates = templates.filter(t => filter === 'all' || t.category === filter);
+
+    const cardVariants = [
+        { initial: { opacity: 0, x: -100, rotate: -10 }, animate: { opacity: 1, x: 0, rotate: 0 } },
+        { initial: { opacity: 0, y: 100, scale: 0.8 }, animate: { opacity: 1, y: 0, scale: 1 } },
+        { initial: { opacity: 0, x: 100, rotate: 10 }, animate: { opacity: 1, x: 0, rotate: 0 } },
+        { initial: { opacity: 0, scale: 1.5, filter: 'blur(10px)' }, animate: { opacity: 1, scale: 1, filter: 'blur(0px)' } },
+        { initial: { opacity: 0, y: -100, rotateX: 45 }, animate: { opacity: 1, y: 0, rotateX: 0 } },
+    ];
 
     return (
         <main className="min-h-screen bg-[#050505]">
@@ -28,8 +39,35 @@ export default function HomeClient() {
                 <div className="max-w-7xl mx-auto text-center">
                     <div className="mb-20 space-y-8">
                         <div className="space-y-4">
-                            <h2 className="text-4xl md:text-6xl font-medium tracking-tighter text-white">Ready for <span className="text-myRed">Deployment</span>.</h2>
-                            <p className="text-white/40 font-medium tracking-tight uppercase text-xs tracking-[0.3em]">Select Architecture</p>
+                            <TypewriterStepWrapper>
+                                {(step, setStep) => (
+                                    <>
+                                        <h2 className="text-4xl md:text-6xl font-medium tracking-tighter text-white">
+                                            Ready for{" "}
+                                            <span className="text-myRed">
+                                                <TypewriterText
+                                                    text="Deployment"
+                                                    speed={0.05}
+                                                    onComplete={() => setStep(1)}
+                                                />
+                                            </span>
+                                            <TypewriterText
+                                                text="."
+                                                trigger={step >= 1}
+                                                speed={0.05}
+                                                onComplete={() => setStep(2)}
+                                            />
+                                        </h2>
+                                        <p className="text-white/40 font-medium tracking-tight uppercase text-xs tracking-[0.3em]">
+                                            <TypewriterText
+                                                text="Select Architecture"
+                                                trigger={step >= 2}
+                                                speed={0.02}
+                                            />
+                                        </p>
+                                    </>
+                                )}
+                            </TypewriterStepWrapper>
                         </div>
 
                         <div className="flex items-center justify-center gap-3 p-1.5 bg-white/5 rounded-2xl border border-white/5 w-fit mx-auto">
@@ -48,13 +86,25 @@ export default function HomeClient() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                        {filteredTemplates.slice(0, 3).map(t => (
-                            <div key={t.id} onClick={() => setSelectedTemplateId(t.id)} className="cursor-pointer">
+                    <motion.div
+                        initial="hidden"
+                        animate="visible"
+                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10"
+                    >
+                        {filteredTemplates.slice(0, 3).map((t, index) => (
+                            <motion.div
+                                key={t.id}
+                                initial={cardVariants[index % cardVariants.length].initial}
+                                whileInView={cardVariants[index % cardVariants.length].animate}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: index * 0.2, ease: [0.16, 1, 0.3, 1] }}
+                                onClick={() => setSelectedTemplateId(t.id)}
+                                className="cursor-pointer"
+                            >
                                 <TemplateCard template={t} />
-                            </div>
+                            </motion.div>
                         ))}
-                    </div>
+                    </motion.div>
 
                     <div className="mt-20">
                         <Link
