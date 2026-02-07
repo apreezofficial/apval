@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Share2, Heart } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Share2, Heart, RotateCcw } from 'lucide-react';
 import Link from 'next/link';
 import AmourView from '@/components/templates/AmourView';
 import MinimalEliteView from '@/components/templates/MinimalEliteView';
@@ -21,6 +21,7 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
     const [viewStep, setViewStep] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
     const [statusIndex, setStatusIndex] = useState(0);
+    const [resetKey, setResetKey] = useState(0);
 
     const statuses = [
         "Initializing Secure Connection...",
@@ -199,25 +200,30 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
         }
     };
 
+    const handleReplay = () => {
+        setViewStep(0);
+        setResetKey(prev => prev + 1);
+    };
+
     const renderContent = () => {
         if (data.templateId === 'amour') {
-            return <AmourView data={data} steps={steps} />;
+            return <AmourView key={resetKey} data={data} steps={steps} />;
         }
 
         if (data.templateId === 'minimal-elite-card') {
-            return <MinimalEliteView data={data} />;
+            return <MinimalEliteView key={resetKey} data={data} />;
         }
 
         if (data.templateId === 'valentine-motion-premium') {
-            return <PremiumMotionView data={data} />;
+            return <PremiumMotionView key={resetKey} data={data} />;
         }
 
         if (data.templateId === 'quest-valentine') {
-            return <QuestValentineView data={data} />;
+            return <QuestValentineView key={resetKey} data={data} />;
         }
 
         if (data.templateId === 'interactive-dodge') {
-            return <InteractiveDodgeView data={data} />;
+            return <InteractiveDodgeView key={resetKey} data={data} />;
         }
 
         // Default Template (Premium Mockup)
@@ -398,8 +404,21 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="fixed bottom-10 right-10 z-[100]"
+                className="fixed bottom-10 right-10 z-[100] flex items-center gap-4"
             >
+                <button
+                    onClick={handleReplay}
+                    className="flex items-center gap-3 px-6 py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl group hover:bg-white transition-all shadow-2xl"
+                >
+                    <div className="p-2 bg-white/10 rounded-lg group-hover:bg-myRed/10 transition-colors">
+                        <RotateCcw size={14} className="text-white group-hover:text-myRed transition-colors" />
+                    </div>
+                    <div className="flex flex-col items-start leading-none gap-1">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-white/40 group-hover:text-myRed transition-colors">Restart</span>
+                        <span className="text-xs font-bold text-white group-hover:text-black transition-colors">Replay</span>
+                    </div>
+                </button>
+
                 <Link
                     href="/"
                     className="flex items-center gap-3 px-6 py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl group hover:bg-white transition-all shadow-2xl"
