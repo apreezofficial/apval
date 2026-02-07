@@ -10,7 +10,7 @@ export default function Hero() {
 
     return (
         <section className="relative min-h-screen flex items-center pt-20 px-6 md:px-24 overflow-hidden bg-[#050505]">
-            {/* Background Grid */}
+            {/* Background for Grid */}
             <div className="absolute inset-0 opacity-[0.05] pointer-events-none bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:60px_60px]" />
 
             {/* Glow Effects */}
