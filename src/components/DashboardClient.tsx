@@ -10,8 +10,6 @@ import Footer from '@/components/Footer';
 import { useToast } from '@/components/Toast';
 import { useModal } from '@/components/Modal';
 
-
-
 export default function DashboardClient() {
     const { showToast } = useToast();
     const { confirm } = useModal();

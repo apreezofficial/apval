@@ -15,6 +15,7 @@ import AmourView from './templates/AmourView';
 import MinimalEliteView from './templates/MinimalEliteView';
 import PremiumMotionView from './templates/PremiumMotionView';
 import QuestValentineView from './templates/QuestValentineView';
+import InteractiveDodgeView from './templates/InteractiveDodgeView';
 import { useToast } from './Toast';
 
 export default function MultiStepEditor({ templateId: initialTemplateId, onClose, editId }: MultiStepEditorProps) {
@@ -38,6 +39,9 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         happyText: '',
         valentineText: '',
         buttonText: '',
+        // Interactive Dodge Specific
+        gender: 'female',
+        introMessages: ['Hey Beautiful...', "We've made so many memories...", "You make me smile every single day...", "So I have a question..."],
     });
     const [loading, setLoading] = useState(false);
     const [link, setLink] = useState('');
@@ -68,25 +72,14 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                             happyText: valData.happyText || '',
                             valentineText: valData.valentineText || '',
                             buttonText: valData.buttonText || '',
+                            gender: valData.gender || 'female',
+                            introMessages: valData.introMessages || ['Hey Beautiful...', "We've made so many memories...", "You make me smile every single day...", "So I have a question..."],
                         });
                     }
                 })
                 .finally(() => setFetchingData(false));
         }
     }, [editId]);
-
-    const stepsForPreview = [
-        { type: 'intro' },
-        { type: 'message' },
-        { type: 'image' },
-        { type: 'outro' },
-    ];
-
-    // Map editor step to preview step (step 1-4 maps to preview index 0-3)
-    const currentPreviewStepIndex = Math.min(step - 1, 3);
-
-    const handleNext = () => setStep(step + 1);
-    const handleBack = () => setStep(step - 1);
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -99,44 +92,17 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         }
     };
 
-    const getStepsConfig = () => {
-        switch (templateId) {
-            case 'valentine-motion-premium':
-                return [
-                    { id: 1, label: 'Recipient & Headline' },
-                    { id: 2, label: 'Intro Sequence' },
-                    { id: 3, label: 'The Content' },
-                    { id: 4, label: 'Attachment' },
-                    { id: 5, label: 'Audio Vibe' },
-                    { id: 6, label: 'Signature' }
-                ];
-            case 'amour':
-                return [
-                    { id: 1, label: 'Recipient & Headline' },
-                    { id: 2, label: 'The Content' },
-                    { id: 3, label: 'Attachment' },
-                    { id: 4, label: 'Audio Vibe' },
-                    { id: 5, label: 'Signature' }
-                ];
-            case 'minimal-elite-card':
-                return [
-                    { id: 1, label: 'Recipient' },
-                    { id: 2, label: 'The Content' },
-                    { id: 3, label: 'Signature' }
-                ];
-            case 'quest-valentine':
-                return [
-                    { id: 1, label: 'Recipient' },
-                    { id: 2, label: 'Audio Vibe' },
-                    { id: 3, label: 'Signature' }
-                ];
-            default:
-                return [{ id: 1, label: 'Recipient' }, { id: 2, label: 'Signature' }];
-        }
+    const featureMap: Record<string, string[]> = {
+        'valentine-motion-premium': ['recipient_headline', 'intro', 'content', 'attachment', 'audio', 'signature'],
+        'amour': ['recipient_headline', 'content', 'attachment', 'audio', 'signature'],
+        'minimal-elite-card': ['recipient_headline', 'content', 'signature'],
+        'quest-valentine': ['recipient', 'audio', 'signature'],
+        'interactive-dodge': ['recipient', 'gender', 'proposal_intro', 'audio', 'signature'],
     };
 
-    const stepsConfig = getStepsConfig();
-    const totalSteps = stepsConfig.length;
+    const features = featureMap[templateId] || ['recipient', 'signature'];
+    const totalSteps = features.length;
+    const currentFeature = features[step - 1];
 
     const handleFinish = async () => {
         setLoading(true);
@@ -169,6 +135,11 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
             setLoading(false);
         }
     };
+
+    const handleNext = () => setStep(step + 1);
+    const handleBack = () => setStep(step - 1);
+
+    const stepsForPreview = features.map(f => ({ type: f }));
 
     return (
         <motion.div
@@ -224,7 +195,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                     data={data}
                                     steps={stepsForPreview}
                                     isPreview
-                                    key={currentPreviewStepIndex} // Force internal step update
+                                    key={step} // Force internal step update
                                 />
                             </div>
                         </div>
@@ -250,6 +221,10 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                             ) : templateId === 'quest-valentine' ? (
                                 <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
                                     <QuestValentineView data={data} />
+                                </div>
+                            ) : templateId === 'interactive-dodge' ? (
+                                <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
+                                    <InteractiveDodgeView data={data} isPreview />
                                 </div>
                             ) : (
                                 <div className="flex-1 p-6 pt-12 flex flex-col items-center justify-between bg-[#FF99F1] text-black">
@@ -331,7 +306,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                 </div>
                             ) : (
                                 <>
-                                    {currentFeature === 'recipient_headline' || currentFeature === 'recipient' && (
+                                    {(currentFeature === 'recipient_headline' || currentFeature === 'recipient') && (
                                         <motion.div
                                             key="step-rec"
                                             initial={{ opacity: 0, x: 20 }}
@@ -432,7 +407,96 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                             </div>
                                             <div className="flex gap-4">
                                                 <button onClick={handleBack} className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all">Back</button>
-                                                <button onClick={handleNext} className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3">
+                                                <button
+                                                    disabled={!data.introQuote1Line1 || !data.introQuote1Line2 || !data.introQuote2Line1 || !data.introQuote2Line2}
+                                                    onClick={handleNext}
+                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                                                >
+                                                    <span>Continue</span>
+                                                    <ArrowRight className="w-5 h-5" />
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+
+                                    {currentFeature === 'gender' && (
+                                        <motion.div
+                                            key="step-gender"
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -20 }}
+                                            className="space-y-8"
+                                        >
+                                            <div className="space-y-4">
+                                                <h2 className="text-3xl font-medium tracking-tight">Vibe Selection</h2>
+                                                <p className="text-white/40 font-medium">Who is this for? We'll tailor the theme.</p>
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <button
+                                                    onClick={() => setData({ ...data, gender: 'female' })}
+                                                    className={`p-8 rounded-[32px] border transition-all flex flex-col items-center gap-4 ${data.gender === 'female' ? 'bg-pink-500/10 border-pink-500 text-pink-500' : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10'}`}
+                                                >
+                                                    <Heart className={`w-12 h-12 ${data.gender === 'female' ? 'fill-current' : ''}`} />
+                                                    <span className="text-sm font-bold uppercase tracking-widest">For Her</span>
+                                                </button>
+                                                <button
+                                                    onClick={() => setData({ ...data, gender: 'male' })}
+                                                    className={`p-8 rounded-[32px] border transition-all flex flex-col items-center gap-4 ${data.gender === 'male' ? 'bg-blue-500/10 border-blue-500 text-blue-500' : 'bg-white/5 border-white/5 text-white/40 hover:bg-white/10'}`}
+                                                >
+                                                    <Sparkles className={`w-12 h-12 ${data.gender === 'male' ? 'fill-current' : ''}`} />
+                                                    <span className="text-sm font-bold uppercase tracking-widest">For Him</span>
+                                                </button>
+                                            </div>
+                                            <div className="flex gap-4">
+                                                <button onClick={handleBack} className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all">Back</button>
+                                                <button
+                                                    onClick={handleNext}
+                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3"
+                                                >
+                                                    <span>Continue</span>
+                                                    <ArrowRight className="w-5 h-5" />
+                                                </button>
+                                            </div>
+                                        </motion.div>
+                                    )}
+
+                                    {currentFeature === 'proposal_intro' && (
+                                        <motion.div
+                                            key="step-proposal-intro"
+                                            initial={{ opacity: 0, x: 20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            exit={{ opacity: 0, x: -20 }}
+                                            className="space-y-8"
+                                        >
+                                            <div className="space-y-4">
+                                                <h2 className="text-3xl font-medium tracking-tight">The Build Up</h2>
+                                                <p className="text-white/40 font-medium">Set the stage with 4 cinematic messages.</p>
+                                            </div>
+                                            <div className="space-y-4">
+                                                {data.introMessages.map((msg: string, idx: number) => (
+                                                    <div key={idx} className="space-y-2">
+                                                        <label className="text-[10px] uppercase tracking-widest text-white/40 ml-2">Message {idx + 1}</label>
+                                                        <input
+                                                            type="text"
+                                                            value={msg}
+                                                            onChange={(e) => {
+                                                                const newMsgs = [...data.introMessages];
+                                                                newMsgs[idx] = e.target.value;
+                                                                setData({ ...data, introMessages: newMsgs });
+                                                            }}
+                                                            placeholder={`Message ${idx + 1}...`}
+                                                            className="w-full px-6 py-4 bg-white/[0.03] rounded-2xl border border-white/5 outline-none text-white text-sm"
+                                                        />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                            <div className="flex gap-4">
+                                                <button onClick={handleBack} className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all">Back</button>
+                                                <button
+                                                    disabled={data.introMessages.some((m: string) => !m)}
+                                                    onClick={handleNext}
+                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
+                                                >
                                                     <span>Continue</span>
                                                     <ArrowRight className="w-5 h-5" />
                                                 </button>
@@ -493,7 +557,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                                 <button
                                                     disabled={!data.message}
                                                     onClick={handleNext}
-                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3"
+                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                                                 >
                                                     <span>Continue</span>
                                                     <ArrowRight className="w-5 h-5" />
@@ -512,7 +576,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                         >
                                             <div className="space-y-4">
                                                 <h2 className="text-3xl font-medium tracking-tight">Attachment</h2>
-                                                <p className="text-white/40 font-medium">Upload a photo to seal the memory (Optional).</p>
+                                                <p className="text-white/40 font-medium">Upload a photo to seal the memory.</p>
                                             </div>
                                             <div className="space-y-4">
                                                 <label className="flex flex-col items-center justify-center w-full aspect-video bg-white/[0.03] rounded-[32px] border-2 border-dashed border-white/5 hover:border-myRed/30 cursor-pointer transition-all group overflow-hidden">
@@ -532,10 +596,11 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                             <div className="flex gap-4">
                                                 <button onClick={handleBack} className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all">Back</button>
                                                 <button
+                                                    disabled={!data.imageUrl}
                                                     onClick={handleNext}
-                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3"
+                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                                                 >
-                                                    <span>{data.imageUrl ? 'Confirm Image' : 'Skip Step'}</span>
+                                                    <span>Confirm Image</span>
                                                     <ArrowRight className="w-5 h-5" />
                                                 </button>
                                             </div>
@@ -590,10 +655,11 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                             <div className="flex gap-4">
                                                 <button onClick={handleBack} className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all">Back</button>
                                                 <button
+                                                    disabled={!data.musicUrl}
                                                     onClick={handleNext}
-                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3"
+                                                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 disabled:opacity-50"
                                                 >
-                                                    <span>{data.musicUrl ? 'Track Set' : 'Skip Audio'}</span>
+                                                    <span>Track Set</span>
                                                     <ArrowRight className="w-5 h-5" />
                                                 </button>
                                             </div>
@@ -635,25 +701,23 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                                         />
                                                     </div>
                                                 )}
-                                                {(templateId === 'amour' || templateId === 'quest-valentine') && (
-                                                    <div className="relative">
-                                                        <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
-                                                        <input
-                                                            type="text"
-                                                            value={data.whatsapp}
-                                                            onChange={(e) => setData({ ...data, whatsapp: e.target.value })}
-                                                            placeholder="WhatsApp Number (e.g. +234...)"
-                                                            className="w-full pl-16 pr-6 py-5 bg-white/[0.03] rounded-2xl border border-white/5 focus:border-myRed/50 outline-none text-white font-medium"
-                                                        />
-                                                    </div>
-                                                )}
+                                                <div className="relative">
+                                                    <Phone className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
+                                                    <input
+                                                        type="text"
+                                                        value={data.whatsapp}
+                                                        onChange={(e) => setData({ ...data, whatsapp: e.target.value })}
+                                                        placeholder="WhatsApp Number (e.g. +234...)"
+                                                        className="w-full pl-16 pr-6 py-5 bg-white/[0.03] rounded-2xl border border-white/5 focus:border-myRed/50 outline-none text-white font-medium"
+                                                    />
+                                                </div>
                                             </div>
                                             <div className="flex gap-4">
                                                 <button onClick={handleBack} className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all">Back</button>
                                                 <button
-                                                    disabled={!data.sender || loading}
+                                                    disabled={!data.sender || ((templateId === 'amour' || templateId === 'quest-valentine' || templateId === 'interactive-dodge') && !data.whatsapp) || loading}
                                                     onClick={handleFinish}
-                                                    className={`flex-[2] py-5 ${templateId === 'valentine-motion-premium' ? 'bg-[#A82424] hover:bg-[#7A1B1B]' : 'bg-myRed hover:bg-myRed/90'} text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-3 relative overflow-hidden`}
+                                                    className={`flex-[2] py-5 ${templateId === 'valentine-motion-premium' ? 'bg-[#A82424] hover:bg-[#7A1B1B]' : 'bg-myRed hover:bg-myRed/90'} text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-3 relative overflow-hidden disabled:opacity-50`}
                                                 >
                                                     {loading && templateId === 'valentine-motion-premium' && (
                                                         <motion.div
@@ -670,7 +734,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                         </motion.div>
                                     )}
 
-                                    {step === (templateId === 'valentine-motion-premium' ? 7 : 6) && (
+                                    {step === (totalSteps + 1) && (
                                         <motion.div
                                             key="success"
                                             initial={{ opacity: 0 }}

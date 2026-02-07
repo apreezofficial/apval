@@ -63,6 +63,7 @@ export default function MinimalEliteView({ data, isPreview }: MinimalEliteViewPr
                     <div className="space-y-3">
                         <span className="text-[11px] font-black uppercase tracking-[0.5em] text-[#3D2B1F]/60">Eternally Sealed</span>
                         <h2 className="text-4xl font-light text-[#3D2B1F] tracking-tight leading-tight">
+                            <span className="block text-sm font-medium opacity-60 mb-1">{data.headline}</span>
                             {data.recipient || 'Your Love'}
                         </h2>
                     </div>

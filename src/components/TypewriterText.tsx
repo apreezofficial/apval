@@ -121,18 +121,28 @@ export const TypewriterText: React.FC<TypewriterTextProps> = ({
 
     return (
         <div ref={containerRef} className={`relative inline-block ${className}`}>
-            <span>{displayText}</span>
-            {/* Ghost span for measurement */}
-            <span ref={ghostRef} className="invisible absolute left-0 top-0 whitespace-nowrap pointer-events-none">
+            {/* Hidden copy to reserve size and prevent layout shifts */}
+            <span className="opacity-0 pointer-events-none select-none" aria-hidden="true">
+                {text}
+            </span>
+
+            {/* Actual typing text */}
+            <span className="absolute left-0 top-0 w-full h-full">
+                {displayText}
+                {!isDone && (
+                    <motion.span
+                        animate={{ opacity: [1, 0] }}
+                        transition={{ duration: 0.4, repeat: Infinity }}
+                        className="inline-block w-[2px] h-[1em] bg-myRed ml-1 align-middle"
+                    />
+                )}
+            </span>
+
+            {/* Ghost span for bubble measurement (no wrapping restriction) */}
+            <span ref={ghostRef} className="invisible absolute left-0 top-0 pointer-events-none">
                 {displayText}
             </span>
-            {!isDone && (
-                <motion.span
-                    animate={{ opacity: [1, 0] }}
-                    transition={{ duration: 0.4, repeat: Infinity }}
-                    className="inline-block w-[2px] h-[1em] bg-myRed ml-1 align-middle"
-                />
-            )}
+
             <div className="absolute inset-0 pointer-events-none">
                 {bubbles.map(bubble => (
                     <Bubble
