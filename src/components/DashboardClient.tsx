@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, ExternalLink, Trash2, Edit2, Share2 } from 'lucide-react';
+import { Heart, Plus, ExternalLink, Trash2, Edit2, Share2, X, MessageCircle, Sparkles } from 'lucide-react';
 import Link from 'next/link';
 import MultiStepEditor from '@/components/MultiStepEditor';
 import Footer from '@/components/Footer';
@@ -20,6 +20,8 @@ export default function DashboardClient() {
     const [filter, setFilter] = useState<'all' | 'card' | 'website'>('all');
     const [isEditorOpen, setIsEditorOpen] = useState(false);
     const [editingValentine, setEditingValentine] = useState<any>(null);
+    const [sharingValentine, setSharingValentine] = useState<any>(null);
+    const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 6;
@@ -179,20 +181,9 @@ export default function DashboardClient() {
                                     <Edit2 className="w-4 h-4" />
                                 </button>
                                 <button
-                                    onClick={async () => {
-                                        const link = `${window.location.origin}/v/${v.id}`;
-                                        if (navigator.share) {
-                                            try {
-                                                await navigator.share({
-                                                    title: 'Cinematic Valentine',
-                                                    text: `Check out this cinematic valentine: ${v.headline}`,
-                                                    url: link,
-                                                });
-                                            } catch (err) { }
-                                        } else {
-                                            navigator.clipboard.writeText(link);
-                                            showToast('Discovery URL Copied!', 'success');
-                                        }
+                                    onClick={() => {
+                                        setSharingValentine(v);
+                                        setIsShareModalOpen(true);
                                     }}
                                     className="p-3 bg-white/5 rounded-xl hover:bg-green-500/10 hover:text-green-500 transition-all text-white/40"
                                 >
@@ -251,6 +242,18 @@ export default function DashboardClient() {
                     />
                 )}
             </AnimatePresence>
+
+            <AnimatePresence>
+                {isShareModalOpen && sharingValentine && (
+                    <ShareModal
+                        valentine={sharingValentine}
+                        onClose={() => {
+                            setIsShareModalOpen(false);
+                            setSharingValentine(null);
+                        }}
+                    />
+                )}
+            </AnimatePresence>
         </main>
     );
 }
@@ -273,5 +276,93 @@ function SkeletonCard() {
                 <div className="w-12 h-12 bg-white/5 rounded-xl" />
             </div>
         </div>
+    );
+}
+
+function ShareModal({ valentine, onClose }: { valentine: any; onClose: () => void }) {
+    const link = `${window.location.origin}/v/${valentine.id}`;
+    const { showToast } = useToast();
+
+    return (
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/90 backdrop-blur-2xl"
+        >
+            <motion.div
+                initial={{ scale: 0.9, y: 20, opacity: 0 }}
+                animate={{ scale: 1, y: 0, opacity: 1 }}
+                exit={{ scale: 0.9, y: 20, opacity: 0 }}
+                className="w-full max-w-md bg-[#0A0A0A] border border-white/10 rounded-[40px] p-10 space-y-8 relative shadow-2xl"
+            >
+                <button
+                    onClick={onClose}
+                    className="absolute top-6 right-6 p-2 hover:bg-white/5 rounded-full transition-colors text-white/40 hover:text-white"
+                >
+                    <X size={20} />
+                </button>
+
+                <div className="text-center space-y-4">
+                    <div className="w-20 h-20 bg-myRed/10 rounded-3xl flex items-center justify-center mx-auto border border-myRed/20">
+                        <Heart className="text-myRed w-10 h-10 fill-current" />
+                    </div>
+                    <div className="space-y-2">
+                        <h2 className="text-2xl font-bold tracking-tight">Transmit Asset</h2>
+                        <p className="text-white/40 text-sm italic">"{valentine.headline} {valentine.recipient}"</p>
+                    </div>
+                </div>
+
+                <div className="p-6 bg-white/[0.03] rounded-3xl border border-white/5 space-y-4">
+                    <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] ml-2">Secure Link</p>
+                    <div className="flex items-center gap-3 bg-black/40 p-3 rounded-2xl border border-white/5">
+                        <span className="flex-1 truncate text-xs font-mono opacity-60 px-2 italic">{link}</span>
+                        <button
+                            onClick={() => {
+                                navigator.clipboard.writeText(link);
+                                showToast('Link copied to clipboard', 'success');
+                            }}
+                            className="px-4 py-2 bg-myRed text-white text-[10px] font-black uppercase tracking-widest rounded-xl hover:scale-105 active:scale-95 transition-all shadow-lg shadow-myRed/20"
+                        >
+                            Copy
+                        </button>
+                    </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                    <button
+                        onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Check out this cinematic valentine I created for you: ${link}`)}`, '_blank')}
+                        className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-green-500/10 hover:border-green-500/30 transition-all group/btn"
+                    >
+                        <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 group-hover/btn:scale-110 transition-transform">
+                            <MessageCircle className="w-5 h-5 fill-current" />
+                        </div>
+                        <span className="text-[8px] font-black uppercase tracking-widest text-white/40 group-hover/btn:text-white">WhatsApp</span>
+                    </button>
+                    <button
+                        onClick={async () => {
+                            if (navigator.share) {
+                                try {
+                                    await navigator.share({
+                                        title: 'Cinematic Valentine',
+                                        text: `Check out this cinematic valentine: ${valentine.headline}`,
+                                        url: link,
+                                    });
+                                } catch (err) { }
+                            } else {
+                                navigator.clipboard.writeText(link);
+                                showToast('Discovery URL Copied!', 'success');
+                            }
+                        }}
+                        className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-myRed/10 hover:border-myRed/30 transition-all group/btn"
+                    >
+                        <div className="w-10 h-10 bg-myRed/20 rounded-full flex items-center justify-center text-myRed group-hover/btn:scale-110 transition-transform">
+                            <Share2 className="w-5 h-5" />
+                        </div>
+                        <span className="text-[8px] font-black uppercase tracking-widest text-white/40 group-hover/btn:text-white">Universal</span>
+                    </button>
+                </div>
+            </motion.div>
+        </motion.div>
     );
 }
