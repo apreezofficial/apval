@@ -22,7 +22,7 @@ export async function generateMetadata(
 
     if (!data || data.error) {
         return {
-            title: "Asset Not Found | Apval",
+            title: "Discovering Asset... | Apval",
         };
     }
 

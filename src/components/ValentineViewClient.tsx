@@ -18,21 +18,117 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
     const [data, setData] = useState<any>(initialData);
     const [mounted, setMounted] = useState(false);
     const [viewStep, setViewStep] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         setMounted(true);
-        if (!initialData && id) {
-            fetch(`/api/valentines/${id}`)
-                .then(res => res.json())
-                .then(result => {
+
+        const searchAsset = async () => {
+            // Artificial delay to make it feel like it's searching
+            await new Promise(resolve => setTimeout(resolve, 2500));
+
+            if (!initialData && id) {
+                try {
+                    const res = await fetch(`/api/valentines/${id}`);
+                    const result = await res.json();
                     if (!result.error) setData(result);
                     else setData({ error: true });
-                })
-                .catch(() => setData({ error: true }));
-        }
+                } catch (error) {
+                    setData({ error: true });
+                }
+            }
+            setIsLoading(false);
+        };
+
+        searchAsset();
     }, [id, initialData]);
 
-    if (!mounted) return null;
+    const LoadingShimmer = () => (
+        <main className="min-h-screen relative bg-[#050505] flex flex-col items-center justify-center p-6 text-white overflow-hidden">
+            {/* Ambient Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] bg-myRed/5 rounded-full blur-[120px] pointer-events-none animate-pulse" />
+
+            {/* Grid Pattern */}
+            <div className="absolute inset-0 opacity-[0.03] pointer-events-none bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:40px_40px]" />
+
+            <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="relative z-10 w-full max-w-[400px] aspect-[9/19] bg-[#111] rounded-[60px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.8)] border-[12px] border-[#1a1a1a] overflow-hidden flex flex-col"
+            >
+                {/* Notch */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[120px] h-[34px] bg-[#1a1a1a] rounded-b-3xl z-50 flex items-center justify-center">
+                    <div className="w-12 h-1 bg-white/10 rounded-full" />
+                </div>
+
+                <div className="flex-1 p-10 pt-24 flex flex-col justify-between relative bg-gradient-to-b from-[#1a1a1a] to-[#050505]">
+                    <div className="space-y-12">
+                        {/* Shimmer Card */}
+                        <div className="relative w-32 h-40 bg-white/5 rounded-[32px] overflow-hidden">
+                            <motion.div
+                                animate={{ x: ['-100%', '100%'] }}
+                                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                                <Heart className="w-10 h-10 text-white/10" />
+                            </div>
+                        </div>
+
+                        {/* Shimmer Text */}
+                        <div className="space-y-4">
+                            {[1, 2, 3].map((i) => (
+                                <div key={i} className="relative h-10 bg-white/5 rounded-2xl overflow-hidden" style={{ width: `${100 - (i * 15)}%` }}>
+                                    <motion.div
+                                        animate={{ x: ['-100%', '100%'] }}
+                                        transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: i * 0.2 }}
+                                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="space-y-6">
+                        {/* Shimmer Progress */}
+                        <div className="flex gap-2">
+                            {[1, 2, 3, 4].map((i) => (
+                                <div key={i} className="h-1 flex-1 bg-white/5 rounded-full" />
+                            ))}
+                        </div>
+                        {/* Shimmer Button */}
+                        <div className="h-16 bg-white/5 rounded-2xl w-full border border-white/5 overflow-hidden relative">
+                            <motion.div
+                                animate={{ x: ['-100%', '100%'] }}
+                                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </motion.div>
+
+            {/* Status Footer */}
+            <div className="mt-12 flex flex-col items-center gap-4 relative z-10">
+                <div className="relative">
+                    <div className="w-8 h-8 border-2 border-myRed/20 rounded-full" />
+                    <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="absolute inset-0 w-8 h-8 border-2 border-myRed border-t-transparent rounded-full"
+                    />
+                </div>
+                <div className="flex flex-col items-center gap-1 text-center">
+                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">Retrieving Asset</span>
+                    <span className="text-[8px] font-bold text-myRed/40 uppercase tracking-widest bg-myRed/5 px-3 py-1 rounded-full border border-myRed/10 mt-2 block">
+                        {id}
+                    </span>
+                </div>
+            </div>
+        </main>
+    );
+
+    if (!mounted || isLoading) return <LoadingShimmer />;
 
     if (!data || data.error) return (
         <NotFoundUI
