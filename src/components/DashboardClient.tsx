@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, ExternalLink, Trash2, Edit2 } from 'lucide-react';
+import { Heart, Plus, ExternalLink, Trash2, Edit2, Share2 } from 'lucide-react';
 import Link from 'next/link';
 import MultiStepEditor from '@/components/MultiStepEditor';
 import Footer from '@/components/Footer';
@@ -10,7 +10,7 @@ import Footer from '@/components/Footer';
 import { useToast } from '@/components/Toast';
 import { useModal } from '@/components/Modal';
 
-import { TypewriterText, TypewriterStepWrapper } from '@/components/TypewriterText';
+
 
 export default function DashboardClient() {
     const { showToast } = useToast();
@@ -104,12 +104,12 @@ export default function DashboardClient() {
             <div className="pt-32 px-6 md:px-20 max-w-7xl mx-auto min-h-[70vh]">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
                     <div>
-                                    <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-2 text-white">
-                                        My Creations
-                                    </h1>
-                                    <p className="text-white/40">
-                                        Keep track of your heart's work and share the vibes
-                                    </p>
+                        <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-2 text-white">
+                            My Creations
+                        </h1>
+                        <p className="text-white/40">
+                            Keep track of your heart's work and share the vibes
+                        </p>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-4">
@@ -177,6 +177,26 @@ export default function DashboardClient() {
                                     className="flex-1 p-3 bg-white/5 rounded-xl hover:bg-myRed/10 hover:text-myRed transition-all flex items-center justify-center text-white/40"
                                 >
                                     <Edit2 className="w-4 h-4" />
+                                </button>
+                                <button
+                                    onClick={async () => {
+                                        const link = `${window.location.origin}/v/${v.id}`;
+                                        if (navigator.share) {
+                                            try {
+                                                await navigator.share({
+                                                    title: 'Cinematic Valentine',
+                                                    text: `Check out this cinematic valentine: ${v.headline}`,
+                                                    url: link,
+                                                });
+                                            } catch (err) { }
+                                        } else {
+                                            navigator.clipboard.writeText(link);
+                                            showToast('Discovery URL Copied!', 'success');
+                                        }
+                                    }}
+                                    className="p-3 bg-white/5 rounded-xl hover:bg-green-500/10 hover:text-green-500 transition-all text-white/40"
+                                >
+                                    <Share2 className="w-4 h-4" />
                                 </button>
                                 <button
                                     onClick={() => handleDelete(v.id)}

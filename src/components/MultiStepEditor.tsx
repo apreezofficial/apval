@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, ArrowRight, ArrowLeft, Send, User, MessageCircle, Sparkles, Phone, Music, Music2 } from 'lucide-react';
+import { X, Heart, ArrowRight, ArrowLeft, Send, User, MessageCircle, Sparkles, Phone, Music, Music2, Share2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
@@ -117,7 +117,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
             const finalId = editId || result.id;
 
             if (finalId) {
-                const successStep = templateId === 'valentine-motion-premium' ? 5 : 4;
+                const successStep = templateId === 'valentine-motion-premium' ? 7 : 6;
                 setLink(`${window.location.origin}/v/${finalId}`);
                 setStep(successStep);
                 showToast('Asset deployed successfully', 'success');
@@ -628,46 +628,173 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                     {step === (templateId === 'valentine-motion-premium' ? 7 : 6) && (
                                         <motion.div
                                             key="success"
-                                            initial={{ opacity: 0, scale: 0.9 }}
-                                            animate={{ opacity: 1, scale: 1 }}
-                                            className="space-y-8 text-center"
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 1 }}
+                                            className="absolute inset-0 z-[100] flex flex-col items-center justify-center p-8 bg-black/95 backdrop-blur-3xl"
                                         >
-                                            <div className={`w-20 h-20 ${templateId === 'valentine-motion-premium' ? 'bg-[#D4AF37]/20 shadow-[0_0_30px_rgba(212,175,55,0.3)]' : 'bg-myRed/20'} rounded-full flex items-center justify-center mx-auto mb-6`}>
-                                                <Heart className={`${templateId === 'valentine-motion-premium' ? 'text-[#D4AF37]' : 'text-myRed'} w-10 h-10 fill-current`} />
+                                            {/* Global Close to Dashboard */}
+                                            <button
+                                                onClick={() => {
+                                                    onClose();
+                                                    router.push('/dashboard');
+                                                }}
+                                                className="absolute top-10 right-10 p-3 bg-white/5 hover:bg-white/10 rounded-full transition-all border border-white/10 group"
+                                            >
+                                                <X className="w-6 h-6 text-white/40 group-hover:text-white" />
+                                            </button>
+                                            {/* Confetti Effect */}
+                                            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                                                {[...Array(24)].map((_, i) => (
+                                                    <motion.div
+                                                        key={i}
+                                                        initial={{
+                                                            top: "100%",
+                                                            left: `${Math.random() * 100}%`,
+                                                            scale: Math.random() * 0.5 + 0.5,
+                                                            opacity: 0,
+                                                            rotate: Math.random() * 360
+                                                        }}
+                                                        animate={{
+                                                            top: "-10%",
+                                                            opacity: [0, 1, 1, 0],
+                                                            rotate: 360 + (Math.random() * 360),
+                                                            x: (Math.random() - 0.5) * 300
+                                                        }}
+                                                        transition={{
+                                                            duration: Math.random() * 4 + 3,
+                                                            repeat: Infinity,
+                                                            delay: Math.random() * 3,
+                                                            ease: "linear"
+                                                        }}
+                                                        className="absolute"
+                                                    >
+                                                        <Heart className={`${i % 2 === 0 ? 'text-myRed/40' : 'text-[#D4AF37]/40'} fill-current w-6 h-6`} />
+                                                    </motion.div>
+                                                ))}
                                             </div>
-                                            <h2 className="text-3xl font-medium tracking-tight">
-                                                {templateId === 'valentine-motion-premium' ? 'Masterpiece Deployed!' : 'Asset Deployed!'}
-                                            </h2>
-                                            <p className="text-white/40 font-medium italic">
-                                                {templateId === 'valentine-motion-premium' ? 'Your premium cinematic experience is now live.' : 'Your interactive card is now live.'}
-                                            </p>
 
-                                            <div className="p-6 bg-white/[0.03] rounded-2xl border border-white/5 space-y-3 relative overflow-hidden group">
-                                                {templateId === 'valentine-motion-premium' && (
-                                                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#D4AF37]/5 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
-                                                )}
-                                                <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest text-left">Access Endpoint</p>
-                                                <div className="flex items-center gap-3 text-white font-medium bg-black/40 p-3 rounded-lg border border-white/5 overflow-hidden text-sm">
-                                                    <span className="truncate flex-1 text-left">{link}</span>
+                                            <motion.div
+                                                initial={{ scale: 0.8, y: 30, opacity: 0 }}
+                                                animate={{ scale: 1, y: 0, opacity: 1 }}
+                                                transition={{ type: "spring", damping: 15, stiffness: 100 }}
+                                                className="w-full max-w-md space-y-8 text-center relative z-10"
+                                            >
+                                                <div className="relative mx-auto w-32 h-32 mb-8">
+                                                    <motion.div
+                                                        animate={{
+                                                            scale: [1, 1.1, 1],
+                                                            rotate: [0, 5, -5, 0]
+                                                        }}
+                                                        transition={{ duration: 4, repeat: Infinity }}
+                                                        className={`w-full h-full ${templateId === 'valentine-motion-premium' ? 'bg-[#D4AF37]/10' : 'bg-myRed/10'} rounded-[40px] flex items-center justify-center border border-white/5 relative z-10 shadow-2xl`}
+                                                    >
+                                                        <Heart className={`${templateId === 'valentine-motion-premium' ? 'text-[#D4AF37]' : 'text-myRed'} w-14 h-14 fill-current`} />
+                                                    </motion.div>
+                                                    <div className="absolute -top-4 -right-4 w-12 h-12 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center animate-bounce">
+                                                        <Sparkles className="w-6 h-6 text-myRed" />
+                                                    </div>
+                                                </div>
+
+                                                <div className="space-y-3">
+                                                    <h2 className="text-4xl font-black tracking-tight italic uppercase">
+                                                        {templateId === 'valentine-motion-premium' ? 'Masterpiece Deployed!' : 'Asset Deployed!'}
+                                                    </h2>
+                                                    <p className="text-white/40 font-medium italic max-w-[300px] mx-auto leading-tight">
+                                                        {templateId === 'valentine-motion-premium'
+                                                            ? 'Your premium cinematic experience is now live on the decentralized web.'
+                                                            : 'Your interactive card is now live and ready to be received.'}
+                                                    </p>
+                                                </div>
+
+                                                <div className="p-8 bg-white/[0.03] rounded-[32px] border border-white/5 space-y-6 relative overflow-hidden group">
+                                                    <div className="space-y-3">
+                                                        <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] text-left ml-2">Secure Discovery URL</p>
+                                                        <div className="flex items-center gap-3 text-white font-medium bg-black/60 p-4 rounded-2xl border border-white/10 overflow-hidden text-sm group-hover:border-myRed/30 transition-colors">
+                                                            <span className="truncate flex-1 text-left font-mono opacity-60 italic">{link}</span>
+                                                            <button
+                                                                onClick={() => {
+                                                                    navigator.clipboard.writeText(link);
+                                                                    showToast('Secure link copied!', 'success');
+                                                                }}
+                                                                className={`${templateId === 'valentine-motion-premium' ? 'bg-[#D4AF37] text-black' : 'bg-myRed text-white'} px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-lg`}
+                                                            >
+                                                                Copy
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="space-y-4">
+                                                        <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em]">Transmit Love via</p>
+                                                        <div className="grid grid-cols-2 gap-4">
+                                                            <button
+                                                                onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(`Hey! I created a cinematic valentine experience for you. View it here: ${link}`)}`, '_blank')}
+                                                                className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-green-500/10 hover:border-green-500/30 transition-all group/btn"
+                                                            >
+                                                                <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center text-green-500 group-hover/btn:scale-110 transition-transform">
+                                                                    <MessageCircle className="w-5 h-5 fill-current" />
+                                                                </div>
+                                                                <span className="text-[8px] font-black uppercase tracking-widest text-white/40 group-hover/btn:text-white">WhatsApp</span>
+                                                            </button>
+                                                            <button
+                                                                onClick={() => window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Check out this cinematic valentine I created with @Apval!`)}&url=${encodeURIComponent(link)}`, '_blank')}
+                                                                className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-blue-400/10 hover:border-blue-400/30 transition-all group/btn"
+                                                            >
+                                                                <div className="w-10 h-10 bg-blue-400/20 rounded-full flex items-center justify-center text-blue-400 group-hover/btn:scale-110 transition-transform">
+                                                                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+                                                                </div>
+                                                                <span className="text-[8px] font-black uppercase tracking-widest text-white/40 group-hover/btn:text-white">X / Twitter</span>
+                                                            </button>
+                                                            <button
+                                                                onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(link)}`, '_blank')}
+                                                                className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-blue-600/10 hover:border-blue-600/30 transition-all group/btn"
+                                                            >
+                                                                <div className="w-10 h-10 bg-blue-600/20 rounded-full flex items-center justify-center text-blue-600 group-hover/btn:scale-110 transition-transform">
+                                                                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.248h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
+                                                                </div>
+                                                                <span className="text-[8px] font-black uppercase tracking-widest text-white/40 group-hover/btn:text-white">Facebook</span>
+                                                            </button>
+                                                            <button
+                                                                onClick={async () => {
+                                                                    if (navigator.share) {
+                                                                        try {
+                                                                            await navigator.share({
+                                                                                title: 'Cinematic Valentine',
+                                                                                text: 'I created a cinematic valentine experience for you!',
+                                                                                url: link,
+                                                                            });
+                                                                        } catch (err) { }
+                                                                    } else {
+                                                                        navigator.clipboard.writeText(link);
+                                                                        showToast('Discovery URL Copied!', 'success');
+                                                                    }
+                                                                }}
+                                                                className="flex flex-col items-center gap-3 p-4 bg-white/5 rounded-2xl border border-white/5 hover:bg-myRed/10 hover:border-myRed/30 transition-all group/btn"
+                                                            >
+                                                                <div className="w-10 h-10 bg-myRed/20 rounded-full flex items-center justify-center text-myRed group-hover/btn:scale-110 transition-transform">
+                                                                    <Share2 className="w-5 h-5" />
+                                                                </div>
+                                                                <span className="text-[8px] font-black uppercase tracking-widest text-white/40 group-hover/btn:text-white">Universal</span>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div className="flex gap-4 pt-6">
                                                     <button
                                                         onClick={() => {
-                                                            navigator.clipboard.writeText(link);
-                                                            showToast('URL Copied to clipboard!', 'info');
+                                                            onClose();
+                                                            router.push('/dashboard');
                                                         }}
-                                                        className={`${templateId === 'valentine-motion-premium' ? 'text-[#D4AF37] hover:text-[#C5A059]' : 'text-myRed hover:text-myRed/80'} text-xs font-bold transition-colors`}
+                                                        className="flex-1 py-5 bg-white/5 text-white/40 font-black uppercase tracking-widest text-[10px] rounded-2xl hover:bg-white/10 transition-all border border-white/5"
                                                     >
-                                                        COPY URL
+                                                        Exit to Dashboard
                                                     </button>
+                                                    <Link href="/dashboard" className={`flex-1 py-5 ${templateId === 'valentine-motion-premium' ? 'bg-[#A82424]' : 'bg-myRed'} text-white font-black uppercase tracking-widest text-[10px] rounded-2xl transition-all flex items-center justify-center gap-2 shadow-2xl hover:scale-105 active:scale-95`}>
+                                                        <span>View All Assets</span>
+                                                        <ArrowRight className="w-4 h-4" />
+                                                    </Link>
                                                 </div>
-                                            </div>
-
-                                            <div className="flex gap-4">
-                                                <button onClick={onClose} className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all">Close</button>
-                                                <Link href="/dashboard" className={`flex-1 py-5 ${templateId === 'valentine-motion-premium' ? 'bg-[#A82424] hover:bg-[#7A1B1B]' : 'bg-myRed hover:bg-myRed/90'} text-white font-bold rounded-2xl transition-all flex items-center justify-center gap-2`}>
-                                                    <span>Dashboard</span>
-                                                    <ArrowRight className="w-4 h-4" />
-                                                </Link>
-                                            </div>
+                                            </motion.div>
                                         </motion.div>
                                     )}
                                 </>
@@ -675,7 +802,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                         </AnimatePresence>
                     </div>
                 </div>
-            </motion.div >
-        </motion.div >
+            </motion.div>
+        </motion.div>
     );
 }

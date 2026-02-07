@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Music, Music2, Volume2, VolumeX } from 'lucide-react';
+import { Heart, Music, Music2, Volume2, VolumeX, MessageCircle } from 'lucide-react';
 
 interface QuestValentineViewProps {
     data: any;
@@ -77,6 +77,25 @@ export default function QuestValentineView({ data }: QuestValentineViewProps) {
                     <p className="text-xl md:text-2xl text-white/60 font-medium tracking-tight">
                         {data.recipient}, you just made my entire world!
                     </p>
+
+                    {data.whatsapp && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.6 }}
+                            className="pt-8"
+                        >
+                            <a
+                                href={`https://wa.me/${data.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(`Hey ${data.sender}! I just said YES to your beautiful Valentine request on Apval! ❤️❤️❤️`)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-3 px-8 py-4 bg-[#25D366] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(37,211,102,0.2)]"
+                            >
+                                <MessageCircle className="w-5 h-5 fill-current" />
+                                <span>Tell {data.sender} on WhatsApp</span>
+                            </a>
+                        </motion.div>
+                    )}
                 </motion.div>
 
                 {/* Celebration Particles */}

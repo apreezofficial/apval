@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { Heart, Shield, Cpu, Zap } from 'lucide-react';
-import { TypewriterText, TypewriterStepWrapper } from './TypewriterText';
+
 
 export default function Mission() {
     return (
@@ -34,29 +34,13 @@ export default function Mission() {
                 {/* Content Side */}
                 <div className="space-y-12">
                     <div className="space-y-6">
-                        <TypewriterStepWrapper>
-                            {(step, setStep) => (
-                                <>
-                                    <h2 className="text-5xl md:text-7xl font-medium tracking-tighter text-white leading-tight">
-                                        Build trust and explain <br />
-                                        <span className="text-myRed">
-                                            <TypewriterText
-                                                text="your mission"
-                                                speed={0.06}
-                                                onComplete={() => setStep(1)}
-                                            />
-                                        </span>
-                                    </h2>
-                                    <p className="text-xl text-white/40 font-medium leading-relaxed max-w-xl">
-                                        <TypewriterText
-                                            text="Our mission is to power love with infrastructure that's reliable, and built to scale—without the typical romantic complexity."
-                                            trigger={step >= 1}
-                                            speed={0.02}
-                                        />
-                                    </p>
-                                </>
-                            )}
-                        </TypewriterStepWrapper>
+                        <h2 className="text-5xl md:text-7xl font-medium tracking-tighter text-white leading-tight">
+                            Build trust and explain <br />
+                            <span className="text-myRed">your mission</span>
+                        </h2>
+                        <p className="text-xl text-white/40 font-medium leading-relaxed max-w-xl">
+                            Our mission is to power love with infrastructure that&apos;s reliable, and built to scale—without the typical romantic complexity.
+                        </p>
                     </div>
 
                     <div className="bg-[#0A0A0A] border border-white/5 rounded-[32px] p-10 space-y-8 shadow-2xl">

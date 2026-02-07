@@ -6,7 +6,7 @@ import TemplateCard from '@/components/TemplateCard';
 import MultiStepEditor from '@/components/MultiStepEditor';
 import { motion, AnimatePresence } from 'framer-motion';
 import Footer from '@/components/Footer';
-import { TypewriterText, TypewriterStepWrapper } from '@/components/TypewriterText';
+
 
 export default function TemplatesClient() {
     const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
@@ -27,19 +27,13 @@ export default function TemplatesClient() {
             <div className="pt-40 px-6 md:px-20 max-w-7xl mx-auto mb-20">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-10 mb-16">
                     <div className="space-y-4">
-                        <TypewriterStepWrapper>
-                            {(step, setStep) => (
-                                <>
-                                    <h1 className="text-5xl md:text-7xl font-medium tracking-tighter leading-none">
-                                        The Complete<br />
-                                        <span className="text-myRed">Asset Gallery</span>
-                                    </h1>
-                                    <p className="max-w-xl text-xl text-white/40 font-medium tracking-tight">
-                                        Select architecture for your next deployment.
-                                    </p>
-                                </>
-                            )}
-                        </TypewriterStepWrapper>
+                        <h1 className="text-5xl md:text-7xl font-medium tracking-tighter leading-none">
+                            The Complete<br />
+                            <span className="text-myRed">Asset Gallery</span>
+                        </h1>
+                        <p className="max-w-xl text-xl text-white/40 font-medium tracking-tight">
+                            Select architecture for your next deployment.
+                        </p>
                     </div>
 
                     <div className="flex items-center gap-3 p-1.5 bg-white/5 rounded-2xl border border-white/5">

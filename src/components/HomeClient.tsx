@@ -12,7 +12,7 @@ import { AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-import { TypewriterText, TypewriterStepWrapper } from "@/components/TypewriterText";
+
 import { motion } from 'framer-motion';
 
 export default function HomeClient() {
@@ -39,35 +39,12 @@ export default function HomeClient() {
                 <div className="max-w-7xl mx-auto text-center">
                     <div className="mb-20 space-y-8">
                         <div className="space-y-4">
-                            <TypewriterStepWrapper>
-                                {(step, setStep) => (
-                                    <>
-                                        <h2 className="text-4xl md:text-6xl font-medium tracking-tighter text-white">
-                                            Ready for{" "}
-                                            <span className="text-myRed">
-                                                <TypewriterText
-                                                    text="Deployment"
-                                                    speed={0.05}
-                                                    onComplete={() => setStep(1)}
-                                                />
-                                            </span>
-                                            <TypewriterText
-                                                text="."
-                                                trigger={step >= 1}
-                                                speed={0.05}
-                                                onComplete={() => setStep(2)}
-                                            />
-                                        </h2>
-                                        <p className="text-white/40 font-medium tracking-tight uppercase text-xs tracking-[0.3em]">
-                                            <TypewriterText
-                                                text="Select Architecture"
-                                                trigger={step >= 2}
-                                                speed={0.02}
-                                            />
-                                        </p>
-                                    </>
-                                )}
-                            </TypewriterStepWrapper>
+                            <h2 className="text-4xl md:text-6xl font-medium tracking-tighter text-white">
+                                Ready for <span className="text-myRed">Deployment</span>.
+                            </h2>
+                            <p className="text-white/40 font-medium tracking-tight uppercase text-xs tracking-[0.3em]">
+                                Select Architecture
+                            </p>
                         </div>
 
                         <div className="flex items-center justify-center gap-3 p-1.5 bg-white/5 rounded-2xl border border-white/5 w-fit mx-auto">

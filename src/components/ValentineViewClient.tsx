@@ -19,6 +19,24 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
     const [mounted, setMounted] = useState(false);
     const [viewStep, setViewStep] = useState(0);
     const [isLoading, setIsLoading] = useState(true);
+    const [statusIndex, setStatusIndex] = useState(0);
+
+    const statuses = [
+        "Initializing Secure Connection...",
+        "Scanning Heartbeat Database...",
+        "Decrypting Cinematic Assets...",
+        "Authenticating Signature...",
+        "Finalizing Experience..."
+    ];
+
+    useEffect(() => {
+        if (isLoading) {
+            const interval = setInterval(() => {
+                setStatusIndex((prev) => (prev + 1) % statuses.length);
+            }, 600);
+            return () => clearInterval(interval);
+        }
+    }, [isLoading]);
 
     useEffect(() => {
         setMounted(true);
@@ -42,6 +60,12 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
 
         searchAsset();
     }, [id, initialData]);
+
+    useEffect(() => {
+        if (data && !data.error && !isLoading) {
+            document.title = `${data.sender} sent you a Valentine! | Apval`;
+        }
+    }, [data, isLoading]);
 
     const LoadingShimmer = () => (
         <main className="min-h-screen relative bg-[#050505] flex flex-col items-center justify-center p-6 text-white overflow-hidden">
@@ -93,7 +117,15 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
                         {/* Shimmer Progress */}
                         <div className="flex gap-2">
                             {[1, 2, 3, 4].map((i) => (
-                                <div key={i} className="h-1 flex-1 bg-white/5 rounded-full" />
+                                <div key={i} className="h-1 flex-1 relative bg-white/5 rounded-full overflow-hidden">
+                                    {i - 1 <= statusIndex && (
+                                        <motion.div
+                                            initial={{ x: '-100%' }}
+                                            animate={{ x: '0%' }}
+                                            className="absolute inset-0 bg-myRed"
+                                        />
+                                    )}
+                                </div>
                             ))}
                         </div>
                         {/* Shimmer Button */}
@@ -119,9 +151,19 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
                     />
                 </div>
                 <div className="flex flex-col items-center gap-1 text-center">
-                    <span className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60">Retrieving Asset</span>
+                    <AnimatePresence mode="wait">
+                        <motion.span
+                            key={statusIndex}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="text-[10px] font-black uppercase tracking-[0.4em] text-white/60 h-4"
+                        >
+                            {statuses[statusIndex]}
+                        </motion.span>
+                    </AnimatePresence>
                     <span className="text-[8px] font-bold text-myRed/40 uppercase tracking-widest bg-myRed/5 px-3 py-1 rounded-full border border-myRed/10 mt-2 block">
-                        {id}
+                        ENDPOINT: {id}
                     </span>
                 </div>
             </div>
@@ -281,6 +323,20 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
                                                 From {data.sender}
                                             </h2>
                                         </div>
+
+                                        {data.whatsapp && (
+                                            <div className="pt-6">
+                                                <a
+                                                    href={`https://wa.me/${data.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(`Hey ${data.sender}! I just saw the cinematic valentine you created for me on Apval. It's beautiful! ❤️`)}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-2 px-6 py-3 bg-[#25D366] text-white rounded-2xl text-[10px] font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl shadow-green-500/20"
+                                                >
+                                                    <MessageCircle className="w-4 h-4 fill-current" />
+                                                    <span>Reply on WhatsApp</span>
+                                                </a>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                             </motion.div>
