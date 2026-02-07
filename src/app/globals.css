@@ -21,24 +21,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
-  overflow-x: hidden !important;
-  max-width: 100vw !important;
-  width: 100% !important;
+  overflow-x: hidden;
+  max-width: 100vw;
+  width: 100%;
   position: relative;
-  scrollbar-width: thin;
-  scrollbar-color: #fc4100 #050505;
-  margin: 0;
-  padding: 0;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-}
-
-#__next,
-main {
-  overflow-x: hidden !important;
-  max-width: 100vw !important;
-  width: 100% !important;
 }
 
 * {
@@ -46,30 +32,18 @@ main {
   border-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Global Premium Bubble Scrollbar - Forced for Chrome/WebKit/Edge */
-::-webkit-scrollbar {
-  width: 12px !important;
-  height: 12px !important;
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
 }
 
-::-webkit-scrollbar-track {
-  background: #050505 !important;
-  border-radius: 10px !important;
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #ff4d8d, #fc4100, #ff4d8d) !important;
-  background-size: 100% 200% !important;
-  border-radius: 100px !important;
-  border: 3px solid #050505 !important;
-  /* Thick border for "floating bubble" effect */
-  box-shadow: inset 0 0 8px rgba(255, 255, 255, 0.3) !important;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background-position: bottom !important;
-  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.4),
-    0 0 20px rgba(252, 65, 0, 0.4) !important;
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #fc4100;
+  border-radius: 10px;
 }
 
 @layer utilities {

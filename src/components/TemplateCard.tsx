@@ -106,49 +106,6 @@ export default function TemplateCard({ template }: TemplateCardProps) {
                                 <div className="w-8 h-4 bg-[#ff4b4b]/30 rounded-full" />
                             </div>
                         </div>
-                    ) : template.id === 'interactive-dodge' ? (
-                        /* Interactive Dodge Preview (Prank/Choice UI) */
-                        <div className="w-[120px] aspect-[9/16] bg-gradient-to-br from-[#FFF0F7] to-[#FFE4F0] rounded-[24px] border-[4px] border-[#FF4D8D]/20 shadow-2xl p-4 flex flex-col items-center justify-center space-y-3 relative group-hover:scale-105 transition-transform overflow-hidden">
-                            <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_#FF4D8D_0%,_transparent_70%)]" />
-                            <div className="flex flex-col items-center mb-1">
-                                <motion.div
-                                    animate={{ scale: [1, 1.2, 1] }}
-                                    transition={{ repeat: Infinity, duration: 2 }}
-                                    className="text-3xl mb-1"
-                                >
-                                    ❤️
-                                </motion.div>
-                            </div>
-                            <div className="space-y-1.5 w-full flex flex-col items-center mb-2">
-                                <div className="h-1.5 w-[85%] bg-[#FF4D8D]/40 rounded-full" />
-                                <div className="h-1.5 w-1/2 bg-[#FF4D8D]/20 rounded-full" />
-                            </div>
-                            <div className="flex flex-col gap-2 w-full px-1">
-                                <div className="w-full h-8 bg-green-500 rounded-xl shadow-[0_4px_10px_rgba(34,197,94,0.3)] flex items-center justify-center">
-                                    <span className="text-[8px] font-black text-white italic">YES!</span>
-                                </div>
-                                <div className="w-2/3 h-6 bg-black/5 border border-black/10 rounded-lg flex items-center justify-center self-center rotate-6 translate-x-2">
-                                    <span className="text-[7px] font-bold text-black/20">No</span>
-                                </div>
-                            </div>
-                            <div className="absolute top-4 left-4 w-1.5 h-1.5 rounded-full bg-blue-400 opacity-40" />
-                            <div className="absolute bottom-10 right-4 w-2 h-2 rounded-full bg-pink-400 opacity-40 blur-[1px]" />
-                        </div>
-                    ) : template.id === 'classic-valentine' ? (
-                        /* Classic Proposal Preview (Cute Bear UI) */
-                        <div className="w-[120px] aspect-[9/16] bg-[#FFB6C1] rounded-[24px] border-[4px] border-white shadow-2xl p-4 flex flex-col items-center justify-center space-y-3 relative group-hover:scale-105 transition-transform overflow-hidden">
-                            <div className="w-14 h-14 bg-white rounded-xl shadow-lg border border-pink-200 overflow-hidden mb-2">
-                                <img src="https://media1.tenor.com/m/al4a1pG1fScAAAAC/jump-bear.gif" className="w-full h-full object-cover" alt="Bear" />
-                            </div>
-                            <div className="h-1.5 w-full bg-white/40 rounded-full" />
-                            <div className="h-1.5 w-2/3 bg-white/40 rounded-full" />
-                            <div className="flex flex-col gap-1 w-full mt-2">
-                                <div className="h-6 w-full bg-green-500 rounded-lg flex items-center justify-center shadow-lg">
-                                    <span className="text-[6px] font-black text-white italic">YES</span>
-                                </div>
-                                <div className="h-4 w-1/2 bg-white/30 rounded-lg self-center" />
-                            </div>
-                        </div>
                     ) : (
                         /* Card / Premium Preview (Phone Mock - Color Scheme from image) */
                         <div className="w-[120px] aspect-[9/16] bg-[#FFECF8] rounded-[24px] border-[4px] border-black shadow-2xl p-4 flex flex-col items-center justify-between relative group-hover:rotate-[-3deg] transition-transform overflow-hidden">
@@ -190,6 +147,6 @@ export default function TemplateCard({ template }: TemplateCardProps) {
                     <Heart className="w-4 h-4 fill-current" />
                 </div>
             </div>
-        </motion.div>
+        </motion.div >
     );
 }

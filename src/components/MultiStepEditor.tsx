@@ -15,7 +15,6 @@ import AmourView from './templates/AmourView';
 import MinimalEliteView from './templates/MinimalEliteView';
 import PremiumMotionView from './templates/PremiumMotionView';
 import QuestValentineView from './templates/QuestValentineView';
-import InteractiveDodgeView from './templates/InteractiveDodgeView';
 import { useToast } from './Toast';
 
 export default function MultiStepEditor({ templateId: initialTemplateId, onClose, editId }: MultiStepEditorProps) {
@@ -45,9 +44,6 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
     });
     const [loading, setLoading] = useState(false);
     const [link, setLink] = useState('');
-    const [musicSearchQuery, setMusicSearchQuery] = useState('');
-    const [musicSearchResults, setMusicSearchResults] = useState<any[]>([]);
-    const [isSearchingMusic, setIsSearchingMusic] = useState(false);
     const router = useRouter();
 
     useEffect(() => {
@@ -99,8 +95,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         'valentine-motion-premium': ['recipient_headline', 'intro', 'content', 'attachment', 'audio', 'signature'],
         'amour': ['recipient_headline', 'content', 'attachment', 'audio', 'signature'],
         'minimal-elite-card': ['recipient_headline', 'content', 'signature'],
-        'quest-valentine': ['recipient', 'audio', 'signature'],
-        'interactive-dodge': ['recipient', 'gender', 'proposal_intro', 'audio', 'signature'],
+        'quest-valentine': ['recipient', 'content', 'audio', 'signature'],
     };
 
     const features = featureMap[templateId] || ['recipient', 'signature'];
@@ -142,24 +137,6 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
     const handleNext = () => setStep(step + 1);
     const handleBack = () => setStep(step - 1);
 
-    const handleMusicSearch = async (query: string) => {
-        setMusicSearchQuery(query);
-        if (query.length < 2) {
-            setMusicSearchResults([]);
-            return;
-        }
-
-        setIsSearchingMusic(true);
-        try {
-            const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=6`);
-            const result = await res.json();
-            setMusicSearchResults(result.results || []);
-        } catch (err) {
-            console.error('Music search failed:', err);
-        } finally {
-            setIsSearchingMusic(false);
-        }
-    };
 
     const stepsForPreview = features.map(f => ({ type: f }));
 
@@ -168,30 +145,8 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#050505]/90 backdrop-blur-3xl overflow-y-auto pt-10 pb-10 px-4"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm overflow-y-auto pt-10 pb-10 px-4"
         >
-            {/* Animated bubbles in background */}
-            <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {[...Array(20)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        animate={{
-                            y: [-20, -1200],
-                            x: Math.random() * 400 - 200,
-                            opacity: [0, 1, 0],
-                        }}
-                        transition={{
-                            duration: Math.random() * 10 + 10,
-                            repeat: Infinity,
-                            delay: Math.random() * 20,
-                        }}
-                        className="absolute bottom-0 text-white/5"
-                        style={{ left: `${Math.random() * 100}%` }}
-                    >
-                        <Heart size={Math.random() * 40 + 10} />
-                    </motion.div>
-                ))}
-            </div>
 
             <motion.div
                 initial={{ scale: 0.9, y: 20 }}
@@ -243,10 +198,6 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                             ) : templateId === 'quest-valentine' ? (
                                 <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
                                     <QuestValentineView data={data} />
-                                </div>
-                            ) : templateId === 'interactive-dodge' ? (
-                                <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
-                                    <InteractiveDodgeView data={data} isPreview />
                                 </div>
                             ) : (
                                 <div className="flex-1 p-6 pt-12 flex flex-col items-center justify-between bg-[#FF99F1] text-black">
@@ -639,77 +590,29 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                         >
                                             <div className="space-y-4">
                                                 <h2 className="text-3xl font-medium tracking-tight">Audio Vibe</h2>
-                                                <p className="text-white/40 font-medium italic">Search for your favorite song (e.g. Rema, Tems) or pick a mood.</p>
+                                                <p className="text-white/40 font-medium">Select a soundtrack or paste a YouTube/Spotify link.</p>
                                             </div>
 
-                                            <div className="space-y-4">
-                                                <div className="relative">
-                                                    <Music className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-white/20" />
-                                                    <input
-                                                        type="text"
-                                                        value={musicSearchQuery}
-                                                        onChange={(e) => handleMusicSearch(e.target.value)}
-                                                        placeholder="Search songs... (e.g. Rema)"
-                                                        className="w-full pl-16 pr-6 py-5 bg-white/[0.03] rounded-2xl border border-white/5 focus:border-myRed/50 outline-none text-white font-medium shadow-inner"
-                                                    />
-                                                    {isSearchingMusic && (
-                                                        <div className="absolute right-6 top-1/2 -translate-y-1/2">
-                                                            <div className="w-4 h-4 border-2 border-myRed border-t-transparent rounded-full animate-spin" />
-                                                        </div>
-                                                    )}
-                                                </div>
-
-                                                {musicSearchResults.length > 0 && (
-                                                    <div className="grid grid-cols-1 gap-2 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
-                                                        {musicSearchResults.map((track) => (
-                                                            <button
-                                                                key={track.trackId}
-                                                                onClick={() => {
-                                                                    setData({ ...data, musicUrl: track.previewUrl });
-                                                                    setMusicSearchResults([]);
-                                                                    setMusicSearchQuery(track.trackName);
-                                                                }}
-                                                                className={`flex items-center gap-4 p-3 rounded-xl border transition-all text-left group ${data.musicUrl === track.previewUrl
-                                                                    ? 'bg-myRed/20 border-myRed'
-                                                                    : 'bg-white/5 border-white/5 hover:bg-white/10'
-                                                                    }`}
-                                                            >
-                                                                <img src={track.artworkUrl60} className="w-10 h-10 rounded-lg shadow-lg" alt="" />
-                                                                <div className="flex-1 overflow-hidden">
-                                                                    <div className="text-xs font-bold text-white truncate">{track.trackName}</div>
-                                                                    <div className="text-[10px] text-white/40 truncate">{track.artistName}</div>
-                                                                </div>
-                                                                <div className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center group-hover:bg-myRed/20 transition-colors">
-                                                                    <Music2 className={`w-3 h-3 ${data.musicUrl === track.previewUrl ? 'text-myRed' : 'text-white/20'}`} />
-                                                                </div>
-                                                            </button>
-                                                        ))}
-                                                    </div>
-                                                )}
+                                            <div className="grid grid-cols-2 gap-3">
+                                                {[
+                                                    { name: 'Romantic Piano', url: 'https://www.youtube.com/embed/WJ3-F02-F_Y' },
+                                                    { name: 'Lofi Love', url: 'https://www.youtube.com/embed/5yx6BWlEVcY' },
+                                                    { name: 'Cinematic Strings', url: 'https://www.youtube.com/embed/B_mS_j8J0K0' },
+                                                    { name: 'Acoustic Guitar', url: 'https://www.youtube.com/embed/2mzX_7YhJ2g' }
+                                                ].map((track) => (
+                                                    <button
+                                                        key={track.name}
+                                                        onClick={() => setData({ ...data, musicUrl: track.url })}
+                                                        className={`p-4 rounded-2xl border transition-all text-left group ${data.musicUrl === track.url
+                                                            ? 'bg-myRed/20 border-myRed text-white'
+                                                            : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'
+                                                            }`}
+                                                    >
+                                                        <Music2 className={`w-5 h-5 mb-2 ${data.musicUrl === track.url ? 'text-myRed' : 'text-white/20'}`} />
+                                                        <div className="text-xs font-bold leading-tight uppercase tracking-widest">{track.name}</div>
+                                                    </button>
+                                                ))}
                                             </div>
-
-                                            {!musicSearchQuery && (
-                                                <div className="grid grid-cols-2 gap-3">
-                                                    {[
-                                                        { name: 'Romantic Piano', url: 'https://www.youtube.com/embed/WJ3-F02-F_Y' },
-                                                        { name: 'Lofi Love', url: 'https://www.youtube.com/embed/5yx6BWlEVcY' },
-                                                        { name: 'Cinematic Strings', url: 'https://www.youtube.com/embed/B_mS_j8J0K0' },
-                                                        { name: 'Acoustic Guitar', url: 'https://www.youtube.com/embed/2mzX_7YhJ2g' }
-                                                    ].map((track) => (
-                                                        <button
-                                                            key={track.name}
-                                                            onClick={() => setData({ ...data, musicUrl: track.url })}
-                                                            className={`p-4 rounded-2xl border transition-all text-left group ${data.musicUrl === track.url
-                                                                ? 'bg-myRed/20 border-myRed text-white'
-                                                                : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'
-                                                                }`}
-                                                        >
-                                                            <Music2 className={`w-5 h-5 mb-2 ${data.musicUrl === track.url ? 'text-myRed' : 'text-white/20'}`} />
-                                                            <div className="text-xs font-bold leading-tight uppercase tracking-widest">{track.name}</div>
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            )}
 
                                             <div className="relative">
                                                 <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-3 ml-2">Manual Override</div>
@@ -982,6 +885,6 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                     </div>
                 </div>
             </motion.div>
-        </motion.div>
+        </motion.div >
     );
 }
