@@ -151,7 +151,7 @@ export default function InteractiveDodgeView({ data, isPreview }: InteractiveDod
                                 layout
                                 onPointerOver={dodgeButton}
                                 onClick={dodgeButton}
-                                className={`py-4 px-10 rounded-full font-bold text-xl border transition-all ${noBtnPos.isAbsolute ? 'fixed z-50 bg-white/80 backdrop-blur-md shadow-2xl' : 'bg-black/5 border-black/5 text-black/40'}`}
+                                className={`py-4 px-10 rounded-full font-bold text-xl border transition-all ${noBtnPos.isAbsolute ? 'absolute z-50 bg-white/80 backdrop-blur-md shadow-2xl' : 'bg-black/5 border-black/5 text-black/40'}`}
                                 style={noBtnPos.isAbsolute ? {
                                     left: noBtnPos.x,
                                     top: noBtnPos.y,
