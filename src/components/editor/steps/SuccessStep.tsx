@@ -123,4 +123,3 @@ export default function SuccessStep({ link, onClose, templateId, showToast }: Su
     );
 }
 
-import { ArrowRight } from 'lucide-react';
