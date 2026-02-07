@@ -47,5 +47,37 @@ export const templates: Template[] = [
         theme: 'playful',
         previewColor: '#FF4D4D',
         category: 'website'
+    },
+    {
+        id: 'interactive-dodge',
+        name: 'Interactive Proposal',
+        description: 'The ultimate dodge-the-no game. Multi-stage intro with a gender-themed UI and confetti celebration.',
+        theme: 'playful',
+        previewColor: '#FF4D8D',
+        category: 'website'
+    },
+    {
+        id: 'classic-valentine',
+        name: 'The Classic Proposal',
+        description: 'The viral "Yes/No" interaction with cute bears and an unstoppable "Yes" button.',
+        theme: 'playful',
+        previewColor: '#FFB6C1',
+        category: 'website'
+    },
+    {
+        id: 'interactive-dodge',
+        name: 'Interactive Proposal',
+        description: 'The ultimate dodge-the-no game. Multi-stage intro with a gender-themed UI and confetti celebration.',
+        theme: 'playful',
+        previewColor: '#FF4D8D',
+        category: 'website'
+    },
+    {
+        id: 'classic-valentine',
+        name: 'The Classic Proposal',
+        description: 'The viral "Yes/No" interaction with cute bears and an unstoppable "Yes" button.',
+        theme: 'playful',
+        previewColor: '#FFB6C1',
+        category: 'website'
     }
 ];

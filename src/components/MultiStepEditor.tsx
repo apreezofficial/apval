@@ -15,6 +15,8 @@ import AmourView from './templates/AmourView';
 import MinimalEliteView from './templates/MinimalEliteView';
 import PremiumMotionView from './templates/PremiumMotionView';
 import QuestValentineView from './templates/QuestValentineView';
+import InteractiveDodgeView from './templates/InteractiveDodgeView';
+import ClassicValentineView from './templates/ClassicValentineView';
 import { useToast } from './Toast';
 
 export default function MultiStepEditor({ templateId: initialTemplateId, onClose, editId }: MultiStepEditorProps) {
@@ -96,6 +98,9 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         'amour': ['recipient_headline', 'content', 'attachment', 'audio', 'signature'],
         'minimal-elite-card': ['recipient_headline', 'content', 'signature'],
         'quest-valentine': ['recipient', 'content', 'audio', 'signature'],
+        'interactive-dodge': ['recipient', 'gender', 'proposal_intro', 'audio', 'signature'],
+        'classic-valentine': ['recipient', 'content', 'audio', 'signature'],
+        'premium-mockup-card': ['recipient', 'content', 'attachment', 'audio', 'signature']
     };
 
     const features = featureMap[templateId] || ['recipient', 'signature'];
@@ -198,6 +203,14 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                             ) : templateId === 'quest-valentine' ? (
                                 <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
                                     <QuestValentineView data={data} />
+                                </div>
+                            ) : templateId === 'interactive-dodge' ? (
+                                <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
+                                    <InteractiveDodgeView data={data} isPreview />
+                                </div>
+                            ) : templateId === 'classic-valentine' ? (
+                                <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
+                                    <ClassicValentineView data={data} isPreview />
                                 </div>
                             ) : (
                                 <div className="flex-1 p-6 pt-12 flex flex-col items-center justify-between bg-[#FF99F1] text-black">
