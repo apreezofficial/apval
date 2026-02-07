@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Share2, Heart, RotateCcw } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Share2, Heart, RotateCcw, MessageCircle } from 'lucide-react';
 import Link from 'next/link';
 import AmourView from '@/components/templates/AmourView';
 import MinimalEliteView from '@/components/templates/MinimalEliteView';
@@ -390,11 +390,15 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
 
             {data.musicUrl && (
                 <div className="fixed top-10 right-10 z-[100] flex items-center gap-4">
-                    <iframe
-                        src={`${data.musicUrl}${data.musicUrl.includes('?') ? '&' : '?'}autoplay=1`}
-                        className="hidden"
-                        allow="autoplay"
-                    />
+                    {data.musicUrl.includes('youtube.com') || data.musicUrl.includes('youtu.be') || data.musicUrl.includes('spotify.com') ? (
+                        <iframe
+                            src={`${data.musicUrl}${data.musicUrl.includes('?') ? '&' : '?'}autoplay=1`}
+                            className="hidden"
+                            allow="autoplay"
+                        />
+                    ) : (
+                        <audio src={data.musicUrl} autoPlay loop className="hidden" />
+                    )}
                     <div className="w-12 h-12 bg-white/10 backdrop-blur-3xl border border-white/20 rounded-full flex items-center justify-center animate-pulse">
                         <Heart size={20} className="text-red-500 fill-current" />
                     </div>

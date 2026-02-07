@@ -80,4 +80,33 @@ body {
   .font-geist {
     font-family: 'Geist', sans-serif;
   }
+
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.02);
+    background-image: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 20%),
+      radial-gradient(circle at 80% 50%, rgba(255, 255, 255, 0.05) 0%, transparent 15%),
+      radial-gradient(circle at 30% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 25%);
+    border-radius: 100px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #ff4d8d, #fc4100, #ff4d8d);
+    background-size: 100% 200%;
+    border-radius: 100px;
+    border: 3px solid rgba(0, 0, 0, 0.3);
+    box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.3),
+      0 0 15px rgba(252, 65, 0, 0.2);
+    transition: all 0.5s ease;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-position: bottom;
+    box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.5),
+      0 0 20px rgba(252, 65, 0, 0.4);
+    cursor: grab;
+  }
 }
