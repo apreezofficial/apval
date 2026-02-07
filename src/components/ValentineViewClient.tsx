@@ -8,6 +8,7 @@ import MinimalEliteView from '@/components/templates/MinimalEliteView';
 import PremiumMotionView from '@/components/templates/PremiumMotionView';
 import QuestValentineView from '@/components/templates/QuestValentineView';
 import InteractiveDodgeView from '@/components/templates/InteractiveDodgeView';
+import ClassicValentineView from '@/components/templates/ClassicValentineView';
 import NotFoundUI from '@/components/NotFoundUI';
 
 interface ValentineViewClientProps {
@@ -224,6 +225,10 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
 
         if (data.templateId === 'interactive-dodge') {
             return <InteractiveDodgeView key={resetKey} data={data} />;
+        }
+
+        if (data.templateId === 'classic-valentine') {
+            return <ClassicValentineView key={resetKey} data={data} />;
         }
 
         // Default Template (Premium Mockup)

@@ -63,6 +63,7 @@ export const viewport: Viewport = {
 };
 
 import BackgroundEffects from "@/components/BackgroundEffects";
+import ScrollBubbles from "@/components/ScrollBubbles";
 
 export default function RootLayout({
   children,
@@ -75,6 +76,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#050505] text-white`}
       >
         <BackgroundEffects />
+        <ScrollBubbles />
         <ToastProvider>
           <ModalProvider>
             {children}

@@ -134,6 +134,21 @@ export default function TemplateCard({ template }: TemplateCardProps) {
                             <div className="absolute top-4 left-4 w-1.5 h-1.5 rounded-full bg-blue-400 opacity-40" />
                             <div className="absolute bottom-10 right-4 w-2 h-2 rounded-full bg-pink-400 opacity-40 blur-[1px]" />
                         </div>
+                    ) : template.id === 'classic-valentine' ? (
+                        /* Classic Proposal Preview (Cute Bear UI) */
+                        <div className="w-[120px] aspect-[9/16] bg-[#FFB6C1] rounded-[24px] border-[4px] border-white shadow-2xl p-4 flex flex-col items-center justify-center space-y-3 relative group-hover:scale-105 transition-transform overflow-hidden">
+                            <div className="w-14 h-14 bg-white rounded-xl shadow-lg border border-pink-200 overflow-hidden mb-2">
+                                <img src="https://media1.tenor.com/m/al4a1pG1fScAAAAC/jump-bear.gif" className="w-full h-full object-cover" alt="Bear" />
+                            </div>
+                            <div className="h-1.5 w-full bg-white/40 rounded-full" />
+                            <div className="h-1.5 w-2/3 bg-white/40 rounded-full" />
+                            <div className="flex flex-col gap-1 w-full mt-2">
+                                <div className="h-6 w-full bg-green-500 rounded-lg flex items-center justify-center shadow-lg">
+                                    <span className="text-[6px] font-black text-white italic">YES</span>
+                                </div>
+                                <div className="h-4 w-1/2 bg-white/30 rounded-lg self-center" />
+                            </div>
+                        </div>
                     ) : (
                         /* Card / Premium Preview (Phone Mock - Color Scheme from image) */
                         <div className="w-[120px] aspect-[9/16] bg-[#FFECF8] rounded-[24px] border-[4px] border-black shadow-2xl p-4 flex flex-col items-center justify-between relative group-hover:rotate-[-3deg] transition-transform overflow-hidden">
