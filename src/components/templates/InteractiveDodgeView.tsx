@@ -1,8 +1,9 @@
 'use client';
 import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, MessageCircle, Sparkles } from 'lucide-react';
+import { Heart, MessageCircle, Sparkles, Volume2, VolumeX } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import MusicPlayer from '../MusicPlayer';
 
 interface InteractiveDodgeViewProps {
     data: any;
@@ -14,6 +15,7 @@ export default function InteractiveDodgeView({ data, isPreview }: InteractiveDod
     const [yesPressed, setYesPressed] = useState(false);
     const [noBtnPos, setNoBtnPos] = useState({ x: 0, y: 0, isAbsolute: false });
     const [yesScale, setYesScale] = useState(1);
+    const [isMuted, setIsMuted] = useState(false);
     const containerRef = useRef<HTMLDivElement>(null);
 
     const messages = data.introMessages || [
@@ -77,6 +79,18 @@ export default function InteractiveDodgeView({ data, isPreview }: InteractiveDod
             ref={containerRef}
             className={`w-full h-full ${isPreview ? 'relative' : 'fixed inset-0'} bg-gradient-to-br ${bgColor} flex items-center justify-center p-6 overflow-hidden select-none font-sans`}
         >
+            {data.musicUrl && <MusicPlayer url={data.musicUrl} isMuted={isMuted} />}
+            
+            {data.musicUrl && (
+                <button
+                    onClick={() => setIsMuted(!isMuted)}
+                    className="absolute top-6 right-6 z-50 w-10 h-10 rounded-full bg-white/40 border border-white/40 flex items-center justify-center hover:bg-white/60 transition-all backdrop-blur-md shadow-sm"
+                    style={{ color: themeColor }}
+                >
+                    {isMuted ? <VolumeX className="w-5 h-5 opacity-60" /> : <Volume2 className="w-5 h-5 animate-pulse" />}
+                </button>
+            )}
+
             {/* Background Floating Elements */}
             <div className="absolute inset-0 pointer-events-none opacity-20">
                 {[...Array(15)].map((_, i) => (

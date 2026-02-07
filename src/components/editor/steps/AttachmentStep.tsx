@@ -51,11 +51,10 @@ export default function AttachmentStep({ data, onUpdate, onNext, onBack }: Attac
             <div className="flex gap-4">
                 <button onClick={onBack} className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all">Back</button>
                 <button
-                    disabled={!data.imageUrl}
                     onClick={onNext}
-                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 disabled:opacity-50 shadow-lg"
+                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 shadow-lg"
                 >
-                    <span>Confirm Image</span>
+                    <span>{data.imageUrl ? 'Confirm Image' : 'Skip'}</span>
                     <ArrowRight className="w-5 h-5" />
                 </button>
             </div>

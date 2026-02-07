@@ -78,8 +78,8 @@ export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepP
                             key={track.trackId}
                             onClick={() => onUpdate({ musicUrl: track.previewUrl })}
                             className={`flex items-center gap-4 p-3 rounded-xl border transition-all ${data.musicUrl === track.previewUrl
-                                    ? 'bg-myRed/10 border-myRed/30'
-                                    : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05]'
+                                ? 'bg-myRed/10 border-myRed/30'
+                                : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05]'
                                 }`}
                         >
                             <img src={track.artworkUrl60} className="w-10 h-10 rounded-lg" alt="" />
@@ -104,8 +104,8 @@ export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepP
                             key={track.name}
                             onClick={() => onUpdate({ musicUrl: track.url })}
                             className={`p-4 rounded-2xl border transition-all text-left group ${data.musicUrl === track.url
-                                    ? 'bg-myRed/20 border-myRed text-white'
-                                    : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'
+                                ? 'bg-myRed/20 border-myRed text-white'
+                                : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'
                                 }`}
                         >
                             <Music2 className={`w-5 h-5 mb-2 ${data.musicUrl === track.url ? 'text-myRed' : 'text-white/20'}`} />
@@ -134,11 +134,10 @@ export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepP
                     Back
                 </button>
                 <button
-                    disabled={!data.musicUrl}
                     onClick={onNext}
-                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 disabled:opacity-50 shadow-[0_10px_20px_-5px_rgba(252,65,0,0.4)]"
+                    className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 shadow-[0_10px_20px_-5px_rgba(252,65,0,0.4)]"
                 >
-                    <span className="text-sm uppercase tracking-widest">Set Soundtrack</span>
+                    <span className="text-sm uppercase tracking-widest">{data.musicUrl ? 'Set Soundtrack' : 'Skip Music'}</span>
                     <ArrowRight className="w-5 h-5" />
                 </button>
             </div>

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, ArrowRight, Share2, Heart, RotateCcw, MessageCircle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Share2, Heart, RotateCcw, MessageCircle, VolumeX } from 'lucide-react';
 import Link from 'next/link';
 import AmourView from '@/components/templates/AmourView';
 import MinimalEliteView from '@/components/templates/MinimalEliteView';
@@ -10,6 +10,7 @@ import QuestValentineView from '@/components/templates/QuestValentineView';
 import InteractiveDodgeView from '@/components/templates/InteractiveDodgeView';
 import ClassicValentineView from '@/components/templates/ClassicValentineView';
 import NotFoundUI from '@/components/NotFoundUI';
+import MusicPlayer from '@/components/MusicPlayer';
 
 interface ValentineViewClientProps {
     initialData: any;
@@ -23,6 +24,7 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
     const [isLoading, setIsLoading] = useState(true);
     const [statusIndex, setStatusIndex] = useState(0);
     const [resetKey, setResetKey] = useState(0);
+    const [isMuted, setIsMuted] = useState(false);
 
     const statuses = [
         "Initializing Secure Connection...",
@@ -393,15 +395,11 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
         <>
             {renderContent()}
 
-            {data.musicUrl && (
-                <div className="fixed top-10 right-10 z-[100] flex items-center gap-4">
-                    <iframe
-                        src={`${data.musicUrl}${data.musicUrl.includes('?') ? '&' : '?'}autoplay=1`}
-                        className="hidden"
-                        allow="autoplay"
-                    />
-                    <div className="w-12 h-12 bg-white/10 backdrop-blur-3xl border border-white/20 rounded-full flex items-center justify-center animate-pulse">
-                        <Heart size={20} className="text-red-500 fill-current" />
+            {data.musicUrl && !['quest-valentine', 'interactive-dodge', 'valentine-motion-premium'].includes(data.templateId || '') && (
+                <div onClick={() => setIsMuted(!isMuted)} className="fixed top-10 right-10 z-[100] flex items-center gap-4 cursor-pointer group">
+                    <MusicPlayer url={data.musicUrl} isMuted={isMuted} />
+                    <div className={`w-12 h-12 ${isMuted ? 'bg-white/5 border-white/10' : 'bg-white/10 backdrop-blur-3xl border-white/20'} border rounded-full flex items-center justify-center transition-all ${isMuted ? '' : 'animate-pulse group-hover:scale-110'}`}>
+                        {isMuted ? <VolumeX size={20} className="text-white fill-current opacity-60" /> : <Heart size={20} className="text-red-500 fill-current" />}
                     </div>
                 </div>
             )}
