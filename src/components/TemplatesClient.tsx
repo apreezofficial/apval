@@ -16,8 +16,8 @@ export default function TemplatesClient() {
 
     const cardVariants = [
         { initial: { opacity: 0, scale: 0.9, y: 50 }, animate: { opacity: 1, scale: 1, y: 0 } },
-        { initial: { opacity: 0, rotate: -5, x: -30 }, animate: { opacity: 1, rotate: 0, x: 0 } },
-        { initial: { opacity: 0, rotate: 5, x: 30 }, animate: { opacity: 1, rotate: 0, x: 0 } },
+        { initial: { opacity: 0, scale: 0.9, y: 30 }, animate: { opacity: 1, scale: 1, y: 0 } },
+        { initial: { opacity: 0, scale: 0.9, y: 40 }, animate: { opacity: 1, scale: 1, y: 0 } },
     ];
 
     return (
