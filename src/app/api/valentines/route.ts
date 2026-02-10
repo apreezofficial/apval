@@ -15,11 +15,35 @@ export async function POST(request: Request) {
 
 export async function PUT(request: Request) {
     try {
-        const { id, userId, ...data } = await request.json();
+        const { id, userId, customSlug, ...data } = await request.json();
         if (!id) return NextResponse.json({ error: 'ID required' }, { status: 400 });
-        await saveValentine(id, { ...data, userId });
+
+        // validate slug if present
+        if (customSlug) {
+            // 1. Format check
+            if (!/^[a-z0-9-]+$/.test(customSlug)) {
+                return NextResponse.json({ error: 'Slug must be lowercase alphanumeric with hyphens' }, { status: 400 });
+            }
+
+            // 2. Check Premium
+            const { getUserById, isSlugTaken } = await import('@/lib/db');
+            const user: any = await getUserById(userId);
+            if (user?.subscriptionTier !== 'premium') {
+                return NextResponse.json({ error: 'Custom slugs are a Premium feature' }, { status: 403 });
+            }
+
+            // 3. Check Uniqueness
+            const taken = await isSlugTaken(customSlug, id);
+            if (taken) {
+                return NextResponse.json({ error: 'This custom link is already taken' }, { status: 409 });
+            }
+        }
+
+        // Save with slug
+        await saveValentine(id, { ...data, userId, customSlug });
         return NextResponse.json({ success: true });
     } catch (error) {
+        console.error(error);
         return NextResponse.json({ error: 'Failed to update Valentine' }, { status: 500 });
     }
 }

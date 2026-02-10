@@ -53,6 +53,11 @@ export async function getUserByEmail(email: string) {
     return Object.values(users).find((u: any) => u.email === email);
 }
 
+export async function getUserById(id: string) {
+    const users = await getUsers();
+    return users[id] || null;
+}
+
 export async function getValentinesByUser(userId: string) {
     const valentines = await getValentines();
     return Object.entries(valentines)
@@ -68,4 +73,16 @@ export async function deleteValentine(id: string) {
         return true;
     }
     return false;
+}
+
+export async function getValentineBySlug(slug: string) {
+    const valentines = await getValentines();
+    return Object.values(valentines).find((v: any) => v.customSlug === slug);
+}
+
+export async function isSlugTaken(slug: string, excludeId?: string) {
+    const valentines = await getValentines();
+    return Object.entries(valentines).some(([id, v]: [string, any]) =>
+        v.customSlug === slug && id !== excludeId
+    );
 }

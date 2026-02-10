@@ -1,7 +1,7 @@
 'use client';
 import { motion } from 'framer-motion';
 import { Link2, Crown, Sparkles } from 'lucide-react';
-import { EditorData } from './types';
+import { EditorData } from '../types';
 
 interface CustomSlugStepProps {
     data: EditorData & { customSlug?: string };

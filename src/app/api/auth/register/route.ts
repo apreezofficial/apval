@@ -14,7 +14,7 @@ export async function POST(request: Request) {
         const userId = uuidv4();
         await saveUser(userId, { id: userId, email, password, name });
 
-        return NextResponse.json({ id: userId, name });
+        return NextResponse.json({ id: userId, name, email });
     } catch (error) {
         return NextResponse.json({ error: 'Registration failed' }, { status: 500 });
     }

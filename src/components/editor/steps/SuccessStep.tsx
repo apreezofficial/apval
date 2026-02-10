@@ -1,18 +1,52 @@
-
-import { motion } from 'framer-motion';
-import { Heart, Sparkles, X, Share2, ArrowRight } from 'lucide-react';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Heart, Sparkles, X, Share2, ArrowRight, Edit2, Loader2, Check } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { apiPut } from '@/lib/api';
 
 interface SuccessStepProps {
     link: string;
     onClose: () => void;
     templateId: string;
+    valentineId: string;
+    isPremiumUser: boolean;
     showToast: (msg: string, type: 'success' | 'error') => void;
 }
 
-export default function SuccessStep({ link, onClose, templateId, showToast }: SuccessStepProps) {
+export default function SuccessStep({ link, onClose, templateId, valentineId, isPremiumUser, showToast }: SuccessStepProps) {
     const router = useRouter();
-    const isPremium = templateId === 'valentine-motion-premium';
+    const isPremiumTemplate = templateId === 'valentine-motion-premium';
+    const [currentLink, setCurrentLink] = useState(link);
+
+    const [isEditingSlug, setIsEditingSlug] = useState(false);
+    const [slugInput, setSlugInput] = useState('');
+    const [savingSlug, setSavingSlug] = useState(false);
+
+    const handleSaveSlug = async () => {
+        if (!slugInput) return;
+        setSavingSlug(true);
+        try {
+            const userId = JSON.parse(localStorage.getItem('user') || '{}').id;
+            const res = await apiPut('/valentines', {
+                id: valentineId,
+                customSlug: slugInput,
+                userId
+            });
+
+            if (res.success) {
+                const newLink = `${window.location.origin}/v/${slugInput}`;
+                setCurrentLink(newLink);
+                setIsEditingSlug(false);
+                showToast('Custom link claimed!', 'success');
+            } else {
+                showToast(res.error || 'Failed to save slug', 'error');
+            }
+        } catch (e: any) {
+            showToast(e.message || 'Failed to save slug', 'error');
+        } finally {
+            setSavingSlug(false);
+        }
+    };
 
     return (
         <motion.div
@@ -73,9 +107,9 @@ export default function SuccessStep({ link, onClose, templateId, showToast }: Su
                             rotate: [0, 5, -5, 0]
                         }}
                         transition={{ duration: 4, repeat: Infinity }}
-                        className={`w-full h-full ${isPremium ? 'bg-[#D4AF37]/10' : 'bg-myRed/10'} rounded-[40px] flex items-center justify-center border border-white/5 relative z-10 shadow-2xl`}
+                        className={`w-full h-full ${isPremiumTemplate ? 'bg-[#D4AF37]/10' : 'bg-myRed/10'} rounded-[40px] flex items-center justify-center border border-white/5 relative z-10 shadow-2xl`}
                     >
-                        <Heart className={`${isPremium ? 'text-[#D4AF37]' : 'text-myRed'} w-14 h-14 fill-current`} />
+                        <Heart className={`${isPremiumTemplate ? 'text-[#D4AF37]' : 'text-myRed'} w-14 h-14 fill-current`} />
                     </motion.div>
                     <div className="absolute -top-4 -right-4 w-12 h-12 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl flex items-center justify-center animate-bounce">
                         <Sparkles className="w-6 h-6 text-myRed" />
@@ -84,10 +118,10 @@ export default function SuccessStep({ link, onClose, templateId, showToast }: Su
 
                 <div className="space-y-3">
                     <h2 className="text-4xl font-black tracking-tight italic uppercase text-white">
-                        {isPremium ? 'Masterpiece Deployed!' : 'Asset Deployed!'}
+                        {isPremiumTemplate ? 'Masterpiece Deployed!' : 'Asset Deployed!'}
                     </h2>
                     <p className="text-white/40 font-medium italic max-w-[300px] mx-auto leading-tight">
-                        {isPremium
+                        {isPremiumTemplate
                             ? 'Your premium cinematic experience is now live on the decentralized web.'
                             : 'Your interactive card is now live and ready to be received.'}
                     </p>
@@ -95,23 +129,62 @@ export default function SuccessStep({ link, onClose, templateId, showToast }: Su
 
                 <div className="p-8 bg-white/[0.03] rounded-[32px] border border-white/5 space-y-6 relative overflow-hidden group">
                     <div className="space-y-3">
-                        <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] text-left ml-2">Secure Discovery URL</p>
-                        <div className="flex items-center gap-3 text-white font-medium bg-black/60 p-4 rounded-2xl border border-white/10 overflow-hidden text-sm group-hover:border-myRed/30 transition-colors">
-                            <span className="truncate flex-1 text-left font-mono opacity-60 italic">{link}</span>
-                            <button
-                                onClick={() => {
-                                    navigator.clipboard.writeText(link);
-                                    showToast('Secure link copied!', 'success');
-                                }}
-                                className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                            >
-                                <Share2 className="w-4 h-4 text-myRed" />
-                            </button>
+                        <div className="flex items-center justify-between">
+                            <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] ml-2">Secure Discovery URL</p>
+                            {isPremiumUser && !isEditingSlug && (
+                                <button
+                                    onClick={() => { setIsEditingSlug(true); setSlugInput(valentineId); }}
+                                    className="text-[10px] font-bold text-myRed hover:text-white bg-myRed/10 hover:bg-myRed px-2 py-1 rounded-md transition-all flex items-center gap-1"
+                                >
+                                    <Edit2 size={10} /> Customize
+                                </button>
+                            )}
                         </div>
+
+                        {isEditingSlug ? (
+                            <div className="flex items-center gap-2 bg-black/60 p-2 pl-4 rounded-2xl border border-myRed/50 animate-in fade-in zoom-in-95">
+                                <span className="text-white/40 text-xs font-mono">apval.xyz/v/</span>
+                                <input
+                                    type="text"
+                                    value={slugInput}
+                                    onChange={(e) => setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
+                                    className="flex-1 bg-transparent border-none outline-none text-white font-mono text-sm"
+                                    placeholder="my-custom-slug"
+                                    autoFocus
+                                />
+                                <button
+                                    onClick={handleSaveSlug}
+                                    disabled={savingSlug}
+                                    className="p-2 bg-green-500 rounded-xl text-white hover:bg-green-400 disabled:opacity-50"
+                                >
+                                    {savingSlug ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+                                </button>
+                                <button
+                                    onClick={() => setIsEditingSlug(false)}
+                                    disabled={savingSlug}
+                                    className="p-2 bg-white/10 rounded-xl text-white/60 hover:bg-white/20 hover:text-white"
+                                >
+                                    <X size={16} />
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="flex items-center gap-3 text-white font-medium bg-black/60 p-4 rounded-2xl border border-white/10 overflow-hidden text-sm group-hover:border-myRed/30 transition-colors">
+                                <span className="truncate flex-1 text-left font-mono opacity-60 italic">{currentLink}</span>
+                                <button
+                                    onClick={() => {
+                                        navigator.clipboard.writeText(currentLink);
+                                        showToast('Secure link copied!', 'success');
+                                    }}
+                                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                                >
+                                    <Share2 className="w-4 h-4 text-myRed" />
+                                </button>
+                            </div>
+                        )}
                     </div>
 
                     <button
-                        onClick={() => window.open(link, '_blank')}
+                        onClick={() => window.open(currentLink, '_blank')}
                         className="w-full py-4 bg-white text-black font-black uppercase tracking-widest rounded-2xl hover:bg-myRed hover:text-white transition-all shadow-xl flex items-center justify-center gap-3"
                     >
                         <span>Preview Live</span>

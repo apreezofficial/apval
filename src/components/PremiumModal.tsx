@@ -83,6 +83,11 @@ export default function PremiumModal({ isOpen, onClose, reason = 'upgrade' }: Pr
             }
             const user = JSON.parse(userStr);
 
+            if (!user.email) {
+                alert("Session incomplete. Please logout and login again to refresh your account details.");
+                return;
+            }
+
             const res = await fetch('/api/upgrade', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

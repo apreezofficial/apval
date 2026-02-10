@@ -111,6 +111,14 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
     const totalSteps = features.length;
     const currentFeature = features[step - 1];
 
+    const [deployedId, setDeployedId] = useState<string | null>(null);
+    const [isPremiumUser, setIsPremiumUser] = useState(false);
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        setIsPremiumUser(user.subscriptionTier === 'premium');
+    }, []);
+
     const handleFinish = async () => {
         setLoading(true);
         const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -124,6 +132,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
 
             if (finalId) {
                 const successStep = totalSteps + 1;
+                setDeployedId(finalId);
                 setLink(`${window.location.origin}/v/${finalId}`);
                 setStep(successStep);
                 showToast('Asset deployed successfully', 'success');
@@ -439,6 +448,8 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                             key="success"
                                             templateId={templateId}
                                             link={link}
+                                            valentineId={deployedId || ''}
+                                            isPremiumUser={isPremiumUser}
                                             onClose={() => {
                                                 onClose();
                                                 router.push('/dashboard');

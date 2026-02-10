@@ -62,6 +62,19 @@ export default function DashboardClient() {
             const parsedUser = JSON.parse(storedUser);
             setUser(parsedUser);
             if (parsedUser?.id) {
+                // Fetch fresh user data to update subscription status
+                apiGet(`/user?id=${parsedUser.id}`)
+                    .then(freshUser => {
+                        if (freshUser && !freshUser.error) {
+                            setUser(freshUser);
+                            // Keep existing sensitive fields if needed, but freshUser is safer
+                            // Ensure we merge to keep token if any (though here we just use user obj)
+                            localStorage.setItem('user', JSON.stringify(freshUser));
+                            console.log("User profile refreshed:", freshUser.subscriptionTier);
+                        }
+                    })
+                    .catch(e => console.error("Profile refresh failed", e));
+
                 fetchValentines(parsedUser.id);
             } else {
                 showToast("User ID missing from session", "error");
@@ -236,7 +249,7 @@ export default function DashboardClient() {
 
                             <div className="flex items-center gap-2 pt-4 border-t border-white/5">
                                 <Link
-                                    href={`/v/${v.id}`}
+                                    href={`/v/${v.customSlug || v.id}`}
                                     className="flex-[2] flex items-center justify-center gap-2 py-3 bg-white/5 rounded-xl hover:bg-white/10 transition-all text-sm font-medium text-white"
                                     target="_blank"
                                 >
@@ -355,7 +368,7 @@ function SkeletonCard() {
 }
 
 function ShareModal({ valentine, onClose }: { valentine: any; onClose: () => void }) {
-    const link = `${window.location.origin}/v/${valentine.id}`;
+    const link = `${window.location.origin}/v/${valentine.customSlug || valentine.id}`;
     const { showToast } = useToast();
 
     return (
