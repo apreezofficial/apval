@@ -1,5 +1,4 @@
-
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Music, Music2, ArrowRight, Search, Play, Check } from 'lucide-react';
 import { EditorData } from '../types';
@@ -12,6 +11,7 @@ interface MusicStepProps {
 }
 
 export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepProps) {
+    const scrollRef = useRef<HTMLDivElement>(null);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchResults, setSearchResults] = useState<any[]>([]);
     const [isSearching, setIsSearching] = useState(false);
@@ -35,12 +35,17 @@ export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepP
         }
     };
 
-    const moodTracks = [
-        { name: 'Romantic Piano', url: 'https://www.youtube.com/embed/WJ3-F02-F_Y' },
-        { name: 'Lofi Love', url: 'https://www.youtube.com/embed/5yx6BWlEVcY' },
-        { name: 'Cinematic Strings', url: 'https://www.youtube.com/embed/B_mS_j8J0K0' },
-        { name: 'Acoustic Guitar', url: 'https://www.youtube.com/embed/2mzX_7YhJ2g' }
-    ];
+    useEffect(() => {
+        if (data.musicUrl) {
+            // Give a tiny delay for React to render the new state
+            setTimeout(() => {
+                window.scrollTo({
+                    top: document.body.scrollHeight,
+                    behavior: 'smooth'
+                });
+            }, 100);
+        }
+    }, [data.musicUrl]);
 
     return (
         <motion.div
@@ -51,7 +56,7 @@ export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepP
         >
             <div className="space-y-4">
                 <h2 className="text-3xl font-medium tracking-tight">Audio Vibe</h2>
-                <p className="text-white/40 font-medium italic">Search for your favorite song or pick a mood.</p>
+                <p className="text-white/40 font-medium italic">Search for your favorite song or paste a link.</p>
             </div>
 
             {/* Music Search */}
@@ -98,27 +103,6 @@ export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepP
                                         <Play className="w-4 h-4 text-white/20" />
                                     </div>
                                 )}
-                            </button>
-                        ))}
-                    </div>
-                </div>
-            )}
-
-            {!searchQuery && (
-                <div className="space-y-4">
-                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-3 ml-2">Mood Filters</div>
-                    <div className="grid grid-cols-2 gap-3">
-                        {moodTracks.map((track) => (
-                            <button
-                                key={track.name}
-                                onClick={() => onUpdate({ musicUrl: track.url })}
-                                className={`p-5 rounded-2xl border transition-all text-left group ${data.musicUrl === track.url
-                                    ? 'bg-myRed/20 border-myRed text-white shadow-[0_0_20px_rgba(252,65,0,0.1)]'
-                                    : 'bg-white/[0.02] border-white/5 text-white/40 hover:border-white/20'
-                                    }`}
-                            >
-                                <Music2 className={`w-5 h-5 mb-3 ${data.musicUrl === track.url ? 'text-myRed' : 'text-white/20'}`} />
-                                <div className="text-[10px] font-black leading-tight uppercase tracking-widest">{track.name}</div>
                             </button>
                         ))}
                     </div>
