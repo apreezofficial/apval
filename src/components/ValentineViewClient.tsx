@@ -410,11 +410,11 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
             )}
 
             {/* Premium Action Footer */}
-            <div className="relative z-[100] w-full px-4 pb-20 pt-10 bg-gradient-to-t from-black/80 to-transparent">
+            <div className="relative lg:static z-[100] w-full px-4 pb-20 pt-10 lg:p-0 bg-gradient-to-t from-black/80 to-transparent lg:bg-none">
                 <motion.div
                     initial={{ opacity: 0, y: 30 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="max-w-md mx-auto flex items-center gap-2 p-2 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[30px] shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
+                    className="max-w-md mx-auto lg:fixed lg:bottom-10 lg:right-10 lg:mx-0 lg:w-[450px] flex items-center gap-2 p-2 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[30px] shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
                 >
                     <button
                         onClick={handleReplay}
