@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/components/Toast';
-import { Check, X, Eye, Trash2, Home, User, Clock, FileText, Image as ImageIcon } from 'lucide-react';
+import { Check, X, Eye, Trash2, Home, User, Clock, FileText, Sparkles, Image as ImageIcon } from 'lucide-react';
 
 interface UpgradeRequest {
     id: string;
