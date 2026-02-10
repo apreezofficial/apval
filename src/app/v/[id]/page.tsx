@@ -27,8 +27,8 @@ export async function generateMetadata(
     }
 
     const templateName = templates.find(t => t.id === data.templateId)?.name || "Interactive Valentine";
-    const title = `${data.sender} sent you a ${templateName}!`;
-    const description = `Click to view the beautiful cinematic experience ${data.sender} created for ${data.recipient}.`;
+    const title = `${data.recipient}`;
+    const description = data.headline || `A beautiful cinematic Valentine experience created by ${data.sender} for ${data.recipient}.`;
 
     return {
         title,
