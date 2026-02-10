@@ -142,31 +142,53 @@ export default function SuccessStep({ link, onClose, templateId, valentineId, is
                         </div>
 
                         {isEditingSlug ? (
-                            <div className="flex items-center gap-2 bg-black/60 p-2 pl-4 rounded-2xl border border-myRed/50 animate-in fade-in zoom-in-95">
-                                <span className="text-white/40 text-xs font-mono">apval.xyz/v/</span>
-                                <input
-                                    type="text"
-                                    value={slugInput}
-                                    onChange={(e) => setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
-                                    className="flex-1 bg-transparent border-none outline-none text-white font-mono text-sm"
-                                    placeholder="my-custom-slug"
-                                    autoFocus
-                                />
-                                <button
-                                    onClick={handleSaveSlug}
-                                    disabled={savingSlug}
-                                    className="p-2 bg-green-500 rounded-xl text-white hover:bg-green-400 disabled:opacity-50"
-                                >
-                                    {savingSlug ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
-                                </button>
-                                <button
-                                    onClick={() => setIsEditingSlug(false)}
-                                    disabled={savingSlug}
-                                    className="p-2 bg-white/10 rounded-xl text-white/60 hover:bg-white/20 hover:text-white"
-                                >
-                                    <X size={16} />
-                                </button>
-                            </div>
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="space-y-4 p-4 bg-black/40 rounded-[24px] border border-myRed/30 shadow-inner"
+                            >
+                                <div className="space-y-2">
+                                    <p className="text-[8px] font-black text-myRed uppercase tracking-[.3em] text-left ml-2">Claim Your Unique URL</p>
+                                    <div className="flex items-center gap-2 bg-white/[0.03] p-4 rounded-2xl border border-white/5 focus-within:border-myRed/50 transition-all">
+                                        <span className="text-white/20 text-xs font-mono select-none">apval.xyz/v/</span>
+                                        <input
+                                            type="text"
+                                            value={slugInput}
+                                            onChange={(e) => setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
+                                            className="flex-1 bg-transparent border-none outline-none text-white font-mono text-sm placeholder:text-white/10"
+                                            placeholder="my-name"
+                                            autoFocus
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="flex gap-2">
+                                    <button
+                                        onClick={() => setIsEditingSlug(false)}
+                                        disabled={savingSlug}
+                                        className="flex-1 py-3 bg-white/5 text-white/60 font-black uppercase tracking-widest text-[10px] rounded-xl hover:bg-white/10 transition-all"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={handleSaveSlug}
+                                        disabled={savingSlug || !slugInput}
+                                        className="flex-[2] py-3 bg-myRed text-white font-black uppercase tracking-widest text-[10px] rounded-xl shadow-[0_10px_20px_-5px_rgba(252,65,0,0.3)] hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center justify-center gap-2 disabled:opacity-50"
+                                    >
+                                        {savingSlug ? (
+                                            <>
+                                                <Loader2 size={14} className="animate-spin" />
+                                                <span>Saving...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Check size={14} />
+                                                <span>Lock Link</span>
+                                            </>
+                                        )}
+                                    </button>
+                                </div>
+                            </motion.div>
                         ) : (
                             <div className="flex items-center gap-3 text-white font-medium bg-black/60 p-4 rounded-2xl border border-white/10 overflow-hidden text-sm group-hover:border-myRed/30 transition-colors">
                                 <span className="truncate flex-1 text-left font-mono opacity-60 italic">{currentLink}</span>
