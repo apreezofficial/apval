@@ -103,7 +103,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         'quest-valentine': ['recipient', 'content', 'audio', 'signature'],
         'interactive-dodge': ['recipient', 'gender', 'proposal_intro', 'audio', 'signature'],
         'classic-valentine': ['recipient', 'content', 'audio', 'signature'],
-        'gaming-elite': ['recipient', 'content', 'audio', 'signature'],
+        'gaming-elite': ['recipient_headline', 'content', 'audio', 'signature'],
         'premium-mockup-card': ['recipient', 'content', 'attachment', 'audio', 'signature']
     };
 

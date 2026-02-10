@@ -287,8 +287,16 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
                         </motion.div>
 
                         <h1 className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 tracking-tighter leading-none mb-8 drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
-                            {data.recipient}, <br />
-                            PLAYER 2 <span className="text-pink-400">READY?</span> 🎮💜
+                            {data.headline ? (
+                                <>
+                                    {data.headline} <span className="text-pink-400">READY?</span> 🎮💜
+                                </>
+                            ) : (
+                                <>
+                                    {data.recipient}, <br />
+                                    PLAYER 2 <span className="text-pink-400">READY?</span> 🎮💜
+                                </>
+                            )}
                         </h1>
 
                         <p className="text-xl md:text-2xl text-white/70 font-medium mb-16 max-w-2xl">

@@ -1,7 +1,7 @@
 export const siteConfig = {
     name: "Apval",
     description: "Spread your love with cinematic digital experiences. Create, customize, and deploy interactive Valentine assets in seconds.",
-    url: process.env.NEXT_PUBLIC_APP_URL || "https://apval.pxxl.pro",
+    url: process.env.NEXT_PUBLIC_APP_URL || "https://apval.xyz",
     apiUrl: typeof window === 'undefined'
         ? (process.env.Internal_API_URL || "http://localhost:3000/api")
         : "/api", // Proxy through local API route
