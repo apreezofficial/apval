@@ -72,46 +72,56 @@ export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepP
             </div>
 
             {searchResults.length > 0 && (
-                <div className="grid grid-cols-1 gap-2 max-h-[200px] overflow-y-auto pr-2 custom-scrollbar">
-                    {searchResults.map((track: any) => (
-                        <button
-                            key={track.trackId}
-                            onClick={() => onUpdate({ musicUrl: track.previewUrl })}
-                            className={`flex items-center gap-4 p-3 rounded-xl border transition-all ${data.musicUrl === track.previewUrl
-                                ? 'bg-myRed/10 border-myRed/30'
-                                : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05]'
-                                }`}
-                        >
-                            <img src={track.artworkUrl60} className="w-10 h-10 rounded-lg" alt="" />
-                            <div className="flex-1 text-left">
-                                <div className="text-sm font-bold text-white truncate">{track.trackName}</div>
-                                <div className="text-[10px] text-white/40 truncate">{track.artistName}</div>
-                            </div>
-                            {data.musicUrl === track.previewUrl ? (
-                                <Check className="w-4 h-4 text-myRed" />
-                            ) : (
-                                <Play className="w-4 h-4 text-white/20" />
-                            )}
-                        </button>
-                    ))}
+                <div className="space-y-2">
+                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-3 ml-2">Search Results</div>
+                    <div className="grid grid-cols-1 gap-2">
+                        {searchResults.map((track: any) => (
+                            <button
+                                key={track.trackId}
+                                onClick={() => onUpdate({ musicUrl: track.previewUrl })}
+                                className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${data.musicUrl === track.previewUrl
+                                    ? 'bg-myRed/10 border-myRed/30'
+                                    : 'bg-white/[0.02] border-white/5 hover:bg-white/[0.05]'
+                                    }`}
+                            >
+                                <img src={track.artworkUrl60} className="w-12 h-12 rounded-xl" alt="" />
+                                <div className="flex-1 text-left min-w-0">
+                                    <div className="text-sm font-bold text-white truncate">{track.trackName}</div>
+                                    <div className="text-[10px] text-white/40 truncate">{track.artistName}</div>
+                                </div>
+                                {data.musicUrl === track.previewUrl ? (
+                                    <div className="w-8 h-8 bg-myRed/20 rounded-full flex items-center justify-center">
+                                        <Check className="w-4 h-4 text-myRed" />
+                                    </div>
+                                ) : (
+                                    <div className="w-8 h-8 bg-white/5 rounded-full flex items-center justify-center">
+                                        <Play className="w-4 h-4 text-white/20" />
+                                    </div>
+                                )}
+                            </button>
+                        ))}
+                    </div>
                 </div>
             )}
 
             {!searchQuery && (
-                <div className="grid grid-cols-2 gap-3">
-                    {moodTracks.map((track) => (
-                        <button
-                            key={track.name}
-                            onClick={() => onUpdate({ musicUrl: track.url })}
-                            className={`p-4 rounded-2xl border transition-all text-left group ${data.musicUrl === track.url
-                                ? 'bg-myRed/20 border-myRed text-white'
-                                : 'bg-white/5 border-white/5 text-white/40 hover:border-white/20'
-                                }`}
-                        >
-                            <Music2 className={`w-5 h-5 mb-2 ${data.musicUrl === track.url ? 'text-myRed' : 'text-white/20'}`} />
-                            <div className="text-xs font-bold leading-tight uppercase tracking-widest">{track.name}</div>
-                        </button>
-                    ))}
+                <div className="space-y-4">
+                    <div className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-3 ml-2">Mood Filters</div>
+                    <div className="grid grid-cols-2 gap-3">
+                        {moodTracks.map((track) => (
+                            <button
+                                key={track.name}
+                                onClick={() => onUpdate({ musicUrl: track.url })}
+                                className={`p-5 rounded-2xl border transition-all text-left group ${data.musicUrl === track.url
+                                    ? 'bg-myRed/20 border-myRed text-white shadow-[0_0_20px_rgba(252,65,0,0.1)]'
+                                    : 'bg-white/[0.02] border-white/5 text-white/40 hover:border-white/20'
+                                    }`}
+                            >
+                                <Music2 className={`w-5 h-5 mb-3 ${data.musicUrl === track.url ? 'text-myRed' : 'text-white/20'}`} />
+                                <div className="text-[10px] font-black leading-tight uppercase tracking-widest">{track.name}</div>
+                            </button>
+                        ))}
+                    </div>
                 </div>
             )}
 
@@ -126,10 +136,10 @@ export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepP
                 />
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 pt-4">
                 <button
                     onClick={onBack}
-                    className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all text-xs uppercase tracking-widest"
+                    className="flex-1 py-5 bg-white/5 text-white font-bold rounded-2xl hover:bg-white/10 transition-all text-[10px] uppercase tracking-widest border border-white/5"
                 >
                     Back
                 </button>
@@ -137,7 +147,7 @@ export default function MusicStep({ data, onUpdate, onNext, onBack }: MusicStepP
                     onClick={onNext}
                     className="flex-[2] py-5 bg-myRed text-white font-bold rounded-2xl hover:bg-myRed/90 transition-all flex items-center justify-center gap-3 shadow-[0_10px_20px_-5px_rgba(252,65,0,0.4)]"
                 >
-                    <span className="text-sm uppercase tracking-widest">{data.musicUrl ? 'Set Soundtrack' : 'Skip Music'}</span>
+                    <span className="text-[10px] uppercase tracking-widest">{data.musicUrl ? 'Set Soundtrack' : 'Skip Music'}</span>
                     <ArrowRight className="w-5 h-5" />
                 </button>
             </div>
