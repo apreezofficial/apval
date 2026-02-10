@@ -28,15 +28,11 @@ export default function AdminDashboardClient() {
 
     const fetchRequests = async () => {
         try {
-            const res = await fetch('/api/admin/requests');
-            if (res.ok) {
-                const data = await res.json();
-                setRequests(data);
-            } else {
-                showToast('Failed to fetch requests', 'error');
-            }
-        } catch (err) {
-            console.error(err);
+            const { apiGet } = await import('@/lib/api');
+            const data = await apiGet('/admin/requests');
+            setRequests(data);
+        } catch (err: any) {
+            showToast(err.response?.data?.error || 'Failed to fetch requests', 'error');
         } finally {
             setLoading(false);
         }
@@ -65,21 +61,12 @@ export default function AdminDashboardClient() {
         if (!confirm(`Are you sure you want to approve user ${req.userEmail}?`)) return;
 
         try {
-            const res = await fetch('/api/admin/approve', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ requestId: req.id, userId: req.userId })
-            });
-
-            if (res.ok) {
-                showToast('User approved successfully!', 'success');
-                setRequests(prev => prev.filter(r => r.id !== req.id));
-            } else {
-                showToast('Failed to approve user', 'error');
-            }
-        } catch (err) {
-            console.error(err);
-            showToast('An error occurred', 'error');
+            const { apiPost } = await import('@/lib/api');
+            await apiPost('/admin/approve', { requestId: req.id, userId: req.userId });
+            showToast('User approved successfully!', 'success');
+            setRequests(prev => prev.filter(r => r.id !== req.id));
+        } catch (err: any) {
+            showToast(err.response?.data?.error || 'Failed to approve user', 'error');
         }
     };
 
@@ -87,21 +74,12 @@ export default function AdminDashboardClient() {
         if (!confirm(`Are you sure you want to REJECT request from ${req.userEmail}?`)) return;
 
         try {
-            const res = await fetch('/api/admin/reject', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ requestId: req.id })
-            });
-
-            if (res.ok) {
-                showToast('Request rejected', 'success');
-                setRequests(prev => prev.filter(r => r.id !== req.id));
-            } else {
-                showToast('Failed to reject request', 'error');
-            }
-        } catch (err) {
-            console.error(err);
-            showToast('An error occurred', 'error');
+            const { apiPost } = await import('@/lib/api');
+            await apiPost('/admin/reject', { requestId: req.id });
+            showToast('Request rejected', 'success');
+            setRequests(prev => prev.filter(r => r.id !== req.id));
+        } catch (err: any) {
+            showToast(err.response?.data?.error || 'Failed to reject request', 'error');
         }
     };
 

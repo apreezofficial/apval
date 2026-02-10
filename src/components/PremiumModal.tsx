@@ -88,25 +88,17 @@ export default function PremiumModal({ isOpen, onClose, reason = 'upgrade' }: Pr
                 return;
             }
 
-            const res = await fetch('/api/upgrade', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: user.id,
-                    userEmail: user.email,
-                    receipt: base64,
-                    timestamp: new Date().toISOString()
-                })
+            const { apiPost } = await import('@/lib/api');
+            await apiPost('/upgrade', {
+                userId: user.id,
+                userEmail: user.email,
+                receipt: base64,
+                timestamp: new Date().toISOString()
             });
 
-            if (res.ok) {
-                alert("Receipt uploaded successfully! Pending admin approval."); // Replace with toast if available
-                setShowPayment(false);
-                onClose();
-            } else {
-                const errorData = await res.json();
-                alert(`Failed to upload: ${errorData.error || 'Unknown error'}`);
-            }
+            alert("Receipt uploaded successfully! Pending admin approval.");
+            setShowPayment(false);
+            onClose();
         } catch (error) {
             console.error("Upload error:", error);
             alert("An error occurred during upload.");

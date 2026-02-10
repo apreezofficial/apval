@@ -21,13 +21,14 @@ export default function Navbar() {
             if (parsedUser.id) {
                 const checkSession = async () => {
                     try {
-                        const res = await fetch(`/api/user?id=${parsedUser.id}`);
-                        if (!res.ok) {
-                            // Session invalid or user deleted
+                        const { apiGet } = await import('@/lib/api');
+                        await apiGet(`/user?id=${parsedUser.id}`);
+                    } catch (e: any) {
+                        // Only logout if the server explicitly says 404/401
+                        // Network errors should be ignored to keep unstable connections logged in
+                        if (e.response?.status === 404 || e.response?.status === 401) {
                             handleLogout();
                         }
-                    } catch (e) {
-                        // Network error, ignore for now to keep offline/flaky ux stable
                     }
                 };
                 checkSession();

@@ -7,11 +7,11 @@ export default function HeroPreview() {
     const [viewStep, setViewStep] = useState(0);
 
     const data = {
-        recipient: "PHP",
-        headline: "To the best stack",
-        message: "Dedicated to my babe, the best stack on earth, php to the world",
-        sender: "ap",
-        imageUrl: "/php.gif" // Placeholder for the actual image which is base64 and too large
+        recipient: "Sarah",
+        headline: "To my favorite person",
+        message: "Every moment with you is a cinematic experience. I'm so grateful to have you in my life. Happy Valentine's Day!",
+        sender: "James",
+        imageUrl: "/php.gif"
     };
 
     const steps = [

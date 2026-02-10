@@ -26,8 +26,9 @@ export default function LoginClient() {
             } else {
                 showToast(data.error || 'Authentication failed', 'error');
             }
-        } catch (err) {
-            showToast('Network error during authentication', 'error');
+        } catch (err: any) {
+            const errorMsg = err.response?.data?.error || 'Authentication failed. Please check your credentials.';
+            showToast(errorMsg, 'error');
         } finally {
             setLoading(false);
         }

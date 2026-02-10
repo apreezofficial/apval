@@ -5,6 +5,7 @@ RewriteEngine On
 Header always set Access-Control-Allow-Origin "*"
 Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
 Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+Header always set Access-Control-Allow-Credentials "true"
 
 RewriteCond %{REQUEST_METHOD} OPTIONS
 RewriteRule ^(.*)$ - [R=200,L]
@@ -15,7 +16,7 @@ RewriteRule ^auth/register/?$ auth/register.php [L,QSA]
 
 # Valentines Routes
 RewriteRule ^valentines/user/([^/]+)/?$ valentines/user.php?id=$1 [L,QSA]
-RewriteRule ^valentines/([^/]{20,})/?$ valentines/view.php?id=$1 [L,QSA] -- Assumes IDs are long UUIDs
+RewriteRule ^valentines/([^/]{20,})/?$ valentines/view.php?id=$1 [L,QSA]
 RewriteRule ^valentines$ valentines/index.php [L,QSA]
 
 # User Route

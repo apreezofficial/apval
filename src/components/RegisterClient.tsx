@@ -27,8 +27,9 @@ export default function RegisterClient() {
             } else {
                 showToast(data.error || 'Registration failed', 'error');
             }
-        } catch (err) {
-            showToast('Network error during registration', 'error');
+        } catch (err: any) {
+            const errorMsg = err.response?.data?.error || 'Registration failed. Please try again.';
+            showToast(errorMsg, 'error');
         } finally {
             setLoading(false);
         }
