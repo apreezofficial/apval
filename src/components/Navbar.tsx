@@ -109,7 +109,10 @@ export default function Navbar() {
                     </div>
 
                     <div className="flex items-center gap-4">
-                        <div className="hidden md:block">
+                        <div className="hidden md:flex items-center gap-4">
+                            {user && (
+                                <span className={`text-[0.8rem] font-semibold ${subTextColor}`}>Hi, {user.name}</span>
+                            )}
                             <Link href="/support" className="bg-myRed text-white text-[0.8rem] font-bold py-2.5 px-6 rounded-full hover:bg-myRed/90 transition-all shadow-lg shadow-myRed/20">
                                 Support
                             </Link>
