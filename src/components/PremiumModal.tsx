@@ -30,45 +30,84 @@ export default function PremiumModal({ isOpen, onClose, reason = 'upgrade' }: Pr
         if (!file) return;
 
         setUploading(true);
-        // Convert to Base64
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = async () => {
-            const base64 = reader.result;
-            try {
-                // Get user from localStorage
-                const userStr = localStorage.getItem('user');
-                if (!userStr) {
-                    alert("Please login first");
-                    return;
-                }
-                const user = JSON.parse(userStr);
 
-                const res = await fetch('/api/upgrade', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        userId: user.id,
-                        userEmail: user.email,
-                        receipt: base64,
-                        timestamp: new Date().toISOString()
-                    })
+        try {
+            // Compress image
+            const resizeImage = (file: File): Promise<string> => {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = (event) => {
+                        const img = new Image();
+                        img.src = event.target?.result as string;
+                        img.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            let width = img.width;
+                            let height = img.height;
+                            const MAX_WIDTH = 1000;
+                            const MAX_HEIGHT = 1000;
+
+                            if (width > height) {
+                                if (width > MAX_WIDTH) {
+                                    height *= MAX_WIDTH / width;
+                                    width = MAX_WIDTH;
+                                }
+                            } else {
+                                if (height > MAX_HEIGHT) {
+                                    width *= MAX_HEIGHT / height;
+                                    height = MAX_HEIGHT;
+                                }
+                            }
+
+                            canvas.width = width;
+                            canvas.height = height;
+                            const ctx = canvas.getContext('2d');
+                            ctx?.drawImage(img, 0, 0, width, height);
+
+                            // Convert to JPEG with 0.7 quality (good balance)
+                            resolve(canvas.toDataURL('image/jpeg', 0.7));
+                        };
+                        img.onerror = reject;
+                    };
+                    reader.onerror = reject;
                 });
+            };
 
-                if (res.ok) {
-                    alert("Receipt uploaded successfully! Pending admin approval."); // Replace with toast if available
-                    setShowPayment(false);
-                    onClose();
-                } else {
-                    alert("Failed to upload receipt. Please try again.");
-                }
-            } catch (error) {
-                console.error("Upload error:", error);
-                alert("An error occurred.");
-            } finally {
-                setUploading(false);
+            const base64 = await resizeImage(file);
+
+            // Get user from localStorage
+            const userStr = localStorage.getItem('user');
+            if (!userStr) {
+                alert("Please login first");
+                return;
             }
-        };
+            const user = JSON.parse(userStr);
+
+            const res = await fetch('/api/upgrade', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId: user.id,
+                    userEmail: user.email,
+                    receipt: base64,
+                    timestamp: new Date().toISOString()
+                })
+            });
+
+            if (res.ok) {
+                alert("Receipt uploaded successfully! Pending admin approval."); // Replace with toast if available
+                setShowPayment(false);
+                onClose();
+            } else {
+                const errorData = await res.json();
+                alert(`Failed to upload: ${errorData.error || 'Unknown error'}`);
+            }
+        } catch (error) {
+            console.error("Upload error:", error);
+            alert("An error occurred during upload.");
+        } finally {
+            setUploading(false);
+        }
     };
 
     // ... (rest of component)

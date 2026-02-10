@@ -20,6 +20,9 @@ export default function AdminDashboardClient() {
     const { showToast } = useToast();
     const [requests, setRequests] = useState<UpgradeRequest[]>([]);
     const [loading, setLoading] = useState(true);
+    const [passkey, setPasskey] = useState('');
+    const [loginError, setLoginError] = useState(false);
+
     const [viewingReceipt, setViewingReceipt] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -40,26 +43,23 @@ export default function AdminDashboardClient() {
     };
 
     useEffect(() => {
-        // Authenticate
-        const userStr = localStorage.getItem('user');
-        if (!userStr) {
-            router.push('/login');
-            return;
-        }
+        // Check if already authenticated via session/local state? 
+        // For simplicity, we just use local state here. Ideally use cookie/session.
+        // But since we want "better still ask for the passkey", we default to locked.
+        setLoading(false);
+    }, []);
 
-        try {
-            const user = JSON.parse(userStr);
-            if (user.email !== 'aa@aa.aa') {
-                setIsAuthenticated(false);
-                setLoading(false);
-                return;
-            }
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (passkey === 'aaaaaa01') {
             setIsAuthenticated(true);
+            setLoading(true);
             fetchRequests();
-        } catch (e) {
-            router.push('/login');
+        } else {
+            setLoginError(true);
+            showToast('Invalid passkey', 'error');
         }
-    }, [router]);
+    };
 
     const handleApprove = async (req: UpgradeRequest) => {
         if (!confirm(`Are you sure you want to approve user ${req.userEmail}?`)) return;
@@ -105,16 +105,45 @@ export default function AdminDashboardClient() {
         }
     };
 
-    if (!isAuthenticated && !loading) {
+    if (!isAuthenticated) {
         return (
-            <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white">
-                <div className="text-center space-y-4">
-                    <h1 className="text-4xl font-black text-myRed">Access Denied</h1>
-                    <p className="text-white/60">You do not have permission to view this page.</p>
-                    <button onClick={() => router.push('/')} className="px-6 py-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors">
+            <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white px-4">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="max-w-md w-full bg-[#0A0A0A] border border-white/10 p-8 rounded-3xl text-center space-y-6 shadow-2xl"
+                >
+                    <div className="w-16 h-16 bg-myRed/10 rounded-full flex items-center justify-center mx-auto border border-myRed/20">
+                        <User size={32} className="text-myRed" />
+                    </div>
+                    <div>
+                        <h1 className="text-2xl font-black tracking-tight mb-2">Admin Access</h1>
+                        <p className="text-white/40 text-sm">Enter passkey to manage requests</p>
+                    </div>
+
+                    <form onSubmit={handleLogin} className="space-y-4">
+                        <input
+                            type="password"
+                            value={passkey}
+                            onChange={(e) => {
+                                setPasskey(e.target.value);
+                                setLoginError(false);
+                            }}
+                            placeholder="Enter passkey..."
+                            className={`w-full bg-white/5 border ${loginError ? 'border-red-500' : 'border-white/10'} rounded-xl px-4 py-3 outline-none focus:border-myRed/50 transition-colors text-center font-bold tracking-widest placeholder:tracking-normal`}
+                        />
+                        <button
+                            type="submit"
+                            className="w-full bg-myRed hover:bg-myRed/90 text-white font-bold py-3 rounded-xl transition-all shadow-lg shadow-myRed/20"
+                        >
+                            Unlock Dashboard
+                        </button>
+                    </form>
+
+                    <button onClick={() => router.push('/')} className="text-xs text-white/20 hover:text-white/40 transition-colors uppercase tracking-widest font-bold">
                         Return Home
                     </button>
-                </div>
+                </motion.div>
             </div>
         );
     }
