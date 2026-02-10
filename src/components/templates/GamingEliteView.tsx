@@ -51,7 +51,7 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
             {data.musicUrl && <MusicPlayer url={data.musicUrl} isMuted={isMuted} />}
 
             {yesPressed ? (
-                <div className="flex flex-col items-center justify-center min-h-screen bg-[#0A0014] text-center p-6 overflow-hidden relative font-geist w-full">
+                <div className={`flex flex-col items-center justify-center ${isPreview ? 'h-full' : 'min-h-screen'} bg-[#0A0014] text-center p-6 overflow-hidden relative font-geist w-full`}>
                     {/* Animated Grid Background */}
                     <div className="absolute inset-0 opacity-20 pointer-events-none bg-[linear-gradient(to_right,#8B5CF6_1px,transparent_1px),linear-gradient(to_bottom,#8B5CF6_1px,transparent_1px)] bg-[size:40px_40px] animate-pulse" />
 
@@ -217,7 +217,7 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
                     </div>
                 </div>
             ) : (
-                <div className="flex flex-col items-center justify-center min-h-screen bg-[#0A0014] text-center p-6 overflow-hidden relative font-geist w-full">
+                <div className={`flex flex-col items-center justify-center ${isPreview ? 'h-full' : 'min-h-screen'} bg-[#0A0014] text-center p-6 overflow-hidden relative font-geist w-full`}>
                     {/* Animated Grid Background */}
                     <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(to_right,#8B5CF6_1px,transparent_1px),linear-gradient(to_bottom,#8B5CF6_1px,transparent_1px)] bg-[size:40px_40px]" />
 
