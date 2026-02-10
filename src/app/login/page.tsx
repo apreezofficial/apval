@@ -2,10 +2,10 @@ import { Metadata } from 'next';
 import LoginClient from '@/components/LoginClient';
 
 export const metadata: Metadata = {
-    title: "Sign In | Apval",
+    title: "Sign In",
     description: "Access your Apval account to manage your digital romance assets and cinematic Valentine experiences.",
     robots: {
-        index: false,
+        index: true,
         follow: true,
     },
 };

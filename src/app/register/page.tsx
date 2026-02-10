@@ -2,10 +2,10 @@ import { Metadata } from 'next';
 import RegisterClient from '@/components/RegisterClient';
 
 export const metadata: Metadata = {
-    title: "Join Apval | Create Digital Romance",
+    title: "Join Now",
     description: "Create an account to start building and deploying personalized cinematic romantic assets.",
     robots: {
-        index: false,
+        index: true,
         follow: true,
     },
 };
