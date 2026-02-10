@@ -64,6 +64,7 @@ export default function Navbar() {
         { name: 'Templates', href: '/templates' },
         { name: 'Dashboard', href: '/dashboard' },
         { name: 'About', href: '/developer' },
+        { name: 'Support', href: '/support' },
     ];
 
     return (
@@ -75,7 +76,11 @@ export default function Navbar() {
                     className={`flex items-center justify-between w-full max-w-6xl px-8 py-4 rounded-full backdrop-blur-xl shadow-lg border ${borderColor} ${navBg}`}
                 >
                     {/* Logo - Updated blue hover to myRed */}
-                    <Link className={`text-[1.3rem] font-grotesk font-black tracking-tight ${textColor} hover:text-myRed transition-colors z-[110]`} href="/">
+                    {/* Logo - Hidden when mobile menu is open per user request */}
+                    <Link
+                        className={`text-[1.3rem] font-grotesk font-black tracking-tight ${textColor} hover:text-myRed transition-all z-[110] ${isMobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+                        href="/"
+                    >
                         Apval<span className="text-myRed">.</span>
                     </Link>
 
@@ -247,7 +252,7 @@ export default function Navbar() {
                                     )}
                                 </div>
                                 <p className="text-white/40 text-[0.6rem] font-bold uppercase tracking-[0.2em]">
-                                    Enterprise-grade Romance.
+                                    Spread the Love | Elite Digital Romance.
                                 </p>
                             </motion.div>
                         </div>

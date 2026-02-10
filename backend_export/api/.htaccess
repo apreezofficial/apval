@@ -1,0 +1,35 @@
+# backend_export/api/.htaccess
+RewriteEngine On
+
+# CORS Pre-flight and Headers
+Header always set Access-Control-Allow-Origin "*"
+Header always set Access-Control-Allow-Methods "POST, GET, OPTIONS, DELETE, PUT"
+Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With"
+
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^(.*)$ - [R=200,L]
+
+# Auth Routes
+RewriteRule ^auth/login/?$ auth/login.php [L,QSA]
+RewriteRule ^auth/register/?$ auth/register.php [L,QSA]
+
+# Valentines Routes
+RewriteRule ^valentines/user/([^/]+)/?$ valentines/user.php?id=$1 [L,QSA]
+RewriteRule ^valentines/([^/]{20,})/?$ valentines/view.php?id=$1 [L,QSA] -- Assumes IDs are long UUIDs
+RewriteRule ^valentines$ valentines/index.php [L,QSA]
+
+# User Route
+RewriteRule ^user/?$ user/index.php [L,QSA]
+
+# Upgrade Route
+RewriteRule ^upgrade/?$ upgrade/index.php [L,QSA]
+
+# Admin Routes
+RewriteRule ^admin/requests/?$ admin/requests.php [L,QSA]
+RewriteRule ^admin/approve/?$ admin/approve.php [L,QSA]
+RewriteRule ^admin/reject/?$ admin/reject.php [L,QSA]
+
+# If view by ID/Slug (more generic)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^valentines/([^/]+)/?$ valentines/view.php?id=$1 [L,QSA]
