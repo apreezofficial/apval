@@ -14,7 +14,24 @@ export default function Navbar() {
     useEffect(() => {
         const storedUser = localStorage.getItem('user');
         if (storedUser) {
-            setUser(JSON.parse(storedUser));
+            const parsedUser = JSON.parse(storedUser);
+            setUser(parsedUser);
+
+            // Verify session with server if user exists
+            if (parsedUser.id) {
+                const checkSession = async () => {
+                    try {
+                        const res = await fetch(`/api/user?id=${parsedUser.id}`);
+                        if (!res.ok) {
+                            // Session invalid or user deleted
+                            handleLogout();
+                        }
+                    } catch (e) {
+                        // Network error, ignore for now to keep offline/flaky ux stable
+                    }
+                };
+                checkSession();
+            }
         }
 
         const lightPages = ['/developer', '/faq', '/privacy', '/terms'];
@@ -110,10 +127,25 @@ export default function Navbar() {
 
                     <div className="flex items-center gap-4">
                         <div className="hidden md:flex items-center gap-4">
-                            {user && (
-                                <span className={`text-[0.8rem] font-semibold ${subTextColor}`}>Hi, {user.name}</span>
+                            {user ? (
+                                <>
+                                    <span className={`text-[0.8rem] font-semibold ${subTextColor}`}>Hi, {user.name}</span>
+                                    <button
+                                        onClick={handleLogout}
+                                        className={`text-[0.8rem] font-bold ${textColor} hover:text-myRed transition-colors px-4 py-2 border ${borderColor} rounded-full`}
+                                    >
+                                        Logout
+                                    </button>
+                                </>
+                            ) : (
+                                <Link
+                                    href="/login"
+                                    className={`bg-myRed text-white text-[0.8rem] font-bold py-2.5 px-6 rounded-full hover:bg-myRed/90 transition-all shadow-lg shadow-myRed/20`}
+                                >
+                                    Login
+                                </Link>
                             )}
-                            <Link href="/support" className="bg-myRed text-white text-[0.8rem] font-bold py-2.5 px-6 rounded-full hover:bg-myRed/90 transition-all shadow-lg shadow-myRed/20">
+                            <Link href="/support" className="bg-white/5 border border-white/10 text-white/60 hover:text-white text-[0.8rem] font-bold py-2.5 px-6 rounded-full transition-all">
                                 Support
                             </Link>
                         </div>
@@ -201,9 +233,18 @@ export default function Navbar() {
                                         <Instagram className="text-white/60" size={20} />
                                         <Facebook className="text-white/60" size={20} />
                                     </div>
-                                    <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="text-white font-bold underline">
-                                        {user ? 'Dashboard' : 'Get Started'}
-                                    </Link>
+                                    {user ? (
+                                        <button
+                                            onClick={handleLogout}
+                                            className="text-white font-bold underline"
+                                        >
+                                            Logout
+                                        </button>
+                                    ) : (
+                                        <Link href="/login" onClick={() => setIsMobileMenuOpen(false)} className="text-white font-bold underline">
+                                            Login / Start
+                                        </Link>
+                                    )}
                                 </div>
                                 <p className="text-white/40 text-[0.6rem] font-bold uppercase tracking-[0.2em]">
                                     Enterprise-grade Romance.

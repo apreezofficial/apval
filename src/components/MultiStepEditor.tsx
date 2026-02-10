@@ -33,6 +33,15 @@ import IntroSequenceStep from './editor/steps/IntroSequenceStep';
 import SuccessStep from './editor/steps/SuccessStep';
 
 export default function MultiStepEditor({ templateId: initialTemplateId, onClose, editId }: MultiStepEditorProps) {
+    const router = useRouter();
+
+    useEffect(() => {
+        const user = localStorage.getItem('user');
+        if (!user) {
+            router.push('/login');
+            onClose();
+        }
+    }, [router, onClose]);
     const { showToast } = useToast();
     const [step, setStep] = useState(1);
     const [templateId, setTemplateId] = useState(initialTemplateId);
@@ -59,7 +68,6 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
     });
     const [loading, setLoading] = useState(false);
     const [link, setLink] = useState('');
-    const router = useRouter();
 
     useEffect(() => {
         if (editId) {

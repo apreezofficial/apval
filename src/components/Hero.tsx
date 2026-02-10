@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Heart, ArrowUpRight, Cpu } from 'lucide-react';
 import HeroPreview from './HeroPreview';
 import { TypewriterText } from './TypewriterText';
+import Link from 'next/link';
 
 export default function Hero() {
     const [step, setStep] = React.useState(0);
@@ -62,15 +63,21 @@ export default function Hero() {
                         transition={{ duration: 0.8, delay: 0.4 }}
                         className="flex items-center gap-10"
                     >
-                        <button className="group relative px-8 py-4 bg-myRed text-white font-medium rounded-full hover:bg-myRed/90 transition-all flex items-center gap-3 shadow-[0_0_30px_rgba(252,65,0,0.3)]">
+                        <button
+                            onClick={() => {
+                                const user = localStorage.getItem('user');
+                                window.location.href = user ? '#templates' : '/login';
+                            }}
+                            className="group relative px-8 py-4 bg-myRed text-white font-medium rounded-full hover:bg-myRed/90 transition-all flex items-center gap-3 shadow-[0_0_30px_rgba(252,65,0,0.3)]"
+                        >
                             <span className="relative z-10 border-r border-white/20 pr-3">Claim Love</span>
                             <Heart className="w-5 h-5 fill-current" />
                         </button>
 
-                        <a href="#templates" className="group flex items-center gap-2 text-white/60 hover:text-white transition-colors font-medium border-b border-white/20 pb-1">
+                        <Link href="/templates" className="group flex items-center gap-2 text-white/60 hover:text-white transition-colors font-medium border-b border-white/20 pb-1">
                             <span>Deploy Your Heart</span>
                             <ArrowUpRight className="w-4 h-4" />
-                        </a>
+                        </Link>
                     </motion.div>
                 </div>
 
