@@ -1,7 +1,8 @@
 'use client';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, Check, Copy, Sparkles, Zap } from 'lucide-react';
+import { X, Heart, Check, Copy, Sparkles, Zap, Upload } from 'lucide-react';
 import { useState } from 'react';
+import { useToast } from '@/components/Toast';
 
 interface PremiumModalProps {
     isOpen: boolean;
@@ -12,8 +13,66 @@ interface PremiumModalProps {
 export default function PremiumModal({ isOpen, onClose, reason = 'upgrade' }: PremiumModalProps) {
     const [copied, setCopied] = useState(false);
     const [showPayment, setShowPayment] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [file, setFile] = useState<File | null>(null);
+    const { showToast } = useToast();
 
     const accountNumber = "9064779856";
+    // ... (rest of constants)
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setFile(e.target.files[0]);
+        }
+    };
+
+    const handleUpload = async () => {
+        if (!file) return;
+
+        setUploading(true);
+        // Convert to Base64
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = async () => {
+            const base64 = reader.result;
+            try {
+                // Get user from localStorage
+                const userStr = localStorage.getItem('user');
+                if (!userStr) {
+                    alert("Please login first");
+                    return;
+                }
+                const user = JSON.parse(userStr);
+
+                const res = await fetch('/api/upgrade', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: user.id,
+                        userEmail: user.email,
+                        receipt: base64,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
+                if (res.ok) {
+                    alert("Receipt uploaded successfully! Pending admin approval."); // Replace with toast if available
+                    setShowPayment(false);
+                    onClose();
+                } else {
+                    alert("Failed to upload receipt. Please try again.");
+                }
+            } catch (error) {
+                console.error("Upload error:", error);
+                alert("An error occurred.");
+            } finally {
+                setUploading(false);
+            }
+        };
+    };
+
+    // ... (rest of component)
+
     const accountName = "Precious Adedokun";
     const bankName = "Moniepoint";
     const amount = "₦1,000";
@@ -197,22 +256,44 @@ export default function PremiumModal({ isOpen, onClose, reason = 'upgrade' }: Pr
                                         </div>
                                     </div>
 
-                                    <div className="flex gap-3">
-                                        <button
-                                            onClick={() => setShowPayment(false)}
-                                            className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 px-6 rounded-xl transition-colors border border-white/10"
-                                        >
-                                            Back
-                                        </button>
-                                        <a
-                                            href="https://app.proforms.top/f/pr001"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
-                                            className="flex-1 bg-myRed hover:bg-myRed/90 text-white font-bold py-3 px-6 rounded-xl transition-colors text-center flex items-center justify-center gap-2 shadow-lg shadow-myRed/30"
-                                        >
-                                            <Heart size={16} className="fill-current" />
-                                            I Have Paid - Upload Receipt
-                                        </a>
+                                    <div className="flex flex-col gap-3">
+                                        <div className="bg-white/5 border border-dashed border-white/20 rounded-xl p-4 text-center cursor-pointer hover:bg-white/10 transition-colors" onClick={() => document.getElementById('receipt-upload')?.click()}>
+                                            <input
+                                                type="file"
+                                                id="receipt-upload"
+                                                className="hidden"
+                                                accept="image/*"
+                                                onChange={handleFileChange}
+                                            />
+                                            <Upload className="mx-auto w-8 h-8 text-white/40 mb-2" />
+                                            {file ? (
+                                                <p className="text-sm font-medium text-myRed">{file.name}</p>
+                                            ) : (
+                                                <p className="text-sm text-white/60">Click to upload payment receipt</p>
+                                            )}
+                                        </div>
+
+                                        <div className="flex gap-3">
+                                            <button
+                                                onClick={() => setShowPayment(false)}
+                                                className="flex-1 bg-white/5 hover:bg-white/10 text-white font-bold py-3 px-6 rounded-xl transition-colors border border-white/10"
+                                                disabled={uploading}
+                                            >
+                                                Back
+                                            </button>
+                                            <button
+                                                onClick={handleUpload}
+                                                disabled={!file || uploading}
+                                                className={`flex-1 font-bold py-3 px-6 rounded-xl transition-colors text-center flex items-center justify-center gap-2 shadow-lg shadow-myRed/30 ${!file || uploading ? 'bg-white/10 text-white/40 cursor-not-allowed' : 'bg-myRed hover:bg-myRed/90 text-white'}`}
+                                            >
+                                                {uploading ? (
+                                                    <Sparkles className="animate-spin w-5 h-5" />
+                                                ) : (
+                                                    <Heart size={16} className="fill-current" />
+                                                )}
+                                                {uploading ? 'Uploading...' : 'Submit Receipt'}
+                                            </button>
+                                        </div>
                                     </div>
                                 </div>
                             )}
