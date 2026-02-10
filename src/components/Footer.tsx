@@ -58,6 +58,7 @@ export default function Footer() {
                         <p className="font-bold text-xs uppercase tracking-[0.2em] text-white/40 mb-2">Project</p>
                         <Link className="text-white/60 hover:text-myRed transition-colors font-medium" href="/developer">About Me</Link>
                         <Link className="text-white/60 hover:text-myRed transition-colors font-medium" href="/templates">Templates</Link>
+                        <Link className="text-white/60 hover:text-myRed transition-colors font-medium" href="/support">Support</Link>
                         <Link className="text-white/60 hover:text-myRed transition-colors font-medium" href="/faq">FAQs</Link>
                         <a className="text-white/60 hover:text-myRed transition-colors font-medium" href="https://preciousadedokun.com.ng/contact" target="_blank" rel="noopener noreferrer">Contact Me</a>
                     </motion.div>

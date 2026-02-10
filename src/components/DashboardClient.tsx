@@ -2,13 +2,15 @@
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, ExternalLink, Trash2, Edit2, Share2, X, MessageCircle, Sparkles } from 'lucide-react';
+import { Heart, Plus, ExternalLink, Trash2, Edit2, Share2, X, MessageCircle, Sparkles, Crown, Zap } from 'lucide-react';
 import Link from 'next/link';
 import MultiStepEditor from '@/components/MultiStepEditor';
 import Footer from '@/components/Footer';
 import { useToast } from '@/components/Toast';
 import { useModal } from '@/components/Modal';
 import { apiGet, apiDelete } from '@/lib/api';
+import PremiumModal from '@/components/PremiumModal';
+import { getUserLimits, canCreateValentine } from '@/lib/subscription';
 
 export default function DashboardClient() {
     const { showToast } = useToast();
@@ -22,6 +24,8 @@ export default function DashboardClient() {
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
+    const [showPremiumModal, setShowPremiumModal] = useState(false);
+    const [premiumReason, setPremiumReason] = useState<'limit' | 'slug' | 'upgrade'>('upgrade');
     const itemsPerPage = 6;
 
     const cardVariants = [
@@ -115,12 +119,61 @@ export default function DashboardClient() {
             <div className="pt-32 px-6 md:px-20 max-w-7xl mx-auto min-h-[70vh]">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-16">
                     <div>
-                        <h1 className="text-4xl md:text-5xl font-medium tracking-tight mb-2 text-white">
-                            My Creations
-                        </h1>
-                        <p className="text-white/40">
-                            Keep track of your heart's work and share the vibes
-                        </p>
+                        <div className="flex items-center gap-4 mb-3">
+                            <h1 className="text-4xl md:text-5xl font-medium tracking-tight text-white">
+                                My Creations
+                            </h1>
+                            {user && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-full ${user.subscriptionTier === 'premium'
+                                        ? 'bg-gradient-to-r from-yellow-500 to-orange-600 text-white'
+                                        : 'bg-white/10 text-white/60 border border-white/20'
+                                        }`}
+                                >
+                                    {user.subscriptionTier === 'premium' ? (
+                                        <>
+                                            <Crown size={16} className="animate-pulse" />
+                                            <span className="text-sm font-bold">Premium</span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Sparkles size={16} />
+                                            <span className="text-sm font-bold">Free</span>
+                                        </>
+                                    )}
+                                </motion.div>
+                            )}
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <p className="text-white/40">
+                                Keep track of your heart's work and share the vibes
+                            </p>
+                            {user && (
+                                <div className="flex items-center gap-2 text-sm">
+                                    <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 rounded-full border border-white/10">
+                                        <Heart size={14} className="text-myRed fill-current" />
+                                        <span className="font-bold text-white">
+                                            {valentines.length}/{getUserLimits(user).maxValentines}
+                                        </span>
+                                        <span className="text-white/40">cards</span>
+                                    </div>
+                                    {user.subscriptionTier !== 'premium' && valentines.length >= 2 && (
+                                        <button
+                                            onClick={() => {
+                                                setPremiumReason('upgrade');
+                                                setShowPremiumModal(true);
+                                            }}
+                                            className="flex items-center gap-1.5 px-3 py-1.5 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-500 rounded-full border border-yellow-500/30 transition-all group"
+                                        >
+                                            <Zap size={14} className="group-hover:animate-pulse" />
+                                            <span className="text-xs font-bold">Upgrade</span>
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-4">
@@ -138,13 +191,20 @@ export default function DashboardClient() {
                                 </button>
                             ))}
                         </div>
-                        <Link
-                            href="/templates"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-myRed text-white rounded-full font-medium hover:bg-myRed/90 transition-all shadow-lg shadow-myRed/20"
+                        <button
+                            onClick={() => {
+                                if (user && !canCreateValentine(user, valentines.length)) {
+                                    setPremiumReason('limit');
+                                    setShowPremiumModal(true);
+                                } else {
+                                    window.location.href = '/templates';
+                                }
+                            }}
+                            className="inline-flex items-center gap-2 px-8 py-4 bg-myRed text-white rounded-full font-medium hover:bg-myRed/90 transition-all shadow-lg shadow-myRed/20 hover:scale-105"
                         >
                             <Plus className="w-5 h-5" />
                             <span>Create New</span>
-                        </Link>
+                        </button>
                     </div>
                 </div>
 
@@ -263,6 +323,12 @@ export default function DashboardClient() {
                     />
                 )}
             </AnimatePresence>
+
+            <PremiumModal
+                isOpen={showPremiumModal}
+                onClose={() => setShowPremiumModal(false)}
+                reason={premiumReason}
+            />
         </main>
     );
 }

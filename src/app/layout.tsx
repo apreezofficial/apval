@@ -54,6 +54,9 @@ export const metadata: Metadata = {
     apple: "/favicon.svg",
   },
   manifest: `${siteConfig.url}/site.webmanifest`,
+  verification: {
+    google: "DKORK9sd2C4nDlAOrHf4AC6UKTmmXxRDgcgt0qX47kY",
+  },
 };
 
 export const viewport: Viewport = {

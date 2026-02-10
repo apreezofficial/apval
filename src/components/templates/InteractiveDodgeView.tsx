@@ -80,7 +80,7 @@ export default function InteractiveDodgeView({ data, isPreview }: InteractiveDod
             className={`w-full h-full ${isPreview ? 'relative' : 'fixed inset-0'} bg-gradient-to-br ${bgColor} flex items-center justify-center p-6 overflow-hidden select-none font-sans`}
         >
             {data.musicUrl && <MusicPlayer url={data.musicUrl} isMuted={isMuted} />}
-            
+
             {data.musicUrl && (
                 <button
                     onClick={() => setIsMuted(!isMuted)}
@@ -144,6 +144,9 @@ export default function InteractiveDodgeView({ data, isPreview }: InteractiveDod
                         </motion.div>
 
                         <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-none mb-4" style={{ color: themeColor }}>
+                            {data.headline && (
+                                <span className="block text-2xl md:text-3xl mb-4 italic font-medium opacity-60 text-black">{data.headline}</span>
+                            )}
                             Will you be my <br />
                             <span className="italic">Valentine?</span>
                         </h1>

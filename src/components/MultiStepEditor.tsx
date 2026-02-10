@@ -100,11 +100,11 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         'valentine-motion-premium': ['recipient_headline', 'intro', 'content', 'attachment', 'audio', 'signature'],
         'amour': ['recipient_headline', 'content', 'attachment', 'audio', 'signature'],
         'minimal-elite-card': ['recipient_headline', 'content', 'signature'],
-        'quest-valentine': ['recipient', 'content', 'audio', 'signature'],
-        'interactive-dodge': ['recipient', 'gender', 'proposal_intro', 'audio', 'signature'],
-        'classic-valentine': ['recipient', 'content', 'audio', 'signature'],
+        'quest-valentine': ['recipient_headline', 'content', 'audio', 'signature'],
+        'interactive-dodge': ['recipient_headline', 'gender', 'proposal_intro', 'audio', 'signature'],
+        'classic-valentine': ['recipient_headline', 'content', 'audio', 'signature'],
         'gaming-elite': ['recipient_headline', 'content', 'audio', 'signature'],
-        'premium-mockup-card': ['recipient', 'content', 'attachment', 'audio', 'signature']
+        'premium-mockup-card': ['recipient_headline', 'content', 'attachment', 'audio', 'signature']
     };
 
     const features = featureMap[templateId] || ['recipient', 'signature'];

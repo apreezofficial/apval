@@ -9,6 +9,7 @@ import PremiumMotionView from '@/components/templates/PremiumMotionView';
 import QuestValentineView from '@/components/templates/QuestValentineView';
 import InteractiveDodgeView from '@/components/templates/InteractiveDodgeView';
 import ClassicValentineView from '@/components/templates/ClassicValentineView';
+import GamingEliteView from '@/components/templates/GamingEliteView';
 import NotFoundUI from '@/components/NotFoundUI';
 import MusicPlayer from '@/components/MusicPlayer';
 import { apiGet } from '@/lib/api';
@@ -231,6 +232,10 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
 
         if (data.templateId === 'classic-valentine') {
             return <ClassicValentineView key={resetKey} data={data} />;
+        }
+
+        if (data.templateId === 'gaming-elite') {
+            return <GamingEliteView key={resetKey} data={data} />;
         }
 
         // Default Template (Premium Mockup)

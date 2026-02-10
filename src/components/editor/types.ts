@@ -1,4 +1,5 @@
 
+
 export interface EditorData {
     recipient: string;
     headline: string;
@@ -7,6 +8,7 @@ export interface EditorData {
     imageUrl: string;
     whatsapp: string;
     musicUrl: string;
+    customSlug?: string;
     // Premium Motion Specific
     introQuote1Line1: string;
     introQuote1Line2: string;
@@ -27,7 +29,9 @@ export type EditorStep =
     | 'content'
     | 'attachment'
     | 'audio'
+    | 'custom_slug'
     | 'signature'
     | 'gender'
     | 'proposal_intro'
     | 'success';
+

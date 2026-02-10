@@ -160,6 +160,9 @@ export default function QuestValentineView({ data }: QuestValentineViewProps) {
                         </motion.div>
 
                         <h1 className="text-4xl md:text-7xl font-black text-white tracking-tighter leading-none mb-16 drop-shadow-2xl">
+                            {data.headline && (
+                                <span className="block text-xl md:text-3xl text-myRed/80 mb-6 uppercase tracking-[0.2em] font-medium">{data.headline}</span>
+                            )}
                             {data.recipient}, <br />
                             will you be my <span className="text-myRed">Valentine?</span> 🥹❤️
                         </h1>

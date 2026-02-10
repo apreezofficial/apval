@@ -47,25 +47,28 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
     };
 
     return (
-        <div className="w-full h-full">
+        <div className="w-full h-full font-mono selection:bg-purple-500 selection:text-white bg-black">
             {data.musicUrl && <MusicPlayer url={data.musicUrl} isMuted={isMuted} />}
 
+            {/* CRT Scanline Effect */}
+            <div className="absolute inset-0 pointer-events-none z-[50] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,6px_100%]" />
+            <div className="absolute inset-0 pointer-events-none z-[50] mix-blend-overlay opacity-20 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent" />
+
             {yesPressed ? (
-                <div className={`flex flex-col items-center justify-center ${isPreview ? 'h-full' : 'min-h-screen'} bg-[#0A0014] text-center p-6 overflow-hidden relative font-geist w-full`}>
+                <div className={`flex flex-col items-center justify-center ${isPreview ? 'h-full' : 'min-h-screen'} bg-[#050008] text-center p-6 overflow-hidden relative w-full`}>
                     {/* Animated Grid Background */}
                     <div className="absolute inset-0 opacity-20 pointer-events-none bg-[linear-gradient(to_right,#8B5CF6_1px,transparent_1px),linear-gradient(to_bottom,#8B5CF6_1px,transparent_1px)] bg-[size:40px_40px] animate-pulse" />
 
                     {/* Glowing Orbs */}
                     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-600/30 blur-[120px] rounded-full animate-pulse" />
-                        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-500/30 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-pink-500/20 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+                        <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full animate-pulse" />
+                        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-cyan-500/20 blur-[120px] rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
                     </div>
 
                     <motion.div
                         initial={{ scale: 0, rotate: -20 }}
                         animate={{ scale: 1, rotate: 0 }}
-                        transition={{ type: "spring", damping: 10, stiffness: 100 }}
+                        transition={{ type: "spring", damping: 12, stiffness: 200 }}
                         className="relative z-10"
                     >
                         {/* Victory Badge */}
@@ -74,46 +77,46 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
                             transition={{ duration: 2, repeat: Infinity }}
                             className="relative mb-8"
                         >
-                            <div className="w-80 h-80 relative">
+                            <div className="w-64 h-64 md:w-80 md:h-80 relative flex items-center justify-center">
                                 {/* Hexagon Badge */}
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <svg viewBox="0 0 100 100" className="w-full h-full">
+                                    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-[0_0_50px_rgba(139,92,246,0.6)]">
                                         <defs>
                                             <linearGradient id="badgeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                                <stop offset="0%" stopColor="#8B5CF6" />
-                                                <stop offset="50%" stopColor="#EC4899" />
-                                                <stop offset="100%" stopColor="#06B6D4" />
+                                                <stop offset="0%" stopColor="#7C3AED" />
+                                                <stop offset="50%" stopColor="#DB2777" />
+                                                <stop offset="100%" stopColor="#0891B2" />
                                             </linearGradient>
                                         </defs>
                                         <polygon
-                                            points="50,5 90,25 90,75 50,95 10,75 10,25"
+                                            points="50,5 95,25 95,75 50,95 5,75 5,25"
                                             fill="url(#badgeGradient)"
                                             stroke="#fff"
                                             strokeWidth="2"
-                                            className="drop-shadow-[0_0_30px_rgba(139,92,246,0.8)]"
+                                            className="opacity-90"
                                         />
                                     </svg>
                                 </div>
 
                                 {/* Trophy Icon */}
                                 <div className="absolute inset-0 flex items-center justify-center">
-                                    <Trophy className="w-32 h-32 text-yellow-300 fill-current drop-shadow-[0_0_20px_rgba(253,224,71,0.8)]" />
+                                    <Trophy className="w-24 h-24 md:w-32 md:h-32 text-yellow-300 fill-current drop-shadow-[0_0_20px_rgba(253,224,71,0.8)]" />
                                 </div>
 
-                                {/* Gamepad Controllers */}
+                                {/* Floating Controllers */}
                                 <motion.div
-                                    animate={{ y: [0, -10, 0] }}
-                                    transition={{ duration: 2, repeat: Infinity }}
-                                    className="absolute -left-8 top-1/2 -translate-y-1/2"
+                                    animate={{ y: [0, -15, 0], rotate: [-10, -5, -10] }}
+                                    transition={{ duration: 3, repeat: Infinity }}
+                                    className="absolute -left-12 top-1/2 -translate-y-1/2"
                                 >
-                                    <Gamepad2 className="w-20 h-20 text-purple-400 drop-shadow-[0_0_15px_rgba(167,139,250,0.8)]" />
+                                    <Gamepad2 className="w-16 h-16 md:w-24 md:h-24 text-purple-400 drop-shadow-[0_0_25px_rgba(167,139,250,0.8)] stroke-[1.5]" />
                                 </motion.div>
                                 <motion.div
-                                    animate={{ y: [0, -10, 0] }}
-                                    transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                                    className="absolute -right-8 top-1/2 -translate-y-1/2"
+                                    animate={{ y: [0, -15, 0], rotate: [10, 5, 10] }}
+                                    transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+                                    className="absolute -right-12 top-1/2 -translate-y-1/2"
                                 >
-                                    <Gamepad2 className="w-20 h-20 text-cyan-400 drop-shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
+                                    <Gamepad2 className="w-16 h-16 md:w-24 md:h-24 text-cyan-400 drop-shadow-[0_0_25px_rgba(34,211,238,0.8)] stroke-[1.5]" />
                                 </motion.div>
                             </div>
                         </motion.div>
@@ -123,59 +126,60 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
                         initial={{ y: 30, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.3 }}
-                        className="space-y-6 relative z-10"
+                        className="space-y-6 relative z-10 w-full max-w-4xl"
                     >
-                        {/* Achievement Unlocked Banner */}
+                        {/* Achievement Banner */}
                         <motion.div
                             initial={{ x: -100, opacity: 0 }}
                             animate={{ x: 0, opacity: 1 }}
                             transition={{ delay: 0.5 }}
-                            className="bg-gradient-to-r from-purple-600/20 via-pink-600/20 to-cyan-600/20 border-2 border-purple-500/50 rounded-2xl px-8 py-4 backdrop-blur-xl"
+                            className="bg-black/40 border-l-4 border-r-4 border-purple-500 max-w-md mx-auto py-4 backdrop-blur-md relative overflow-hidden group"
                         >
-                            <div className="flex items-center gap-4 justify-center">
-                                <Star className="w-8 h-8 text-yellow-300 fill-current animate-pulse" />
+                            <div className="absolute inset-0 bg-purple-500/10 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-1000" />
+                            <div className="flex items-center gap-4 justify-center relative z-10">
+                                <Star className="w-6 h-6 text-yellow-400 fill-current animate-[spin_3s_linear_infinite]" />
                                 <div className="text-left">
-                                    <p className="text-xs font-black uppercase tracking-widest text-purple-300">Achievement Unlocked</p>
-                                    <p className="text-lg font-black text-white">LEGENDARY VALENTINE</p>
+                                    <p className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-purple-400">System Notification</p>
+                                    <p className="text-sm md:text-lg font-bold text-white tracking-wider">ACHIEVEMENT UNLOCKED</p>
                                 </div>
-                                <Star className="w-8 h-8 text-yellow-300 fill-current animate-pulse" />
+                                <Star className="w-6 h-6 text-yellow-400 fill-current animate-[spin_3s_linear_infinite_reverse]" />
                             </div>
                         </motion.div>
 
-                        <h1 className="text-6xl md:text-9xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 tracking-tighter leading-none drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
+                        <h1 className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-purple-300 to-purple-600 tracking-tighter leading-none drop-shadow-[0_5px_0_rgba(88,28,135,1)]">
                             VICTORY!
                         </h1>
 
-                        <p className="text-2xl md:text-4xl text-white/90 font-bold tracking-tight">
-                            {data.recipient}, you just won my heart! 💜
+                        <p className="text-xl md:text-3xl text-white font-bold tracking-tight px-4 shadow-black drop-shadow-md">
+                            <span className="text-cyan-400">&gt;</span> {data.recipient} just joined the party!
                         </p>
 
-                        <div className="flex items-center justify-center gap-6 text-white/60 font-mono text-sm">
-                            <div className="flex items-center gap-2">
-                                <Zap className="w-5 h-5 text-yellow-400" />
-                                <span>SCORE: {score + 10000}</span>
+                        <div className="flex items-center justify-center gap-4 md:gap-12 text-white/80 font-mono text-xs md:text-sm pt-4">
+                            <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-lg border border-white/10">
+                                <Zap className="w-4 h-4 text-yellow-400" />
+                                <span>SCORE: <span className="text-yellow-400">{score + 99999}</span></span>
                             </div>
-                            <div className="flex items-center gap-2">
-                                <Heart className="w-5 h-5 text-pink-400 fill-current" />
-                                <span>LOVE LEVEL: MAX</span>
+                            <div className="flex items-center gap-2 bg-white/5 px-4 py-2 rounded-lg border border-white/10">
+                                <Heart className="w-4 h-4 text-pink-500 fill-current" />
+                                <span>HP: <span className="text-green-400">100%</span></span>
                             </div>
                         </div>
 
                         {data.whatsapp && (
                             <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.8 }}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                transition={{ delay: 1 }}
                                 className="pt-8"
                             >
                                 <a
-                                    href={`https://wa.me/${data.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(`GG ${data.sender}! I just accepted your legendary Valentine request! 💜🎮`)}`}
+                                    href={`https://wa.me/${data.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(`GG WP ${data.sender}! 🎮 I ACCEPT the challenge! Let's go! 💜`)}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-2xl text-sm font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-[0_20px_40px_rgba(139,92,246,0.4)] border-2 border-purple-400/50"
+                                    className="inline-flex items-center gap-3 px-8 py-4 bg-green-600 hover:bg-green-500 text-white border-b-4 border-green-800 active:border-b-0 active:translate-y-1 transition-all uppercase font-bold tracking-wider text-sm md:text-base shadow-[0_0_20px_rgba(34,197,94,0.4)]"
                                 >
-                                    <MessageCircle className="w-6 h-6 fill-current" />
-                                    <span>Message {data.sender} on WhatsApp</span>
+                                    <MessageCircle className="w-5 h-5 fill-current" />
+                                    <span>Press Start (WhatsApp)</span>
                                 </a>
                             </motion.div>
                         )}
@@ -186,161 +190,115 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
                         {[...Array(40)].map((_, i) => (
                             <motion.div
                                 key={i}
-                                initial={{
-                                    top: "100%",
-                                    left: `${Math.random() * 100}%`,
-                                    scale: Math.random() * 0.8 + 0.4,
-                                    opacity: 0
-                                }}
-                                animate={{
-                                    top: "-20%",
-                                    opacity: [0, 1, 1, 0],
-                                    rotate: 360,
-                                    x: (Math.random() - 0.5) * 300
-                                }}
-                                transition={{
-                                    duration: Math.random() * 5 + 4,
-                                    repeat: Infinity,
-                                    delay: Math.random() * 3
-                                }}
+                                initial={{ top: "110%", left: `${Math.random() * 100}%`, scale: 0, opacity: 0 }}
+                                animate={{ top: "-10%", opacity: [0, 1, 1, 0], scale: [0, 1, 1], rotate: [0, 180, 360], x: (Math.random() - 0.5) * 200 }}
+                                transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, delay: Math.random() * 2, ease: "linear" }}
                                 className="absolute"
                             >
-                                {i % 3 === 0 ? (
-                                    <Heart className="text-pink-500 fill-current w-8 h-8 drop-shadow-[0_0_10px_rgba(236,72,153,0.8)]" />
-                                ) : i % 3 === 1 ? (
-                                    <Star className="text-yellow-400 fill-current w-8 h-8 drop-shadow-[0_0_10px_rgba(250,204,21,0.8)]" />
-                                ) : (
-                                    <Gamepad2 className="text-purple-400 w-8 h-8 drop-shadow-[0_0_10px_rgba(167,139,250,0.8)]" />
-                                )}
+                                {i % 3 === 0 ? <Heart className="text-pink-500/80 fill-current w-6 h-6" /> :
+                                    i % 3 === 1 ? <Star className="text-yellow-400/80 fill-current w-6 h-6" /> :
+                                        <div className="w-3 h-3 bg-cyan-400 shadow-[0_0_10px_cyan]" />}
                             </motion.div>
                         ))}
                     </div>
                 </div>
             ) : (
-                <div className={`flex flex-col items-center justify-center ${isPreview ? 'h-full' : 'min-h-screen'} bg-[#0A0014] text-center p-6 overflow-hidden relative font-geist w-full`}>
+                <div className={`flex flex-col items-center justify-center ${isPreview ? 'h-full' : 'min-h-screen'} bg-[#050008] text-center p-6 overflow-hidden relative w-full`}>
                     {/* Animated Grid Background */}
-                    <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(to_right,#8B5CF6_1px,transparent_1px),linear-gradient(to_bottom,#8B5CF6_1px,transparent_1px)] bg-[size:40px_40px]" />
+                    <div className="absolute inset-0 opacity-15 pointer-events-none bg-[linear-gradient(to_right,#4C1D95_1px,transparent_1px),linear-gradient(to_bottom,#4C1D95_1px,transparent_1px)] bg-[size:50px_50px]" />
 
                     {/* Glowing Orbs */}
                     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                        <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-purple-600/20 blur-[100px] rounded-full animate-pulse" />
-                        <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-cyan-500/20 blur-[100px] rounded-full animate-pulse" style={{ animationDelay: '1s' }} />
+                        <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-purple-900/40 blur-[100px] rounded-full animate-pulse" />
+                        <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-cyan-900/40 blur-[100px] rounded-full animate-pulse" style={{ animationDelay: '1.5s' }} />
                     </div>
 
-                    <div className="relative z-10 max-w-3xl w-full flex flex-col items-center">
-                        {/* Score Display */}
-                        <motion.div
-                            initial={{ y: -50, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            className="absolute top-0 left-1/2 -translate-x-1/2 bg-gradient-to-r from-purple-600/30 to-pink-600/30 backdrop-blur-xl border border-purple-500/30 rounded-2xl px-8 py-4 font-mono"
-                        >
-                            <div className="flex items-center gap-4">
-                                <Zap className="w-6 h-6 text-yellow-400 animate-pulse" />
-                                <span className="text-2xl font-black text-white">SCORE: {score}</span>
+                    <div className="relative z-10 max-w-4xl w-full flex flex-col items-center">
+                        {/* Score Display HUD */}
+                        <div className="absolute top-0 left-0 right-0 p-4 flex justify-between items-start font-bold text-xs md:text-sm tracking-widest text-purple-300/60 uppercase pointer-events-none">
+                            <div className="flex gap-4">
+                                <span>P1: {data.sender || 'YOU'}</span>
+                                <span>P2: CPU</span>
                             </div>
-                        </motion.div>
+                            <div className="animate-pulse text-red-500">INSERT COIN</div>
+                            <div>CREDITS: 00</div>
+                        </div>
 
-                        {/* Gaming Controller Animation */}
+                        {/* Main Content */}
                         <motion.div
-                            key={noCount}
-                            initial={{ scale: 0.8, opacity: 0, y: 30 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            className="mb-16 mt-24"
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            className="flex flex-col items-center gap-8 mt-12 mb-12"
                         >
                             <div className="relative group">
-                                {/* Glow Effect */}
+                                <div className="absolute -inset-8 bg-purple-600/20 blur-2xl rounded-full group-hover:bg-purple-600/30 transition-all duration-500" />
                                 <motion.div
                                     animate={{
-                                        scale: [1, 1.2, 1],
-                                        opacity: [0.3, 0.6, 0.3]
+                                        y: [0, -10, 0],
+                                        rotateZ: [0, -2, 2, 0]
                                     }}
-                                    transition={{ duration: 2, repeat: Infinity }}
-                                    className="absolute -inset-8 bg-gradient-to-r from-purple-600 to-pink-600 blur-3xl rounded-full"
-                                />
+                                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                                    className="relative"
+                                >
+                                    <Gamepad2 className="w-48 h-48 md:w-64 md:h-64 text-purple-500 drop-shadow-[0_0_30px_rgba(168,85,247,0.6)] stroke-[1] fill-black/50" />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <Heart className="w-16 h-16 text-pink-500 fill-current animate-pulse drop-shadow-[0_0_20px_rgba(236,72,153,0.8)]" />
+                                    </div>
+                                </motion.div>
+                            </div>
 
-                                {/* Controller Display */}
-                                <div className="relative w-80 h-80 flex items-center justify-center">
-                                    {/* Main Gamepad */}
-                                    <motion.div
-                                        animate={{
-                                            rotate: [0, -5, 5, 0],
-                                            y: [0, -10, 0]
-                                        }}
-                                        transition={{ duration: 3, repeat: Infinity }}
-                                        className="relative"
-                                    >
-                                        <Gamepad2 className="w-64 h-64 text-purple-400 drop-shadow-[0_0_40px_rgba(167,139,250,0.8)]" />
-
-                                        {/* Heart in center */}
-                                        <motion.div
-                                            animate={{
-                                                scale: [1, 1.3, 1],
-                                            }}
-                                            transition={{ duration: 1.5, repeat: Infinity }}
-                                            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                                        >
-                                            <Heart className="w-20 h-20 text-pink-500 fill-current drop-shadow-[0_0_30px_rgba(236,72,153,1)]" />
-                                        </motion.div>
-                                    </motion.div>
-                                </div>
+                            <div className="space-y-4 max-w-2xl px-4">
+                                <h1 className="text-4xl md:text-7xl font-black text-white tracking-tighter leading-tight drop-shadow-2xl">
+                                    {data.headline ? (
+                                        <span className="block text-2xl md:text-4xl text-cyan-400 mb-2 font-bold tracking-widest uppercase drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
+                                            {data.headline}
+                                        </span>
+                                    ) : (
+                                        <span className="block text-2xl md:text-4xl text-cyan-400 mb-2 font-bold tracking-widest uppercase drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]">
+                                            PLAYER 2 READY?
+                                        </span>
+                                    )}
+                                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 animate-gradient-x">
+                                        {data.recipient}
+                                    </span>
+                                </h1>
+                                <p className="text-lg md:text-xl text-purple-200/80 font-medium">
+                                    {data.message || "Ready for a co-op adventure? Press Start to join."}
+                                </p>
                             </div>
                         </motion.div>
 
-                        <h1 className="text-5xl md:text-8xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400 tracking-tighter leading-none mb-8 drop-shadow-[0_0_30px_rgba(139,92,246,0.5)]">
-                            {data.headline ? (
-                                <>
-                                    {data.headline} <span className="text-pink-400">READY?</span> 🎮💜
-                                </>
-                            ) : (
-                                <>
-                                    {data.recipient}, <br />
-                                    PLAYER 2 <span className="text-pink-400">READY?</span> 🎮💜
-                                </>
-                            )}
-                        </h1>
-
-                        <p className="text-xl md:text-2xl text-white/70 font-medium mb-16 max-w-2xl">
-                            {data.message || "Let's team up for the ultimate co-op adventure... Will you be my Valentine?"}
-                        </p>
-
-                        <div className="flex flex-col items-center justify-center gap-8 w-full max-w-md">
+                        {/* Action Buttons */}
+                        <div className="flex flex-col items-center justify-center gap-6 w-full max-w-xs md:max-w-md relative z-20">
                             <motion.button
                                 onClick={() => setYesPressed(true)}
-                                style={{ fontSize: yesButtonSize > 100 ? '3rem' : '1.5rem' }}
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
-                                className="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-cyan-600 hover:from-purple-500 hover:via-pink-500 hover:to-cyan-500 text-white font-black py-8 px-12 rounded-[32px] shadow-[0_20px_60px_-10px_rgba(139,92,246,0.5)] transition-all flex items-center justify-center gap-4 border-2 border-purple-400/50 relative overflow-hidden group"
+                                className="w-full bg-green-500 hover:bg-green-400 text-black font-black text-xl md:text-2xl py-6 px-12 border-b-8 border-green-700 active:border-b-0 active:translate-y-2 rounded-lg transition-all shadow-[0_0_30px_rgba(34,197,94,0.3)] flex items-center justify-center gap-3 uppercase tracking-wider group"
                             >
-                                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
-                                <span className="relative">ACCEPT</span>
-                                <Heart className="fill-current w-8 h-8 relative" />
+                                <Zap className="w-6 h-6 fill-current group-hover:animate-ping" />
+                                <span>START GAME</span>
+                                <Zap className="w-6 h-6 fill-current group-hover:animate-ping" />
                             </motion.button>
 
                             <motion.button
                                 layout
                                 onClick={handleNoClick}
-                                whileHover={{ x: [0, -8, 8, -8, 8, 0] }}
-                                className="text-white/50 hover:text-white/70 font-bold py-5 px-10 rounded-2xl border-2 border-white/10 hover:bg-white/5 hover:border-purple-500/30 transition-all text-sm uppercase tracking-widest backdrop-blur-sm"
+                                whileHover={{ x: [0, -4, 4, -4, 4, 0] }}
+                                className="text-white/50 hover:text-red-400 font-bold tracking-widest text-sm md:text-base py-4 hover:bg-white/5 w-full rounded transition-colors uppercase"
                             >
                                 {getNoButtonText()}
                             </motion.button>
                         </div>
-
-                        {data.sender && (
-                            <div className="mt-24 flex items-center gap-4 px-8 py-4 bg-white/5 rounded-2xl border border-white/10 backdrop-blur-sm">
-                                <Gamepad2 className="w-5 h-5 text-purple-400" />
-                                <span className="text-sm font-bold tracking-tight text-white/60">DEPLOYED BY {data.sender.toUpperCase()}</span>
-                            </div>
-                        )}
                     </div>
 
-                    {/* Music Control */}
+                    {/* Mute Control */}
                     {data.musicUrl && (
                         <button
                             onClick={() => setIsMuted(!isMuted)}
-                            className="fixed top-10 right-10 z-50 w-14 h-14 rounded-full bg-gradient-to-br from-purple-600/20 to-pink-600/20 border-2 border-purple-500/30 flex items-center justify-center group hover:from-purple-600/30 hover:to-pink-600/30 transition-all backdrop-blur-xl"
+                            className="fixed top-6 right-6 z-50 p-3 rounded-lg bg-black/50 border border-white/10 hover:bg-white/10 transition-colors backdrop-blur-md text-white/60 hover:text-white"
                         >
-                            {isMuted ? <VolumeX className="w-6 h-6 text-white/50" /> : <Volume2 className="w-6 h-6 text-purple-400 animate-pulse" />}
+                            {isMuted ? <VolumeX className="w-6 h-6" /> : <Volume2 className="w-6 h-6 animate-pulse" />}
                         </button>
                     )}
                 </div>
