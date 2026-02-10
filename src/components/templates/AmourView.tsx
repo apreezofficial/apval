@@ -101,7 +101,7 @@ export default function AmourView({ data, steps, isPreview }: AmourViewProps) {
                                             Purpose Built For...
                                         </motion.p>
                                         <h1 className="text-white text-5xl md:text-7xl font-black tracking-tighter uppercase drop-shadow-2xl">
-                                            {data.headline || 'Your Vision'}
+                                            {data.headline}
                                         </h1>
                                         <p className="text-white/60 text-xl md:text-2xl font-medium pt-4">Prepared for {data.recipient}</p>
                                     </div>

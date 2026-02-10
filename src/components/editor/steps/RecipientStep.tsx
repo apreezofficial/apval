@@ -39,7 +39,7 @@ export default function RecipientStep({
                             type="text"
                             value={data.headline}
                             onChange={(e) => onUpdate({ headline: e.target.value })}
-                            placeholder="Headline (e.g. For my love)"
+                            placeholder="Opening text (e.g., To my one and only)"
                             className="w-full pl-16 pr-6 py-5 bg-white/[0.03] rounded-2xl border border-white/5 focus:border-myRed/50 outline-none text-white font-medium"
                         />
                     </div>

@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Heart, ArrowRight, ArrowLeft, Send, User, MessageCircle, Sparkles, Phone, Music, Music2, Share2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { apiGet, apiPost, apiPut } from '@/lib/api';
 
 interface MultiStepEditorProps {
     templateId: string;
@@ -17,6 +18,7 @@ import PremiumMotionView from './templates/PremiumMotionView';
 import QuestValentineView from './templates/QuestValentineView';
 import InteractiveDodgeView from './templates/InteractiveDodgeView';
 import ClassicValentineView from './templates/ClassicValentineView';
+import GamingEliteView from './templates/GamingEliteView';
 import { useToast } from './Toast';
 
 // Modular Step Components
@@ -37,7 +39,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
     const [fetchingData, setFetchingData] = useState(!!editId);
     const [data, setData] = useState({
         recipient: '',
-        headline: 'We offer the best moments to',
+        headline: '',
         message: '',
         sender: '',
         imageUrl: '',
@@ -62,8 +64,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
     useEffect(() => {
         if (editId) {
             setFetchingData(true);
-            fetch(`/api/valentines/${editId}`)
-                .then(res => res.json())
+            apiGet(`/valentines/${editId}`)
                 .then(valData => {
                     if (valData) {
                         if (valData.templateId) {
@@ -71,7 +72,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                         }
                         setData({
                             recipient: valData.recipient || '',
-                            headline: valData.headline || 'We offer the best moments to',
+                            headline: valData.headline || '',
                             message: valData.message || '',
                             sender: valData.sender || '',
                             imageUrl: valData.imageUrl || '',
@@ -102,6 +103,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         'quest-valentine': ['recipient', 'content', 'audio', 'signature'],
         'interactive-dodge': ['recipient', 'gender', 'proposal_intro', 'audio', 'signature'],
         'classic-valentine': ['recipient', 'content', 'audio', 'signature'],
+        'gaming-elite': ['recipient', 'content', 'audio', 'signature'],
         'premium-mockup-card': ['recipient', 'content', 'attachment', 'audio', 'signature']
     };
 
@@ -113,17 +115,11 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         setLoading(true);
         const user = JSON.parse(localStorage.getItem('user') || '{}');
         try {
-            const method = editId ? 'PUT' : 'POST';
-            const body = editId
-                ? JSON.stringify({ ...data, id: editId, templateId, userId: user.id })
-                : JSON.stringify({ ...data, templateId, userId: user.id });
+            const payload = { ...data, templateId, userId: user.id };
+            const result = editId
+                ? await apiPut('/valentines', { ...payload, id: editId })
+                : await apiPost('/valentines', payload);
 
-            const res = await fetch('/api/valentines', {
-                method,
-                headers: { 'Content-Type': 'application/json' },
-                body,
-            });
-            const result = await res.json();
             const finalId = editId || result.id;
 
             if (finalId) {
@@ -214,6 +210,10 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                 <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
                                     <ClassicValentineView data={data} isPreview />
                                 </div>
+                            ) : templateId === 'gaming-elite' ? (
+                                <div className="flex-1 pointer-events-none scale-[0.7] md:scale-100 origin-center">
+                                    <GamingEliteView data={data} isPreview />
+                                </div>
                             ) : (
                                 <div className="flex-1 p-6 pt-12 flex flex-col items-center justify-between bg-[#FF99F1] text-black">
                                     <div className="w-full space-y-6">
@@ -234,7 +234,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                         </div>
                                         <div className="space-y-4">
                                             <h2 className="text-2xl font-black leading-tight tracking-tighter">
-                                                {data.headline} {data.recipient || '...'}
+                                                {data.headline || 'Your message for'} {data.recipient || '...'}
                                             </h2>
                                             {step === 2 && (
                                                 <p className="text-[10px] font-bold leading-tight opacity-70 line-clamp-6 bg-white/40 p-3 rounded-2xl border border-white/20">
@@ -430,7 +430,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                                             onBack={handleBack}
                                             loading={loading}
                                             showButtonText={templateId === 'valentine-motion-premium'}
-                                            showWhatsapp={templateId === 'amour' || templateId === 'quest-valentine' || templateId === 'interactive-dodge' || templateId === 'classic-valentine'}
+                                            showWhatsapp={templateId === 'amour' || templateId === 'quest-valentine' || templateId === 'interactive-dodge' || templateId === 'classic-valentine' || templateId === 'gaming-elite'}
                                         />
                                     )}
 

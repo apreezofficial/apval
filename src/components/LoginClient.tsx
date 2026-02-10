@@ -5,6 +5,7 @@ import { Heart, Mail, Lock, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useToast } from './Toast';
+import { apiPost } from '@/lib/api';
 
 export default function LoginClient() {
     const { showToast } = useToast();
@@ -17,12 +18,7 @@ export default function LoginClient() {
         e.preventDefault();
         setLoading(true);
         try {
-            const res = await fetch('/api/auth/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password }),
-            });
-            const data = await res.json();
+            const data = await apiPost('/auth/login', { email, password });
             if (data.id) {
                 localStorage.setItem('user', JSON.stringify(data));
                 showToast(`Welcome back, ${data.name}`, 'success');

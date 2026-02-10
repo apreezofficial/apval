@@ -11,6 +11,7 @@ import InteractiveDodgeView from '@/components/templates/InteractiveDodgeView';
 import ClassicValentineView from '@/components/templates/ClassicValentineView';
 import NotFoundUI from '@/components/NotFoundUI';
 import MusicPlayer from '@/components/MusicPlayer';
+import { apiGet } from '@/lib/api';
 
 interface ValentineViewClientProps {
     initialData: any;
@@ -52,8 +53,7 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
 
             if (!initialData && id) {
                 try {
-                    const res = await fetch(`/api/valentines/${id}`);
-                    const result = await res.json();
+                    const result = await apiGet(`/valentines/${id}`);
                     if (!result.error) setData(result);
                     else setData({ error: true });
                 } catch (error) {
@@ -296,7 +296,7 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
                                             </motion.div>
                                         </div>
                                         <h1 className="text-5xl font-black leading-none tracking-tighter break-words">
-                                            {data.headline || 'We offer the best moments to'}<br />
+                                            {data.headline && <>{data.headline}<br /></>}
                                             {data.recipient}.
                                         </h1>
                                     </div>

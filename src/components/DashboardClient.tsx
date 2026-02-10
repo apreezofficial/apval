@@ -6,9 +6,9 @@ import { Heart, Plus, ExternalLink, Trash2, Edit2, Share2, X, MessageCircle, Spa
 import Link from 'next/link';
 import MultiStepEditor from '@/components/MultiStepEditor';
 import Footer from '@/components/Footer';
-
 import { useToast } from '@/components/Toast';
 import { useModal } from '@/components/Modal';
+import { apiGet, apiDelete } from '@/lib/api';
 
 export default function DashboardClient() {
     const { showToast } = useToast();
@@ -32,8 +32,7 @@ export default function DashboardClient() {
 
     const fetchValentines = (userId: string) => {
         setIsLoading(true);
-        fetch(`/api/valentines/user/${userId}`)
-            .then(res => res.json())
+        apiGet(`/valentines/user/${userId}`)
             .then(data => {
                 const sorted = Array.isArray(data) ? data.sort((a: any, b: any) =>
                     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
@@ -83,8 +82,7 @@ export default function DashboardClient() {
             type: 'danger',
             onConfirm: async () => {
                 try {
-                    const res = await fetch(`/api/valentines?id=${id}`, { method: 'DELETE' });
-                    const result = await res.json();
+                    const result = await apiDelete(`/valentines?id=${id}`);
                     if (result.success) {
                         showToast('Asset successfully decommissioned', 'success');
                         fetchValentines(user.id);

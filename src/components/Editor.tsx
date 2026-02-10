@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Save, Share2, Heart, Type, Image as ImageIcon, Send } from 'lucide-react';
+import { apiPost } from '@/lib/api';
 
 interface EditorProps {
     templateId: string;
@@ -21,12 +22,7 @@ export default function Editor({ templateId, onClose }: EditorProps) {
     const handleGenerate = async () => {
         setIsGenerating(true);
         try {
-            const response = await fetch('/api/valentines', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ ...data, templateId }),
-            });
-            const result = await response.json();
+            const result = await apiPost('/valentines', { ...data, templateId });
             if (result.id) {
                 const link = `${window.location.origin}/v/${result.id}`;
                 setGeneratedLink(link);

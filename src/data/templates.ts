@@ -63,5 +63,13 @@ export const templates: Template[] = [
         theme: 'playful',
         previewColor: '#FFB6C1',
         category: 'website'
+    },
+    {
+        id: 'gaming-elite',
+        name: 'Gaming Elite',
+        description: 'Epic gaming-themed proposal with neon aesthetics, gamepad animations, achievement unlocks, and cyberpunk vibes.',
+        theme: 'dark',
+        previewColor: '#8B5CF6',
+        category: 'website'
     }
 ];

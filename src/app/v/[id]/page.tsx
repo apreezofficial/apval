@@ -8,7 +8,7 @@ interface Props {
 }
 
 async function getValentineData(id: string) {
-    const res = await fetch(`${siteConfig.url}/api/valentines/${id}`, { cache: 'no-store' });
+    const res = await fetch(`${siteConfig.apiUrl}/valentines/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return res.json();
 }
