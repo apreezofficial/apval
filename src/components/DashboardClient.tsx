@@ -34,13 +34,22 @@ export default function DashboardClient() {
         setIsLoading(true);
         apiGet(`/valentines/user/${userId}`)
             .then(data => {
-                const sorted = Array.isArray(data) ? data.sort((a: any, b: any) =>
+                console.log("Dashboard fetch raw data:", data);
+                // Handle both direct array and { data: [...] } wrapper
+                const items = Array.isArray(data) ? data : (data.data || []);
+                const list = Array.isArray(items) ? items : [];
+
+                const sorted = list.sort((a: any, b: any) =>
                     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-                ) : [];
+                );
                 setValentines(sorted);
                 setIsLoading(false);
             })
-            .catch(() => setIsLoading(false));
+            .catch((err) => {
+                console.error("Dashboard fetch error:", err);
+                showToast(`Failed to load creations: ${err.message}`, 'error');
+                setIsLoading(false);
+            });
     };
 
     useEffect(() => {
@@ -48,7 +57,11 @@ export default function DashboardClient() {
         if (storedUser) {
             const parsedUser = JSON.parse(storedUser);
             setUser(parsedUser);
-            fetchValentines(parsedUser.id);
+            if (parsedUser?.id) {
+                fetchValentines(parsedUser.id);
+            } else {
+                showToast("User ID missing from session", "error");
+            }
         } else {
             window.location.href = '/login';
         }
