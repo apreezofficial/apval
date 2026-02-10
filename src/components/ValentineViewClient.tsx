@@ -240,7 +240,7 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
 
         // Default Template (Premium Mockup)
         return (
-            <main className="min-h-screen relative bg-[#FF99F1] flex flex-col items-center justify-center p-6 text-black overflow-hidden select-none">
+            <main className="min-h-screen relative bg-[#FF99F1] flex flex-col items-center justify-center p-6 text-black select-none">
                 <div className="absolute inset-0 pointer-events-none">
                     {[...Array(20)].map((_, i) => (
                         <motion.div
@@ -409,37 +409,42 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
                 </div>
             )}
 
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="fixed bottom-10 right-10 z-[100] flex items-center gap-4"
-            >
-                <button
-                    onClick={handleReplay}
-                    className="flex items-center gap-3 px-6 py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl group hover:bg-white transition-all shadow-2xl"
+            {/* Premium Action Footer */}
+            <div className="relative z-[100] w-full px-4 pb-20 pt-10 bg-gradient-to-t from-black/80 to-transparent">
+                <motion.div
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="max-w-md mx-auto flex items-center gap-2 p-2 bg-white/5 backdrop-blur-3xl border border-white/10 rounded-[30px] shadow-[0_20px_50px_rgba(0,0,0,0.5)]"
                 >
-                    <div className="p-2 bg-white/10 rounded-lg group-hover:bg-myRed/10 transition-colors">
-                        <RotateCcw size={14} className="text-white group-hover:text-myRed transition-colors" />
-                    </div>
-                    <div className="flex flex-col items-start leading-none gap-1">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-white/40 group-hover:text-myRed transition-colors">Restart</span>
-                        <span className="text-xs font-bold text-white group-hover:text-black transition-colors">Replay</span>
-                    </div>
-                </button>
+                    <button
+                        onClick={handleReplay}
+                        className="flex-1 flex items-center justify-center gap-3 py-4 rounded-[22px] hover:bg-white/5 transition-all group"
+                    >
+                        <div className="w-10 h-10 bg-white/5 rounded-full flex items-center justify-center group-hover:rotate-180 transition-transform duration-500">
+                            <RotateCcw size={16} className="text-white/60 group-hover:text-white" />
+                        </div>
+                        <div className="flex flex-col items-start leading-none gap-1">
+                            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/30">Reset</span>
+                            <span className="text-xs font-bold text-white group-hover:text-white/80">Replay</span>
+                        </div>
+                    </button>
 
-                <Link
-                    href="/"
-                    className="flex items-center gap-3 px-6 py-4 bg-white/10 backdrop-blur-2xl border border-white/20 rounded-2xl group hover:bg-white transition-all shadow-2xl"
-                >
-                    <div className="p-2 bg-red-500 rounded-lg group-hover:scale-110 transition-transform">
-                        <Heart size={14} className="text-white fill-current" />
-                    </div>
-                    <div className="flex flex-col items-start leading-none gap-1">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-red-500 group-hover:text-red-500 transition-colors">Elite Rebrand</span>
-                        <span className="text-xs font-bold text-white group-hover:text-black transition-colors">Deploy Yours</span>
-                    </div>
-                </Link>
-            </motion.div>
+                    <div className="w-[1px] h-8 bg-white/10" />
+
+                    <Link
+                        href="/"
+                        className="flex-[1.5] flex items-center justify-center gap-3 py-4 bg-myRed rounded-[22px] shadow-[0_10px_30px_-5px_rgba(252,65,0,0.5)] hover:scale-[1.02] active:scale-[0.98] transition-all group"
+                    >
+                        <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center animate-pulse">
+                            <Heart size={16} className="text-white fill-current" />
+                        </div>
+                        <div className="flex flex-col items-start leading-none gap-1">
+                            <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/60">Create Mine</span>
+                            <span className="text-xs font-bold text-white uppercase tracking-wider">Deploy Yours</span>
+                        </div>
+                    </Link>
+                </motion.div>
+            </div>
         </>
     );
 }
