@@ -51,7 +51,7 @@ export default function LoginClient() {
                         <span className="text-white font-bold text-2xl tracking-tight uppercase">Ap<span className="text-myRed">val</span></span>
                     </Link>
                     <h1 className="text-4xl font-bold text-white tracking-tight">Welcome Back</h1>
-                    <p className="text-white/40 mt-2 font-medium">Enterprise-grade love awaits</p>
+                    <p className="text-white/40 mt-2 font-medium">Elite Digital Romance awaits</p>
                 </div>
 
                 <div className="bg-[#0A0A0A] border border-white/5 p-10 rounded-[40px] shadow-2xl space-y-8">
@@ -66,7 +66,7 @@ export default function LoginClient() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full px-6 py-4 bg-white/[0.03] rounded-2xl border border-white/5 focus:border-myRed/50 outline-none text-white font-medium transition-all"
-                                placeholder="you@enterprise.com"
+                                placeholder="you@elite.com"
                             />
                         </div>
 

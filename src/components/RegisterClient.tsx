@@ -81,7 +81,7 @@ export default function RegisterClient() {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 className="w-full px-6 py-4 bg-white/[0.03] rounded-2xl border border-white/5 focus:border-myRed/50 outline-none text-white font-medium transition-all"
-                                placeholder="you@enterprise.com"
+                                placeholder="you@elite.com"
                             />
                         </div>
 

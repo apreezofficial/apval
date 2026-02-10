@@ -81,7 +81,7 @@ export default function Footer() {
                         whileInView={{ opacity: 1 }}
                         className="text-white/20 text-[10px] font-bold uppercase tracking-[0.3em] text-center md:text-left"
                     >
-                        Apval is a digital lifestyle project. Spread love responsibly.
+                        Spread the Love | Elite Digital Romance.
                     </motion.p>
                     <motion.p
                         initial={{ opacity: 0 }}
