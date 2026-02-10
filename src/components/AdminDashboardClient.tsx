@@ -25,14 +25,19 @@ export default function AdminDashboardClient() {
 
     const [viewingReceipt, setViewingReceipt] = useState<string | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [stats, setStats] = useState({ valentines: 0, users: 0, pending: 0, premium: 0 });
 
-    const fetchRequests = async () => {
+    const fetchDashboardData = async () => {
         try {
             const { apiGet } = await import('@/lib/api');
-            const data = await apiGet('/admin/requests');
-            setRequests(data);
+            const [reqData, statsData] = await Promise.all([
+                apiGet('/admin/requests'),
+                apiGet('/admin/stats')
+            ]);
+            setRequests(reqData);
+            setStats(statsData);
         } catch (err: any) {
-            showToast(err.response?.data?.error || 'Failed to fetch requests', 'error');
+            showToast(err.response?.data?.error || 'Failed to fetch dashboard data', 'error');
         } finally {
             setLoading(false);
         }
@@ -50,7 +55,7 @@ export default function AdminDashboardClient() {
         if (passkey === 'aaaaaa01') {
             setIsAuthenticated(true);
             setLoading(true);
-            fetchRequests();
+            fetchDashboardData();
         } else {
             setLoginError(true);
             showToast('Invalid passkey', 'error');
@@ -130,15 +135,48 @@ export default function AdminDashboardClient() {
         <div className="min-h-screen bg-[#050505] text-white p-6 md:p-12 relative">
             <div className="max-w-7xl mx-auto space-y-12">
                 {/* Header */}
-                <header className="flex items-center justify-between pb-8 border-b border-white/10">
+                <header className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-8 border-b border-white/10">
                     <div>
-                        <h1 className="text-3xl font-black tracking-tight mb-2">Admin Dashboard</h1>
-                        <p className="text-white/40">Manage premium upgrade requests</p>
+                        <h1 className="text-4xl font-black tracking-tighter mb-2">Admin Dashboard</h1>
+                        <p className="text-white/40 font-medium">Global romantic network oversight.</p>
                     </div>
-                    <button onClick={() => router.push('/')} className="p-3 bg-white/5 rounded-full hover:bg-white/10 transition-colors">
-                        <Home size={20} />
-                    </button>
+                    <div className="flex items-center gap-3">
+                        <button onClick={fetchDashboardData} className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors border border-white/5 flex items-center gap-2 text-xs font-bold uppercase tracking-widest">
+                            <Clock size={16} className="text-myRed" />
+                            Refresh Data
+                        </button>
+                        <button onClick={() => router.push('/')} className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors border border-white/5">
+                            <Home size={20} />
+                        </button>
+                    </div>
                 </header>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[
+                        { label: 'Total Valentines', value: stats.valentines, icon: FileText, color: 'text-myRed' },
+                        { label: 'Active Users', value: stats.users, icon: User, color: 'text-blue-500' },
+                        { label: 'Premium Tier', value: stats.premium, icon: Sparkles, color: 'text-yellow-500' },
+                        { label: 'Pending Upgrades', value: stats.pending, icon: Clock, color: 'text-orange-500' },
+                    ].map((s, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: i * 0.1 }}
+                            className="bg-[#0A0A0A] border border-white/5 p-6 rounded-[32px] space-y-2"
+                        >
+                            <s.icon className={`w-5 h-5 ${s.color}`} />
+                            <div className="text-2xl font-black tracking-tighter">{s.value}</div>
+                            <div className="text-[10px] font-black uppercase tracking-widest text-white/20">{s.label}</div>
+                        </motion.div>
+                    ))}
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <div className="w-1.5 h-1.5 rounded-full bg-myRed animate-pulse" />
+                    <h2 className="text-xs font-black uppercase tracking-[0.3em] text-white/40">Live Upgrade Requests</h2>
+                </div>
 
                 {loading ? (
                     <div className="flex justify-center items-center h-64">

@@ -29,6 +29,7 @@ RewriteRule ^upgrade/?$ upgrade/index.php [L,QSA]
 RewriteRule ^admin/requests/?$ admin/requests.php [L,QSA]
 RewriteRule ^admin/approve/?$ admin/approve.php [L,QSA]
 RewriteRule ^admin/reject/?$ admin/reject.php [L,QSA]
+RewriteRule ^admin/stats/?$ admin/stats.php [L,QSA]
 
 # If view by ID/Slug (more generic)
 RewriteCond %{REQUEST_FILENAME} !-f
