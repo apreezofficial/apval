@@ -75,8 +75,8 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
 
     const LoadingShimmer = () => (
         <main className="min-h-screen relative bg-[#050505] flex flex-col items-center justify-center p-6 text-white overflow-hidden">
-            {/* Ambient Background Glow - Optimized */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] bg-myRed/5 rounded-full blur-[40px] pointer-events-none" />
+            {/* Ambient Background Glow - Highly Optimized */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100vw] h-[100vw] bg-myRed/5 rounded-full blur-[20px] pointer-events-none opacity-50" />
 
             {/* Grid Pattern */}
             <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[linear-gradient(to_right,#ffffff_1px,transparent_1px),linear-gradient(to_bottom,#ffffff_1px,transparent_1px)] bg-[size:40px_40px]" />
@@ -238,32 +238,11 @@ export default function ValentineViewClient({ initialData, id }: ValentineViewCl
             return <GamingEliteView key={resetKey} data={data} />;
         }
 
-        // Default Template (Premium Mockup)
+        // Default Template (Premium Mockup) - Optimized
         return (
             <main className="min-h-screen relative bg-[#FF99F1] flex flex-col items-center justify-center p-6 text-black select-none">
                 <div className="absolute inset-0 pointer-events-none">
-                    {[...Array(7)].map((_, i) => (
-                        <motion.div
-                            key={i}
-                            initial={{ y: "110%", x: `${Math.random() * 100}%`, scale: Math.random() * 0.5 + 0.5 }}
-                            animate={{
-                                y: "-10%",
-                                x: [`${Math.random() * 100}%`, `${Math.random() * 100}%`],
-                                rotate: [0, 360]
-                            }}
-                            transition={{
-                                duration: Math.random() * 10 + 10,
-                                repeat: Infinity,
-                                ease: "linear",
-                                delay: Math.random() * 5
-                            }}
-                            className="absolute opacity-40"
-                        >
-                            <div className="w-8 h-8 md:w-12 md:h-12 rounded-full bg-white/30 border border-white/50 flex items-center justify-center shadow-lg">
-                                <Heart size={12} className="text-white fill-current" />
-                            </div>
-                        </motion.div>
-                    ))}
+                    {/* Background effects removed for performance */}
                 </div>
 
                 <div className="relative z-10 w-full max-w-[400px] aspect-[9/19] bg-white rounded-[60px] shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3),inset_0_2px_4px_rgba(255,255,255,1)] border-[12px] border-black overflow-hidden flex flex-col">

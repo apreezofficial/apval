@@ -50,14 +50,14 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
         <div className="relative w-full min-h-screen font-mono selection:bg-purple-500 selection:text-white bg-black">
             {data.musicUrl && <MusicPlayer url={data.musicUrl} isMuted={isMuted} />}
 
-            {/* CRT Scanline Effect */}
-            <div className="absolute inset-0 pointer-events-none z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,6px_100%]" />
-            <div className="absolute inset-0 pointer-events-none z-10 mix-blend-overlay opacity-20 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent" />
+            {/* Minimal Background Effect */}
+            <div className="absolute inset-0 pointer-events-none z-10 opacity-30 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.1)_50%)] bg-[size:100%_8px]" />
+            <div className="absolute inset-0 pointer-events-none z-10 opacity-10 bg-gradient-to-br from-purple-500/5 to-transparent" />
 
             {yesPressed ? (
                 <div className={`flex flex-col items-center justify-center ${isPreview ? 'h-full' : 'min-h-screen'} bg-[#050008] text-center p-6 overflow-hidden relative w-full`}>
-                    {/* Animated Grid Background */}
-                    <div className="absolute inset-0 opacity-20 pointer-events-none bg-[linear-gradient(to_right,#8B5CF6_1px,transparent_1px),linear-gradient(to_bottom,#8B5CF6_1px,transparent_1px)] bg-[size:40px_40px] animate-pulse" />
+                    {/* Fixed Background Grid */}
+                    <div className="absolute inset-0 opacity-10 pointer-events-none bg-[linear-gradient(to_right,#8B5CF6_1px,transparent_1px),linear-gradient(to_bottom,#8B5CF6_1px,transparent_1px)] bg-[size:50px_50px]" />
 
                     {/* Glowing Orbs */}
                     <div className="absolute inset-0 overflow-hidden pointer-events-none">

@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // Database configuration
 $host = 'localhost';
-$db   = 'apval_db';
+$db   = 'preciou3_clan';
 $user = 'root'; // Change to your cPanel db username
 $pass = '';     // Change to your cPanel db password
 $charset = 'utf8mb4';

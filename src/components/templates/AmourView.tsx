@@ -20,14 +20,15 @@ export default function AmourView({ data, steps, isPreview }: AmourViewProps) {
 
     return (
         <main className={`${isPreview ? 'w-full h-full relative' : 'fixed inset-0'} bg-[#050505] text-white overflow-hidden font-sans`}>
-            {/* Cinematic Background */}
-            <div className={`absolute inset-0 ${isPreview ? 'scale-150' : ''}`}>
+            {/* Optimized Cinematic Background */}
+            <div className={`absolute inset-0 ${isPreview ? 'scale-110' : ''}`}>
+                <div className="absolute inset-0 bg-[#0A0A0A]" /> {/* Solid fallback */}
                 <img
                     src="/amour-bg.png"
-                    className="w-full h-full object-cover opacity-60 scale-105"
+                    className="w-full h-full object-cover opacity-40"
                     alt="Background"
                 />
-                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/80" />
             </div>
 
             {/* Corner Metadata */}

@@ -122,8 +122,8 @@ export default function PremiumMotionView({ data, isPreview, onUpdateData }: Pre
 
             const animate = () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                // Reduced frequency and count for performance
-                if (hearts.length < 30 && Math.random() < 0.1) {
+                // Optimized frequency and count for fast loading
+                if (hearts.length < 12 && Math.random() < 0.05) {
                     hearts.push(new HeartParticle());
                 }
                 hearts.forEach((h, i) => {

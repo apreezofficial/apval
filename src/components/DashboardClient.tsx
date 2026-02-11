@@ -237,8 +237,16 @@ export default function DashboardClient() {
                             className="bg-[#0A0A0A] border border-white/5 rounded-[32px] p-8 space-y-6 hover:border-myRed/20 transition-all group"
                         >
                             <div className="flex items-center justify-between">
-                                <div className="w-12 h-12 bg-myRed/10 rounded-2xl flex items-center justify-center">
-                                    <Heart className="text-myRed w-6 h-6 fill-current" />
+                                <div className="flex items-center gap-3">
+                                    <div className="w-12 h-12 bg-myRed/10 rounded-2xl flex items-center justify-center">
+                                        <Heart className="text-myRed w-6 h-6 fill-current" />
+                                    </div>
+                                    {v.view_count > 0 && (
+                                        <div className="px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full flex items-center gap-1.5">
+                                            <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse" />
+                                            <span className="text-[10px] font-black text-green-500 uppercase tracking-widest">{v.view_count} {v.view_count === 1 ? 'View' : 'Views'}</span>
+                                        </div>
+                                    )}
                                 </div>
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-white/20">
                                     Asset

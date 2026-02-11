@@ -132,10 +132,9 @@ export default function QuestValentineView({ data }: QuestValentineViewProps) {
                 </div>
             ) : (
                 <div className="flex flex-col items-center justify-center min-h-screen bg-[#050505] text-center p-6 overflow-hidden relative font-geist w-full">
-                    {/* Liquid Background */}
+                    {/* Optimized Background */}
                     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                        <div className="absolute top-1/4 -left-20 w-[400px] h-[400px] bg-myRed/10 blur-[100px] rounded-full animate-pulse" />
-                        <div className="absolute bottom-1/4 -right-20 w-[400px] h-[400px] bg-blue-500/5 blur-[100px] rounded-full" />
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-myRed/5 blur-[50px]" />
                     </div>
 
                     <div className="relative z-10 max-w-2xl w-full flex flex-col items-center">

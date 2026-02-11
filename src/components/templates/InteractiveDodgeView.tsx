@@ -91,20 +91,10 @@ export default function InteractiveDodgeView({ data, isPreview }: InteractiveDod
                 </button>
             )}
 
-            {/* Background Floating Elements */}
-            <div className="absolute inset-0 pointer-events-none opacity-20">
-                {[...Array(7)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        initial={{ y: '110vh', x: `${Math.random() * 100}vw`, rotate: 0 }}
-                        animate={{ y: '-10vh', rotate: 360 }}
-                        transition={{ duration: 10 + Math.random() * 10, repeat: Infinity, delay: Math.random() * 10, ease: "linear" }}
-                        className="absolute text-2xl"
-                        style={{ color: themeColor }}
-                    >
-                        {isMale ? '❄️' : '❤️'}
-                    </motion.div>
-                ))}
+            {/* Optimized Background */}
+            <div className="absolute inset-0 pointer-events-none opacity-10">
+                <div className="absolute top-0 left-0 w-64 h-64 blur-[100px] rounded-full" style={{ background: themeColor }} />
+                <div className="absolute bottom-0 right-0 w-64 h-64 blur-[100px] rounded-full" style={{ background: themeColor }} />
             </div>
 
             <AnimatePresence mode="wait">

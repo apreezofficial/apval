@@ -10,15 +10,9 @@ interface MinimalEliteViewProps {
 export default function MinimalEliteView({ data, isPreview }: MinimalEliteViewProps) {
     return (
         <div className={`w-full h-full ${isPreview ? 'relative' : 'fixed inset-0'} bg-[#FFF9F2] flex items-center justify-center p-8 overflow-hidden font-serif`}>
-            {/* Silk/Champagne Gradient Background */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#F3E9DC,transparent_70%)]" />
-            <div className="absolute inset-0 opacity-[0.4] bg-[linear-gradient(135deg,#FFF9F2_25%,transparent_25%,transparent_50%,#FFF9F2_50%,#FFF9F2_75%,transparent_75%,transparent)] bg-[size:100px_100px]" />
-
-            {/* Royal Graphic Elements */}
-            <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-5">
-                <div className="w-[150%] h-[150%] border-[2px] border-[#3D2B1F] rounded-full" />
-                <div className="absolute w-[130%] h-[130%] border-[1px] border-[#3D2B1F] rounded-full" />
-            </div>
+            {/* Optimized Background */}
+            <div className="absolute inset-0 bg-[#FFF9F2]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,#F3E9DC,transparent_50%)]" />
 
             <motion.div
                 initial={{ opacity: 0, y: 30 }}

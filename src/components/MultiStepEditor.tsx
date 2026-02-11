@@ -127,6 +127,14 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
         setIsPremiumUser(user.subscriptionTier === 'premium');
     }, []);
 
+    // Reset scroll when step changes
+    useEffect(() => {
+        const editorContent = document.getElementById('editor-scroll-container');
+        if (editorContent) {
+            editorContent.scrollTop = 0;
+        }
+    }, [step]);
+
     const handleFinish = async () => {
         setLoading(true);
         const user = JSON.parse(localStorage.getItem('user') || '{}');
@@ -165,13 +173,13 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm overflow-y-auto pt-10 pb-10 px-4"
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm overflow-hidden md:py-10 px-0 md:px-4"
         >
 
             <motion.div
                 initial={{ scale: 0.9, y: 20 }}
                 animate={{ scale: 1, y: 0 }}
-                className="w-full max-w-6xl bg-[#0A0A0A] border border-white/5 rounded-[40px] shadow-2xl overflow-hidden relative z-10 flex flex-col md:flex-row h-full max-h-[850px]"
+                className="w-full max-w-6xl bg-[#0A0A0A] border border-white/5 rounded-none md:rounded-[40px] shadow-2xl overflow-hidden relative z-10 flex flex-col md:flex-row h-full md:h-full max-h-[100dvh] md:max-h-[850px]"
             >
                 {/* Left Side: Live Preview */}
                 <div className="flex-1 bg-[#111111] p-12 flex items-center justify-center border-r border-white/5 relative overflow-hidden hidden md:flex">
@@ -284,7 +292,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                 </div>
 
                 {/* Right Side: Form */}
-                <div className="w-full md:w-[500px] flex flex-col bg-[#0A0A0A]">
+                <div className="w-full md:w-[500px] flex-1 md:flex-none flex flex-col bg-[#0A0A0A] min-h-0">
                     {/* Header */}
                     <div className="p-8 border-b border-white/5 flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -298,7 +306,7 @@ export default function MultiStepEditor({ templateId: initialTemplateId, onClose
                         </button>
                     </div>
 
-                    <div className="p-10 flex-1 overflow-y-auto">
+                    <div id="editor-scroll-container" className="p-6 md:p-10 flex-1 overflow-y-auto min-h-0">
                         <AnimatePresence mode="wait">
                             {fetchingData ? (
                                 <div key="fetching" className="flex flex-col items-center justify-center py-20 space-y-4">
