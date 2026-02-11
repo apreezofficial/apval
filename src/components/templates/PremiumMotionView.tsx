@@ -104,8 +104,6 @@ export default function PremiumMotionView({ data, isPreview, onUpdateData }: Pre
                     ctx.translate(this.x + Math.sin(this.wobble) * 30, this.y);
                     ctx.globalAlpha = this.opacity;
                     ctx.fillStyle = this.color;
-                    ctx.shadowBlur = 20;
-                    ctx.shadowColor = this.color;
 
                     // Improved heart shape logic
                     ctx.beginPath();
@@ -124,7 +122,8 @@ export default function PremiumMotionView({ data, isPreview, onUpdateData }: Pre
 
             const animate = () => {
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (hearts.length < 150 && Math.random() < 0.2) {
+                // Reduced frequency and count for performance
+                if (hearts.length < 30 && Math.random() < 0.1) {
                     hearts.push(new HeartParticle());
                 }
                 hearts.forEach((h, i) => {

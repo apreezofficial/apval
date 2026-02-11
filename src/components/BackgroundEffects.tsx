@@ -187,7 +187,7 @@ const Waves = () => {
 const BackgroundEffects = () => {
     // Generate a set of 40 icons
     const iconsToRender = useMemo(() => {
-        return Array.from({ length: 50 }).map((_, i) => ({
+        return Array.from({ length: 7 }).map((_, i) => ({
             Icon: ICON_LIST[i % ICON_LIST.length],
             id: i
         }));

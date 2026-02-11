@@ -65,7 +65,7 @@ export default function SuccessStep({ link, onClose, templateId, valentineId, is
             </button>
 
             <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                {[...Array(24)].map((_, i) => (
+                {[...Array(7)].map((_, i) => (
                     <motion.div
                         key={i}
                         initial={{
@@ -84,7 +84,7 @@ export default function SuccessStep({ link, onClose, templateId, valentineId, is
                         transition={{
                             duration: Math.random() * 4 + 3,
                             repeat: Infinity,
-                            delay: Math.random() * 3,
+                            delay: Math.random() * 5,
                             ease: "linear"
                         }}
                         className="absolute"
@@ -133,10 +133,14 @@ export default function SuccessStep({ link, onClose, templateId, valentineId, is
                             <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.4em] ml-2">Secure Discovery URL</p>
                             {isPremiumUser && !isEditingSlug && (
                                 <button
-                                    onClick={() => { setIsEditingSlug(true); setSlugInput(valentineId); }}
+                                    onClick={() => {
+                                        const currentSlug = currentLink.split('/').pop() || '';
+                                        setIsEditingSlug(true);
+                                        setSlugInput(currentSlug === valentineId ? '' : currentSlug);
+                                    }}
                                     className="text-[10px] font-bold text-myRed hover:text-white bg-myRed/10 hover:bg-myRed px-2 py-1 rounded-md transition-all flex items-center gap-1"
                                 >
-                                    <Edit2 size={10} /> Customize
+                                    <Edit2 size={10} /> {currentLink.includes(valentineId) ? 'Customize' : 'Edit Slug'}
                                 </button>
                             )}
                         </div>
@@ -211,6 +215,16 @@ export default function SuccessStep({ link, onClose, templateId, valentineId, is
                     >
                         <span>Preview Live</span>
                         <ArrowRight className="w-4 h-4" />
+                    </button>
+
+                    <button
+                        onClick={() => {
+                            onClose();
+                            router.push('/dashboard');
+                        }}
+                        className="w-full py-4 bg-white/5 text-white/40 font-black uppercase tracking-[0.2em] text-[10px] rounded-2xl hover:bg-white/10 hover:text-white transition-all border border-white/5"
+                    >
+                        Return to Dashboard
                     </button>
                 </div>
             </motion.div>

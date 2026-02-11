@@ -103,7 +103,7 @@ export default function QuestValentineView({ data }: QuestValentineViewProps) {
 
                     {/* Celebration Particles */}
                     <div className="absolute inset-0 pointer-events-none">
-                        {[...Array(30)].map((_, i) => (
+                        {[...Array(7)].map((_, i) => (
                             <motion.div
                                 key={i}
                                 initial={{
@@ -121,8 +121,7 @@ export default function QuestValentineView({ data }: QuestValentineViewProps) {
                                 transition={{
                                     duration: Math.random() * 4 + 3,
                                     repeat: Infinity,
-                                    delay: Math.random() * 2
-                                    // ease: "linear" // Removed to fix TS error if not needed, or add if valid
+                                    delay: Math.random() * 5
                                 }}
                                 className="absolute"
                             >

@@ -69,7 +69,7 @@ export default function AmourView({ data, steps, isPreview }: AmourViewProps) {
                 <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    className={`relative border border-white/20 bg-white/5 backdrop-blur-[40px] rounded-[2px] pointer-events-auto flex flex-col overflow-hidden shadow-2xl ${isPreview ? 'w-[95%] h-[85%] scale-[0.85]' : 'w-[90vw] h-[80vh]'}`}
+                    className={`relative border border-white/20 bg-white/5 backdrop-blur-[20px] rounded-[2px] pointer-events-auto flex flex-col overflow-hidden shadow-2xl ${isPreview ? 'w-[95%] h-[85%] scale-[0.85]' : 'w-[90vw] h-[80vh]'}`}
                 >
                     <AnimatePresence mode="wait">
                         <motion.div

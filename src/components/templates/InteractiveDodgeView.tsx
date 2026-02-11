@@ -93,7 +93,7 @@ export default function InteractiveDodgeView({ data, isPreview }: InteractiveDod
 
             {/* Background Floating Elements */}
             <div className="absolute inset-0 pointer-events-none opacity-20">
-                {[...Array(15)].map((_, i) => (
+                {[...Array(7)].map((_, i) => (
                     <motion.div
                         key={i}
                         initial={{ y: '110vh', x: `${Math.random() * 100}vw`, rotate: 0 }}
