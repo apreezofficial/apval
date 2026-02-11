@@ -11,7 +11,7 @@ import Footer from "@/components/Footer";
 import { AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
-
+import HomeSeoSection from "@/components/HomeSeoSection";
 
 import { motion } from 'framer-motion';
 
@@ -34,7 +34,7 @@ export default function HomeClient() {
             <Navbar />
             <Hero />
             <PartnerLogos />
-
+            <HomeSeoSection />
             <section id="templates" className="py-32 px-6">
                 <div className="max-w-7xl mx-auto text-center">
                     <div className="mb-20 space-y-8">
