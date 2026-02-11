@@ -16,6 +16,7 @@ RewriteRule ^auth/register/?$ auth/register.php [L,QSA]
 
 # Valentines Routes
 RewriteRule ^valentines/user/([^/]+)/?$ valentines/user.php?id=$1 [L,QSA]
+RewriteRule ^valentines/stats/?$ valentines/stats.php [L,QSA]
 RewriteRule ^valentines/([^/]{20,})/?$ valentines/view.php?id=$1 [L,QSA]
 RewriteRule ^valentines$ valentines/index.php [L,QSA]
 

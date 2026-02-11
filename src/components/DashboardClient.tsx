@@ -2,9 +2,10 @@
 import { useEffect, useState } from 'react';
 import Navbar from '@/components/Navbar';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Heart, Plus, ExternalLink, Trash2, Edit2, Share2, X, MessageCircle, Sparkles, Crown, Zap } from 'lucide-react';
+import { Heart, Plus, ExternalLink, Trash2, Edit2, Share2, X, MessageCircle, Sparkles, Crown, Zap, BarChart2 } from 'lucide-react';
 import Link from 'next/link';
 import MultiStepEditor from '@/components/MultiStepEditor';
+import TrackerModal from '@/components/TrackerModal';
 import Footer from '@/components/Footer';
 import { useToast } from '@/components/Toast';
 import { useModal } from '@/components/Modal';
@@ -22,6 +23,8 @@ export default function DashboardClient() {
     const [editingValentine, setEditingValentine] = useState<any>(null);
     const [sharingValentine, setSharingValentine] = useState<any>(null);
     const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+    const [viewingStats, setViewingStats] = useState<any>(null);
+    const [isStatsModalOpen, setIsStatsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [showPremiumModal, setShowPremiumModal] = useState(false);
@@ -272,6 +275,16 @@ export default function DashboardClient() {
                                     <Share2 className="w-4 h-4" />
                                 </button>
                                 <button
+                                    onClick={() => {
+                                        setViewingStats(v);
+                                        setIsStatsModalOpen(true);
+                                    }}
+                                    className="p-3 bg-white/5 rounded-xl hover:bg-myRed/10 hover:text-myRed transition-all text-white/40"
+                                    title="View Stats"
+                                >
+                                    <BarChart2 className="w-4 h-4" />
+                                </button>
+                                <button
                                     onClick={() => handleDelete(v.id)}
                                     className="p-3 bg-white/5 rounded-xl hover:bg-red-500/10 hover:text-red-500 transition-all text-white/40"
                                 >
@@ -332,6 +345,18 @@ export default function DashboardClient() {
                         onClose={() => {
                             setIsShareModalOpen(false);
                             setSharingValentine(null);
+                        }}
+                    />
+                )}
+            </AnimatePresence>
+
+            <AnimatePresence>
+                {isStatsModalOpen && viewingStats && (
+                    <TrackerModal
+                        valentine={viewingStats}
+                        onClose={() => {
+                            setIsStatsModalOpen(false);
+                            setViewingStats(null);
                         }}
                     />
                 )}
