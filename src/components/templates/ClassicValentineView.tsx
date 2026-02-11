@@ -133,17 +133,17 @@ export default function ClassicValentineView({ data, isPreview }: ClassicValenti
 
             {/* Floating Hearts Background */}
             <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30">
-                {[...Array(15)].map((_, i) => (
+                {[...Array(7)].map((_, i) => (
                     <motion.div
                         key={i}
                         animate={{
-                            y: [window.innerHeight + 100, -100],
-                            x: [Math.random() * window.innerWidth, Math.random() * window.innerWidth],
+                            y: ['110vh', '-10vh'],
+                            x: [`${Math.random() * 100}vw`, `${Math.random() * 100}vw`],
                             rotate: [0, 360],
                             scale: [0.5, 1.2, 0.8]
                         }}
                         transition={{
-                            duration: 5 + Math.random() * 5,
+                            duration: 7 + Math.random() * 5,
                             repeat: Infinity,
                             delay: Math.random() * 5,
                             ease: "linear"

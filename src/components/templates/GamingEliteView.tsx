@@ -47,12 +47,12 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
     };
 
     return (
-        <div className="w-full h-full font-mono selection:bg-purple-500 selection:text-white bg-black">
+        <div className="relative w-full min-h-screen font-mono selection:bg-purple-500 selection:text-white bg-black">
             {data.musicUrl && <MusicPlayer url={data.musicUrl} isMuted={isMuted} />}
 
             {/* CRT Scanline Effect */}
-            <div className="absolute inset-0 pointer-events-none z-[50] bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,6px_100%]" />
-            <div className="absolute inset-0 pointer-events-none z-[50] mix-blend-overlay opacity-20 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent" />
+            <div className="absolute inset-0 pointer-events-none z-10 bg-[linear-gradient(rgba(18,16,16,0)_50%,rgba(0,0,0,0.25)_50%),linear-gradient(90deg,rgba(255,0,0,0.06),rgba(0,255,0,0.02),rgba(0,0,255,0.06))] bg-[size:100%_4px,6px_100%]" />
+            <div className="absolute inset-0 pointer-events-none z-10 mix-blend-overlay opacity-20 bg-gradient-to-br from-transparent via-purple-500/10 to-transparent" />
 
             {yesPressed ? (
                 <div className={`flex flex-col items-center justify-center ${isPreview ? 'h-full' : 'min-h-screen'} bg-[#050008] text-center p-6 overflow-hidden relative w-full`}>
@@ -187,12 +187,12 @@ export default function GamingEliteView({ data, isPreview }: GamingEliteViewProp
 
                     {/* Celebration Particles */}
                     <div className="absolute inset-0 pointer-events-none overflow-hidden">
-                        {[...Array(40)].map((_, i) => (
+                        {[...Array(7)].map((_, i) => (
                             <motion.div
                                 key={i}
                                 initial={{ top: "110%", left: `${Math.random() * 100}%`, scale: 0, opacity: 0 }}
                                 animate={{ top: "-10%", opacity: [0, 1, 1, 0], scale: [0, 1, 1], rotate: [0, 180, 360], x: (Math.random() - 0.5) * 200 }}
-                                transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, delay: Math.random() * 2, ease: "linear" }}
+                                transition={{ duration: Math.random() * 3 + 2, repeat: Infinity, delay: Math.random() * 5, ease: "linear" }}
                                 className="absolute"
                             >
                                 {i % 3 === 0 ? <Heart className="text-pink-500/80 fill-current w-6 h-6" /> :
