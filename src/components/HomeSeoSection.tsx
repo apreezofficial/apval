@@ -1,3 +1,5 @@
+'use client';
+import Link from 'next/link';
 export default function HomeSeo(){
 return <>
   {/* testing the hidden text seo formatting for apval.xyz, no robots txt, no sitemaps and all, if you see this, you are lucky, leatn seo with me 🤝🤞 */}
